@@ -4,6 +4,8 @@
 
 An extension that handles TeX math rendering for your [Flarum](https://github.com/flarum) forum.
 
+![Screenshot](https://i.imgur.com/iFt2AS8.png)
+
 ## Features
 
 - Based on [KaTeX](https://github.com/KaTeX/KaTeX) (the fastest math typesetting library on the web).
