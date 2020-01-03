@@ -1,6 +1,6 @@
 # MathRen for Flarum
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/flagrow/upload/blob/master/LICENSE.md) [![Latest Stable Version](https://img.shields.io/packagist/v/flagrow/upload.svg)](https://packagist.org/packages/flagrow/upload) [![Total Downloads](https://img.shields.io/packagist/dt/flagrow/upload.svg)](https://packagist.org/packages/flagrow/upload)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/the-turk/mathren/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/the-turk/mathren.svg)](https://packagist.org/packages/the-turk/mathren) [![Total Downloads](https://img.shields.io/packagist/dt/the-turk/mathren.svg)](https://packagist.org/packages/the-turk/mathren)
 
 An extension that handles TeX math rendering for your [Flarum](https://github.com/flarum) forum.
 
@@ -73,5 +73,6 @@ This inline expression won't be rendered either:
 - [Report an issue](https://github.com/the-turk/mathren/issues)
 - [Download via Packagist](https://packagist.org/packages/the-turk/mathren)
 
-_This is my first [Flarum](https://github.com/flarum) extension. So please go easy on me. :blush:_
-_English is not my mother tongue, i'll appreciate it if you correct my translations. :no_mouth:_
+_English is not my mother tongue, i'll appreciate it if you correct my translations._
+
+_This is my first [Flarum](https://github.com/flarum) extension. So please go easy on me._
