@@ -50,7 +50,7 @@ Wrap your TeX code with `[mathren]` and `[/mathren]` delimiters.
 Wrap your TeX code with `[mathren-inline]` and `[/mathren-inline]` delimiters.
 
 ```
-Lorem ipsum dolor [mathren-inline]\DELTA = b^2 4ac[/mathren-inline] sit amet.
+Lorem ipsum dolor [mathren-inline]\varDelta = b^2-4ac[/mathren-inline] sit amet.
 ```
 
 ### Ignored Classes
@@ -66,7 +66,7 @@ This block expression won't be rendered:
 This inline expression won't be rendered either:
 
 ```
-[mathren-inline=-ignore]\e = mc^2[/mathren-inline]
+[mathren-inline=-ignore]\varDelta = b^2-4ac[/mathren-inline]
 ```
 
 ## Links
