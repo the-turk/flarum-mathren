@@ -1,6 +1,6 @@
 # MathRen for Flarum
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/the-turk/mathren/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/the-turk/mathren.svg)](https://packagist.org/packages/the-turk/mathren) [![Total Downloads](https://img.shields.io/packagist/dt/the-turk/mathren.svg)](https://packagist.org/packages/the-turk/mathren)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/the-turk/flarum-mathren/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/the-turk/flarum-mathren.svg)](https://packagist.org/packages/the-turk/flarum-mathren) [![Total Downloads](https://img.shields.io/packagist/dt/the-turk/flarum-mathren.svg)](https://packagist.org/packages/the-turk/flarum-mathren)
 
 An extension that handles TeX math rendering for your [Flarum](https://github.com/flarum) forum.
 
@@ -68,10 +68,10 @@ This inline expression won't be rendered either:
 ## Links
 
 - [Flarum Discuss post](https://discuss.flarum.org/d/4154)
-- [Source code on GitHub](https://github.com/the-turk/mathren)
-- [Changelog](https://github.com/the-turk/mathren/blob/master/CHANGELOG.md)
-- [Report an issue](https://github.com/the-turk/mathren/issues)
-- [Download via Packagist](https://packagist.org/packages/the-turk/mathren)
+- [Source code on GitHub](https://github.com/the-turk/flarum-mathren)
+- [Changelog](https://github.com/the-turk/flarum-mathren/blob/master/CHANGELOG.md)
+- [Report an issue](https://github.com/the-turk/flarum-mathren/issues)
+- [Download via Packagist](https://packagist.org/packages/the-turk/flarum-mathren)
 
 _English is not my mother tongue, i'll appreciate it if you correct my translations._
 
