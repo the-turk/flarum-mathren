@@ -1,6 +1,6 @@
 {
     "name": "the-turk/flarum-mathren",
-    "description": "Matematiksel ifadeleri görüntüleyin.",
+    "description": "TeX math rendering for your forum.",
     "keywords": [
         "flarum",
         "mathren",
