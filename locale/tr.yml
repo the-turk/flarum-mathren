@@ -1,0 +1,33 @@
+the-turk-mathren:
+    admin:
+        settings:
+            title: MathRen Ayarları
+            codeOptionsHeading: <code /> Etiketi Seçenekleri
+            enableCode: Matematiksel ifadeleri <code /> etiketine göm
+            enableCodeHelp: Markdown gibi eklentiler matematiksel ifadeleriniz üzerinde istenmeyen biçimlendirmelere neden olabilir. Bunun gibi eklentileri kullanıyorsanız bu seçeneği aktif etmelisiniz.
+            enableCodeWarning: <strong>Uyarı:</strong> Bu seçenek değiştirildiğinde, değişimden önce yazılmış ifadeler yeniden düzenlenene kadar olduğu gibi kalacaktır.
+            codeClasses: <code /> etiketi için sınıf isimleri
+            codeClassesHelp: <code /> etiketleri için sınıf adı girin ve bu sınıfı istediğiniz şekilde biçimlendirin.
+            codeClass: Satır dışındaki <code /> etiketi
+            inlineCodeClass: Satır içindeki <code /> etiketi
+            codeStyle: <code /> etiketini biçimlendirin
+            katexOptionsHeading: KaTeX Seçenekleri
+            enableFleqn: Matematiksel ifadeleri sola yasla (fleqn)
+            enableLeqno: İfade etiketlerini sola yasla (leqno)
+            ignoredTags: Atlanacak etiketler
+            ignoredTagsHelp: Bu etiketler arasındaki matematik ifadeleri dönüştürülmeyecektir.
+            ignoredClasses: Atlanacak sınıflar
+            ignoredClassesHelp: Bu sınıflara dahil etiketler arasındaki matematik ifadeleri dönüştürülmeyecektir.
+            outputMode: Biçimlendirme
+            outputModeHelp: Matematik ifadelerin gösterilmesinde kullanılacak biçimlendirme dilini seçin.
+            enableThrowOnError: Desteklenmeyen komut girildiğinde konsola hata mesajı gönder
+            errorColor: Hatalı komutu renklendir
+            errorColorHelp: Konsola hata mesajı göndermek yerine desteklenmeyen komutu renklendirebilirsiniz.
+            sizeSettings: Boyutlandırma ayarları
+            sizeSettingsHelp: Ondalık değerler için <strong>nokta</strong> kullanın. <em>Sonsuz</em> değerler kabul edilmez!
+            minRuleThickness: Minimum kalınlık (em)
+            maxSize: Maksimum yazı boyutu (em)
+            macros: Makrolar
+            macrosHelp: Özelleştirilmiş makrolarınızı buraya yazabilirsiniz.
+            maxExpand: Maksimum genişleme sınırı
+            katexOptionsInfo: <strong>Not:</strong> KaTeX seçenekleri ile ilgili daha ayrıntılı bilgiyi https://katex.org/ adresinde bulabilirsiniz.
