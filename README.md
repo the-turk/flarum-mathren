@@ -31,7 +31,7 @@ php flarum cache:clear
 
 Enable the extension.
 
-Some extensions such as _Markdown_ may cause unwanted formatting on your mathematical expressions. Hence, please double-check that you have enabled the "Wrap mathematical expressions with <code />" option from the settings modal if you're using such extensions. Everything else is optional.
+Some extensions such as _Markdown_ may cause unwanted formatting on your mathematical expressions. Hence, please double-check that you have enabled the "Wrap mathematical expressions with `<code />`" option from the settings modal if you're using such extensions. Everything else is optional.
 
 ### Block Expressions
 
