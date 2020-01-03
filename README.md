@@ -79,4 +79,4 @@ This inline expression won't be rendered either:
 
 _English is not my mother tongue, i'll appreciate it if you correct my translations._
 
-_This is my first [Flarum](https://github.com/flarum) extension. So please go easy on me._ 😟
+_This is my first [Flarum](https://github.com/flarum) extension. So please go easy on me._
