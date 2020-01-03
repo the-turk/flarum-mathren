@@ -71,7 +71,7 @@ This inline expression won't be rendered either:
 
 ## Links
 
-- [Flarum Discuss post](https://discuss.flarum.org/d/XXXX)
+- [Flarum Discuss post](https://discuss.flarum.org/d/22439-mathren-tex-math-rendering)
 - [Source code on GitHub](https://github.com/the-turk/flarum-mathren)
 - [Changelog](https://github.com/the-turk/flarum-mathren/blob/master/CHANGELOG.md)
 - [Report an issue](https://github.com/the-turk/flarum-mathren/issues)
