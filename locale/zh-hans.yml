@@ -1,0 +1,33 @@
+the-turk-mathren:
+    admin:
+        settings:
+            title: MathRen 设置
+            codeOptionsHeading: <code/> Tag 选项
+            enableCode: 数学表达式使用 <code/> 包装
+            enableCodeHelp: 诸如 Markdown 之类的某些扩展可能会导致您的数学表达式格式不正确。如果使用此类扩展，则必须启用此选项。
+            enableCodeWarning: <strong>注意：</strong> 禁用或启用扩展时，以前的表达式将保持不变，直到编辑相应的帖子为止。
+            codeClasses: <code/> 标记的 css class 名称
+            codeClassesHelp: 您可以轻松地使用 css class 来样式化<code />包装器。
+            codeClass: <code/> 标记用于块表达式
+            inlineCodeClass: <code /> 标记用于内联表达式
+            codeStyle: <code/> 样式
+            katexOptionsHeading: KaTeX 设置
+            enableFleqn: 启用左齐平方程 (fleqn)
+            enableLeqno: 启用左方程式编号 (leqno)
+            ignoredTags: 忽略的 Tags
+            ignoredTagsHelp: 递归时要忽略的 DOM Tag
+            ignoredClasses: 忽略的 css classes
+            ignoredClassesHelp: 递归时要忽略的 DOM class
+            outputMode: 输出模式
+            outputModeHelp: 选择输出的标记语言
+            enableThrowOnError: 在不受支持的命令或无效的 LaTeX 上引发错误
+            errorColor: 不支持的命令或无效的LaTeX的警告颜色
+            errorColorHelp: 选择禁用错误引发时呈现不支持的命令和无效LaTeX的颜色。
+            sizeSettings: 大小设置
+            sizeSettingsHelp: 使用<strong> point </strong>作为小数点分隔符。 <em>无限值</em>是不可接受的！
+            minRuleThickness: 最小厚度（em）
+            maxSize: 最大大小 (em)
+            macros: 宏
+            macrosHelp: 自定义宏
+            maxExpand: 最大扩展限制
+            katexOptionsInfo: 您可以在https://katex.org/上找到有关KaTeX选项的更多信息。

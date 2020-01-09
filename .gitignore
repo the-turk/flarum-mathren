@@ -1,2 +1,4 @@
-
 *.md
+composer.lock
+/.idea
+/vendor
