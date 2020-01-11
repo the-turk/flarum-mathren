@@ -81,7 +81,7 @@ export default class MathRenSettingsModal extends SettingsModal {
 				m('.helpText', app.translator.trans(translationPrefix + 'ignoredTagsHelp')),
 				m('input[type=text].FormControl', {
 					bidi: this.setting(settingsPrefix + 'ignoredTags'),
-					placeholder: 'script,noscript,style,textarea,pre'
+					placeholder: 'script,noscript,style,textarea,pre,code'
 				})
 			]),
 			m('.Form-group', [

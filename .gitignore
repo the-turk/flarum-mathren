@@ -2,3 +2,5 @@
 composer.lock
 /.idea
 /vendor
+node_modules
+yarn.lock
