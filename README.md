@@ -80,7 +80,7 @@ $$\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi$${ignore}
 \(\varDelta = b^2-4ac\){ignore}
 ```
 
-Ignored expressions will be wrapped with `<span class="mathren-ignore">...</span>` by default if you choose the second option.
+Ignored expressions will be wrapped with `<span class="{mathren-inline|mathren-block} mathren-ignore">...</span>` by default if you choose the second option.
 
 ## Links
 
