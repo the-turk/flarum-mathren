@@ -1,15 +1,21 @@
 {
   "name": "@the-turk/flarum-mathren",
-  "version": "0.0.0",
+  "description": "TeX math rendering for your forum.",
+  "license": "MIT",
+  "version": "0.2.0",
   "dependencies": {
     "flarum-webpack-config": "0.1.0-beta.10",
-    "webpack": "^4.0.0",
-    "webpack-cli": "^3.0.7",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
     "copy-webpack-plugin": "^5.1.1",
     "katex": "^0.11.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/the-turk/flarum-mathren.git"
+  },
   "scripts": {
-    "watch": "webpack --mode development --watch",
+    "dev": "webpack --mode development --watch",
     "build": "webpack --mode production"
   }
 }

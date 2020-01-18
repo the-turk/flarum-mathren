@@ -1,33 +1,64 @@
 the-turk-mathren:
     admin:
         settings:
-            title: MathRen Ayarları
-            codeOptionsHeading: <code /> Etiketi Seçenekleri
-            enableCode: Matematiksel ifadeleri <code /> etiketine göm
-            enableCodeHelp: Markdown gibi eklentiler matematiksel ifadeleriniz üzerinde istenmeyen biçimlendirmelere neden olabilir. Bunun gibi eklentileri kullanıyorsanız bu seçeneği aktif etmelisiniz.
-            enableCodeWarning: <strong>Uyarı:</strong> Bu seçenek değiştirildiğinde, değişimden önce yazılmış ifadeler yeniden düzenlenene kadar olduğu gibi kalacaktır.
-            codeClasses: <code /> etiketi için sınıf isimleri
-            codeClassesHelp: <code /> etiketleri için sınıf adı girin ve bu sınıfı istediğiniz şekilde biçimlendirin.
-            codeClass: Satır dışındaki <code /> etiketi
-            inlineCodeClass: Satır içindeki <code /> etiketi
-            codeStyle: <code /> etiketini biçimlendirin
-            katexOptionsHeading: KaTeX Seçenekleri
-            enableFleqn: Matematiksel ifadeleri sola yasla (fleqn)
-            enableLeqno: İfade etiketlerini sola yasla (leqno)
-            ignoredTags: Atlanacak etiketler
-            ignoredTagsHelp: Bu etiketler arasındaki matematik ifadeleri dönüştürülmeyecektir.
-            ignoredClasses: Atlanacak sınıflar
-            ignoredClassesHelp: Bu sınıflara dahil etiketler arasındaki matematik ifadeleri dönüştürülmeyecektir.
-            outputMode: Biçimlendirme
-            outputModeHelp: Matematik ifadelerin gösterilmesinde kullanılacak biçimlendirme dilini seçin.
-            enableThrowOnError: Desteklenmeyen komut girildiğinde konsola hata mesajı gönder
-            errorColor: Hatalı komutu renklendir
-            errorColorHelp: Konsola hata mesajı göndermek yerine desteklenmeyen komutu renklendirebilirsiniz.
-            sizeSettings: Boyutlandırma ayarları
-            sizeSettingsHelp: Ondalık değerler için <strong>nokta</strong> kullanın. <em>Sonsuz</em> değerler kabul edilmez!
-            minRuleThickness: Minimum kalınlık (em)
-            maxSize: Maksimum yazı boyutu (em)
-            macros: Makrolar
-            macrosHelp: Özelleştirilmiş makrolarınızı buraya yazabilirsiniz.
-            maxExpand: Maksimum genişleme sınırı
-            katexOptionsInfo: <strong>Not:</strong> KaTeX seçenekleri ile ilgili daha ayrıntılı bilgiyi https://katex.org/ adresinde bulabilirsiniz.
+            title:                    MathRen
+            description:              TeX işleyicisini kişiselleştirin.
+            wrapperOptionsHeading:    Gömme Seçenekleri
+            mathClasses:              <code>span</code> etiketi için sınıf isimleri
+            mathClassesHelp:          <code>span</code> etiketleri için sınıf adı girin ve bu sınıfı istediğiniz şekilde biçimlendirin.
+            blockMathClass:           Satır dışındaki <code>span</code> etiketi
+            inlineMathClass:          Satır içindeki <code>span</code> etiketi
+            wrapperStyle:             <code>span</code> etiketini biçimlendirin
+            katexOptionsHeading:      KaTeX Seçenekleri
+            enableFleqn:              Matematiksel ifadeleri sola yasla (fleqn)
+            enableLeqno:              İfade etiketlerini sola yasla (leqno)
+            delimiters:               Sınırlayıcılar
+            delimitersHelp:           Virgül ile ayırın. <strong>%e%</strong>, matematiksel ifadeyi temsil etmektedir.
+            mainBlockDelimiter:       Blok ifadeler için asıl <strong>BBCode</strong> sınırlayıcısı
+            mainInlineDelimiter:      Satır içindeki ifadeler için asıl <strong>BBCode</strong> sınırlayıcısı
+            aliasBlockDelimiters:     Blok ifadeler için ek sınırlayıcılar
+            aliasInlineDelimiters:    Satır içindeki ifadeler için ek sınırlayıcılar
+            aliasDelimitersHelp:      >-
+                        Ek sınırlayıcılar, <em>asıl BBCode sınırlayıcılarını</em> kullanmanın başka bir yoludur. Eğer ek sınırlayıcılar listenizde özel
+                        sınırlayıcılar bulunuyorsa (<code>$$</code> gibi) MathRen, gönderi kaydedilirken bütün yazıyı tarar ve
+                        bu özel sınırlayıcıları bulup ana sınırlayıcılarla değiştirmeye çalışır. Bu durum mesajın kaydedilme süresini
+                        uzatabilir. Bu etkiden kaçınmak için buraya yazacağınız ek sınırlayıcılarda özel sınırlayıcılar
+                        yerine BBCode formatını kullanmak isteyebilirsiniz.
+            delimiterWarning:         >-
+                        <strong>UYARI</strong> Aşağıdaki listelerin herhangi birinde eğer <code>\[%e%\]</code> sınırlayıcısını
+                        kullanmak isterseniz, listenin en sonuna yazmalısınız. Aksi durumda MathRen, diğer sınırlayıcılardan önce <code>\[</code>
+                        sınırlayıcısını arayacaktır. Bu durum, başka bir sınırlayıcı içinde yazılmış <code>\\[0.3em]</code> gibi bir kodun
+                        bulunmasına ve matematiksel ifadenin yanlış yerden başlatılmasına neden olabilir.
+            ignoringExpressions:      Atlanacak İfadeler
+            ignoringExpressionsHelp:  Virgül ile ayırın.
+            decisiveKeywords:         Atlamayı belirleyici kelimeler
+            decisiveKeywordsHelp:     >-
+                        Matematiksel ifadelerin işlenmesini önlemek için bu kelimeleri süslü parantez kullanarak <em>özel</em> bir sağ
+                        sınırlayıcının (BBCode harici) hemen yanına (örn. <code>$$%e%$${<strong>kelime</strong>}</code>) ya da BBCode içine
+                        (örn. <code>[math=<strong>kelime</strong>]%e%[/math]</code>) yazacaksınız. <strong>Not:</strong>
+                        <code>[math]%e%[/math]{<strong>kelime</strong>}</code> ifadesi, yanlış bir kullanıma örnektir.
+            decisiveKeywordsInfo:     Listeye yazılan ilk kelime, metin editörü için varsayılan olarak kabul edilecektir.
+            decisiveKeywordsWarning:  Özel karakterler kullanmayın! Aksi durumda hata mesajıyla karşılaşırsınız.
+            ignoredTags:              Atlanacak etiketler
+            ignoredClasses:           Atlanacak sınıflar
+            ignoredClassesInfo:       Bu listeye yazılan ilk sınıf, dönüştürülmeyen ifadeler için varsayılan olarak kullanılacaktır.
+            outputMode:               Biçimlendirme
+            outputModeHelp:           Matematik ifadelerin gösterilmesinde kullanılacak biçimlendirme dilini seçin.
+            enableColorIsTextColor:   <code>\color</code> komutunun iki ifade içermesine izin ver (colorIsTextColor)
+            enableThrowOnError:       Desteklenmeyen komut girildiğinde konsola hata mesajı gönder
+            errorColor:               Hatalı komutu renklendir
+            errorColorHelp:           Konsola hata mesajı göndermek yerine desteklenmeyen komutu renklendirebilirsiniz.
+            sizeSettings:             Boyutlandırma ayarları
+            sizeSettingsHelp:         Ondalık değerler için <strong>nokta</strong> kullanın. <em>Sonsuz</em> değerler kabul edilmez!
+            minRuleThickness:         Minimum kalınlık (em)
+            maxSize:                  Maksimum yazı boyutu (em)
+            macros:                   Makrolar
+            macrosHelp:               Özelleştirilmiş makrolarınızı buraya yazabilirsiniz.
+            maxExpand:                Maksimum genişleme sınırı
+            katexOptionsInfo:         <strong>Not:</strong> KaTeX seçenekleri ile ilgili daha ayrıntılı bilgiyi https://katex.org/ adresinde bulabilirsiniz.
+            otherOptionsHeading:      Diğer Seçenekler
+            enableTextEditorButtons:  Metin editöründe butonları göster
+    forum:
+        textEditor:
+            blockExpression:          Blok İfade
+            inlineExpression:         Satır İçi İfade

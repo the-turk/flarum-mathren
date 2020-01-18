@@ -11,10 +11,10 @@
  * @author     Hasan Özbey <hasanoozbey@gmail.com>
  * @copyright  2020
  * @license    The MIT License
- * @version    Release: 0.1.0
+ * @version    Release: 0.2.0
  * @link       https://github.com/the-turk/flarum-mathren
  */
- 
+
 namespace TheTurk\MathRen;
 
 use Flarum\Extend;
@@ -23,13 +23,16 @@ use TheTurk\MathRen;
 
 return [
     (new Extend\Frontend('forum'))
-		->js(__DIR__.'/js/dist/forum.js')
-		->content(MathRen\Listeners\AddAssets::class),
-	(new Extend\Frontend('admin'))
+        ->css(__DIR__ . '/resources/less/forum/textEditor.less')
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->content(MathRen\Listeners\AddAssets::class),
+    (new Extend\Frontend('admin'))
+        ->css(__DIR__ . '/resources/less/admin/settingsPage.less')
         ->js(__DIR__ . '/js/dist/admin.js'),
     (new Extend\Locales(__DIR__ . '/locale')),
     function (Dispatcher $events) {
-		$events->subscribe(MathRen\Listeners\LoadSettings::class);
-		$events->subscribe(MathRen\Listeners\AddCustomTags::class);
+        $events->subscribe(MathRen\Listeners\LoadSettings::class);
+        $events->subscribe(MathRen\Listeners\ConfigureTextFormatter::class);
+        $events->subscribe(MathRen\Listeners\InterruptPostProcess::class);
     },
 ];

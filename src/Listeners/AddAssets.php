@@ -11,17 +11,17 @@ class AddAssets
      * @var SettingsRepositoryInterface
      */
     protected $settings;
-	
-	/**
+
+    /**
      * @var Application
-	*/
+    */
     protected $app;
-	
-	/**
+
+    /**
      * @var string $settingsPrefix
      */
-	public $settingsPrefix = 'the-turk-mathren.';
-	
+    public $settingsPrefix = 'the-turk-mathren';
+
     /**
      * LoadSettingsFromDatabase constructor
      *
@@ -31,29 +31,29 @@ class AddAssets
     {
         $this->settings = $settings;
     }
-	
-	/**
+
+    /**
      * @param Document $document
      */
     public function __invoke(Document $document)
     {
         $this->assets($document);
     }
-	
+
     private function assets(Document &$document)
     {
-		// Include KaTeX stylesheet
-		$extensionFolder = '/'.substr($this->settingsPrefix, 0, -1).'/katex.min.css';
-		$urlGenerator = app()->make(UrlGenerator::class);
-		$katexCSS = $urlGenerator->to('forum')->path('assets/extensions'.$extensionFolder);
-		$document->head[] = '<link rel="stylesheet" type="text/css" href="'.$katexCSS.'">';
-		
-		// Style options for the <code /> tag.
-		$codeStyle = $this->settings->get($this->settingsPrefix.'codeStyle', '');
-		// convert new lines into a space
-		$codeStyle = trim(preg_replace('/\s+/', ' ', $codeStyle));
-		if(!empty($codeStyle)) {
-			$document->head[] = '<style type="text/css">'.$codeStyle.'</style>';
-		}
+        // include KaTeX stylesheet
+        $extensionFolder = '/'.$this->settingsPrefix.'/katex.min.css';
+        $urlGenerator = app()->make(UrlGenerator::class);
+        $katexCSS = $urlGenerator->to('forum')->path('assets/extensions'.$extensionFolder);
+        $document->head[] = '<link rel="stylesheet" type="text/css" href="'.$katexCSS.'">';
+
+        // stylize <span /> wrapper
+        $spanStyle = $this->settings->get($this->settingsPrefix.'.wrapperStyle', '');
+        // remove new lines to minify it
+        $spanStyle = trim(preg_replace('/\s+/', '', $spanStyle));
+        if (!empty($spanStyle)) {
+            $document->head[] = '<style type="text/css">'.$spanStyle.'</style>';
+        }
     }
 }

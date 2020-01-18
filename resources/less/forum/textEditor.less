@@ -1,0 +1,12 @@
+// Override horizontal scrolling to work around
+// https://github.com/flarum/core/issues/1692
+
+.TextEditor-controls {
+	overflow: visible;
+}
+// Overrides ".TextEditor-controls li" inline behaviour
+
+.MathRenDropdown li {
+	display: block;
+	margin: 0 !important;
+}

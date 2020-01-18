@@ -4,15 +4,15 @@
 
 An extension that handles TeX math rendering for your [Flarum](https://github.com/flarum) forum.
 
-![Screenshot](https://i.ibb.co/9H9jspH/post.png)
+![Screenshot](https://i.ibb.co/whsx4Yf/math-Ren-Post.png)
 
-[Click to view settings screenshot](https://i.ibb.co/ScTd1WK/settings.png)
+[Click to view settings screenshot](https://i.ibb.co/3hVCKz0/math-Ren-Settings-Page.png)
 
 ## Features
 
 - Based on [KaTeX](https://github.com/KaTeX/KaTeX) (the fastest math typesetting library on the web).
 - Display expressions as an inline or a block element.
-- Compatible with _Markdown_ and BBCode.
+- Compatible with Markdown and BBCode.
 - Almost fully customizable.
 - Fully self-hosted.
 
@@ -35,39 +35,52 @@ php flarum cache:clear
 
 Enable the extension.
 
-Some extensions such as _Markdown_ may cause unwanted formatting on your mathematical expressions. Hence, please double-check that you have enabled the "Wrap mathematical expressions with `<code />`" option from the settings modal if you're using such extensions. Everything else is optional.
+#### Delimiters
+You can use unlimited set of delimiters through this extension. But choose them wisely. LaTeX originally uses `$…$` for inline delimiters, but it ruins the display of normal `$` in text as expected in forum environment. However, MathRen uses `[math]...[/math]` for block and `[imath]...[/imath]` for inline delimiters by default (could be changed from the settings page) and has nothing to do with special characters.
 
-### Block Expressions
+You will see two new definitions including **Main BBCode delimiter** and **Alias delimiters** on the settings page. Since we can't use Regex for a simple find and replace operation with obvious reasons (See more on [here](https://github.com/Khan/perseus/blob/master/src/perseus-markdown.jsx)), additional delimiters are meant to be **alias** for _main BBCode delimiters_. If you have special delimiters (like `$$`) in your alias delimiters list, MathRen will scan the whole post for additional (alias) delimiters when saving a post and will try to replace them with main BBCode delimiters. This may cause longer waiting time when saving a post. You may want to use additional BBCode delimiters instead of special ones to prevent this action though. Because additional BBCode delimiters won't be changed with main BBCode delimiters and will stay as it is in the abscence of special delimiters in alias delimiters list.
 
-Wrap your TeX code with `[mathren]` and `[/mathren]` delimiters.
+#### Block Expressions
 
-```
-[mathren]\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi[/mathren]
-```
-
-### Inline Expressions
-
-Wrap your TeX code with `[mathren-inline]` and `[/mathren-inline]` delimiters.
+Wrap your TeX code with `[math]` and `[/math]` or your custom delimiters.
 
 ```
-Lorem ipsum dolor [mathren-inline]\varDelta = b^2-4ac[/mathren-inline] sit amet.
+[math]\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi[/math]
 ```
 
-### Ignored Classes
+Block expressions will be wrapped with `<span class="mathren-block">...</span>` by default.
 
-If you're willing to show the TeX code with delimiters, set `{codeClass}-ignore` class as an ignored class from the settings modal and use `[mathren=-ignore]` or `[mathren-inline=-ignore]` delimiters. These delimiters will automatically change into `[mathren]` and `[mathren-inline]` respectively. You must replace `{codeClass}` with the code tag's class name (defaults: `mathren-code` for block and `mathren-inline-code` for inline expressions).
+#### Inline Expressions
 
-This block expression won't be rendered:
-
-```
-[mathren=-ignore]\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi[/mathren]
-```
-
-This inline expression won't be rendered either:
+Wrap your TeX code with `[imath]` and `[/imath]` or your custom delimiters.
 
 ```
-[mathren-inline=-ignore]\varDelta = b^2-4ac[/mathren-inline]
+Lorem ipsum dolor [imath]\varDelta = b^2-4ac[/imath] sit amet.
 ```
+
+Inline expressions will be wrapped with `<span class="mathren-inline">...</span>` by default.
+
+#### Ignoring Expressions
+
+If you're willing to show the TeX code with delimiters,  there are two options:
+
+1. Wrap your expression with \`backticks\` or `code` tag.
+  + You must set it as an ignored tag from the settings page.
+2. Use a decisive keyword with your expressions.
+  + The keyword is `ignore` by default. But you can change it or assign multiple keywords from the settings page. You must write one of these keywords next to the _special_ right delimiter (i.e. `$$...$${keyword}`, `\(...\){keyword}`) with curly brackets or inside a BBCode (i.e. `[math=keyword]...[/math]`). Note that `[math]%e%[/math]{keyword}` is an example of invalid usage.
+
+These expressions won't be rendered:
+
+```
+`[math]\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi[/math]`
+[math=ignore]\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi[/math]
+[imath=ignore]\varDelta = b^2-4ac[/imath]
+$$\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi$${ignore}
+\[\int_{-\infty}^\infty\hat\xi\,e^{2\pi i\xi x}\,d\xi\]{ignore}
+\(\varDelta = b^2-4ac\){ignore}
+```
+
+Ignored expressions will be wrapped with `<span class="mathren-ignore">...</span>` by default if you choose the second option.
 
 ## Links
 
@@ -78,5 +91,3 @@ This inline expression won't be rendered either:
 - [Download via Packagist](https://packagist.org/packages/the-turk/flarum-mathren)
 
 _English is not my mother tongue, i'll appreciate it if you correct my translations._
-
-_This is my first [Flarum](https://github.com/flarum) extension. So please go easy on me._

@@ -1,7 +1,8 @@
 import app from 'flarum/app';
-import MathRenSettingsModal from "./modals/MathRenSettingsModal";
+import addSettingsPane from "./addSettingsPane";
 
 // initialize settings modal
-app.initializers.add('the-turk-mathren', () => {
-    app.extensionSettings['the-turk-mathren'] = () => app.modal.show(new MathRenSettingsModal());
+app.initializers.add('the-turk-mathren', app => {
+  // add the admin pane
+  addSettingsPane();
 });

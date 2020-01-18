@@ -289,6 +289,24 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _inheritsLoose; });
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+/***/ }),
+
 /***/ "./node_modules/katex/dist/katex.js":
 /*!******************************************!*\
   !*** ./node_modules/katex/dist/katex.js ***!
@@ -17719,6 +17737,148 @@ var katex_renderToHTMLTree = function renderToHTMLTree(expression, options) {
 
 /***/ }),
 
+/***/ "./src/forum/components/MathDropdown.js":
+/*!**********************************************!*\
+  !*** ./src/forum/components/MathDropdown.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _default; });
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/inheritsLoose */ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js");
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/app */ "flarum/app");
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_app__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_Component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/Component */ "flarum/Component");
+/* harmony import */ var flarum_Component__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_Component__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/components/Dropdown */ "flarum/components/Dropdown");
+/* harmony import */ var flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/components/Button */ "flarum/components/Button");
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/utils/ItemList */ "flarum/utils/ItemList");
+/* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var flarum_components_Separator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/components/Separator */ "flarum/components/Separator");
+/* harmony import */ var flarum_components_Separator__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Separator__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/helpers/icon */ "flarum/helpers/icon");
+/* harmony import */ var flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var flarum_components_Alert__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/components/Alert */ "flarum/components/Alert");
+/* harmony import */ var flarum_components_Alert__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Alert__WEBPACK_IMPORTED_MODULE_8__);
+
+
+
+
+
+
+
+
+
+
+var _default =
+/*#__PURE__*/
+function (_Component) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(_default, _Component);
+
+  function _default() {
+    return _Component.apply(this, arguments) || this;
+  }
+
+  var _proto = _default.prototype;
+
+  _proto.init = function init() {
+    this.textEditor = this.props.textEditor; // translation prefix
+
+    this.localePrefix = 'the-turk-mathren.forum.textEditor.'; // main BBCode delimiters
+
+    this.mainBlockDelimiters = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainBlockDelimiter').split('%e%');
+    this.mainInlineDelimiters = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainInlineDelimiter').split('%e%'); // default ignoring keyword
+
+    this.decisiveKeyword = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenDecisiveKeyword');
+  };
+
+  _proto.view = function view() {
+    return flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_3___default.a.component({
+      className: 'MathRenDropdown',
+      buttonClassName: 'Button Button--flat',
+      label: flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7___default()('fas fa-square-root-alt'),
+      children: this.items().toArray()
+    });
+  }
+  /**
+   * Build an item list for the contents of the dropdown menu.
+   *
+   * @return {ItemList}
+   */
+  ;
+
+  _proto.items = function items() {
+    var _this = this;
+
+    var items = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5___default.a();
+    items.add('mathBlock', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
+      icon: 'fas fa-vector-square',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'blockExpression'),
+      onclick: function onclick() {
+        // opening tag (left delimiter)
+        var leftDelim = _this.mainBlockDelimiters[0]; // closing tag (right delimiter)
+
+        var rightDelim = _this.mainBlockDelimiters[1];
+
+        var wrapper = _this.wrapSelection(leftDelim, rightDelim);
+
+        _this.textEditor.setValue(wrapper.value);
+
+        _this.textEditor.setSelectionRange(wrapper.range);
+      }
+    }), 50);
+    items.add('mathInline', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
+      icon: 'fas fa-grip-lines',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'inlineExpression'),
+      onclick: function onclick() {
+        // opening tag (left delimiter)
+        var leftDelim = _this.mainInlineDelimiters[0]; // closing tag (right delimiter)
+
+        var rightDelim = _this.mainInlineDelimiters[1];
+
+        var wrapper = _this.wrapSelection(leftDelim, rightDelim);
+
+        _this.textEditor.setValue(wrapper.value);
+
+        _this.textEditor.setSelectionRange(wrapper.range);
+      }
+    }), 0);
+    return items;
+  }
+  /**
+   * Wrap the current selection with BBCode tags
+   * If there's no selection, put them around the cursor
+   * Adapted from flagrow/fonts extension
+   *
+   * @param string leftDelim
+   * @param string rightDelim
+   * @return object
+   */
+  ;
+
+  _proto.wrapSelection = function wrapSelection(leftDelim, rightDelim) {
+    var range = this.textEditor.getSelectionRange();
+    var value = this.textEditor.value();
+    var before = value.slice(0, range[0]);
+    var after = value.slice(range[1]);
+    var selected = value.slice(range[0], range[1]);
+    return {
+      value: before + leftDelim + selected + rightDelim + after,
+      range: before.length + leftDelim.length + before.length + rightDelim.length + selected.length
+    };
+  };
+
+  return _default;
+}(flarum_Component__WEBPACK_IMPORTED_MODULE_2___default.a);
+
+
+
+/***/ }),
+
 /***/ "./src/forum/index.js":
 /*!****************************!*\
   !*** ./src/forum/index.js ***!
@@ -17736,6 +17896,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../dist/auto-render.min */ "./dist/auto-render.min.js");
 /* harmony import */ var _dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/components/TextEditor */ "flarum/components/TextEditor");
+/* harmony import */ var flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _components_MathDropdown__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/MathDropdown */ "./src/forum/components/MathDropdown.js");
+
+
 
 
 
@@ -17757,19 +17922,31 @@ flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.initializers.add('the-turk-mat
       "maxSize": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMaxSize'),
       "maxExpand": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMaxExpand'),
       "macros": JSON.parse(flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMacros')),
-      // ToDo: make delimiters optionable ? + add more options ?
-      "delimiters": [{
-        left: "[mathren]",
-        right: "[/mathren]",
-        display: true
-      }, {
-        left: "[mathren-inline]",
-        right: "[/mathren-inline]",
-        display: false
-      }]
+      "delimiters": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenDelimiters'),
+      "colorIsTextColor": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenEnableColorIsTextColor')
     });
+  }); // add text editor buttons
+
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4___default.a.prototype, 'toolbarItems', function (items) {
+    if (flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenEnableTextEditorButtons') === true) {
+      var mathButton = new _components_MathDropdown__WEBPACK_IMPORTED_MODULE_5__["default"]({
+        textEditor: this
+      });
+      items.add('the-turk-mathren', mathButton);
+    }
   });
 });
+
+/***/ }),
+
+/***/ "flarum/Component":
+/*!**************************************************!*\
+  !*** external "flarum.core.compat['Component']" ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['Component'];
 
 /***/ }),
 
@@ -17784,6 +17961,28 @@ module.exports = flarum.core.compat['app'];
 
 /***/ }),
 
+/***/ "flarum/components/Alert":
+/*!*********************************************************!*\
+  !*** external "flarum.core.compat['components/Alert']" ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Alert'];
+
+/***/ }),
+
+/***/ "flarum/components/Button":
+/*!**********************************************************!*\
+  !*** external "flarum.core.compat['components/Button']" ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Button'];
+
+/***/ }),
+
 /***/ "flarum/components/CommentPost":
 /*!***************************************************************!*\
   !*** external "flarum.core.compat['components/CommentPost']" ***!
@@ -17795,6 +17994,39 @@ module.exports = flarum.core.compat['components/CommentPost'];
 
 /***/ }),
 
+/***/ "flarum/components/Dropdown":
+/*!************************************************************!*\
+  !*** external "flarum.core.compat['components/Dropdown']" ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Dropdown'];
+
+/***/ }),
+
+/***/ "flarum/components/Separator":
+/*!*************************************************************!*\
+  !*** external "flarum.core.compat['components/Separator']" ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Separator'];
+
+/***/ }),
+
+/***/ "flarum/components/TextEditor":
+/*!**************************************************************!*\
+  !*** external "flarum.core.compat['components/TextEditor']" ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/TextEditor'];
+
+/***/ }),
+
 /***/ "flarum/extend":
 /*!***********************************************!*\
   !*** external "flarum.core.compat['extend']" ***!
@@ -17803,6 +18035,28 @@ module.exports = flarum.core.compat['components/CommentPost'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['extend'];
+
+/***/ }),
+
+/***/ "flarum/helpers/icon":
+/*!*****************************************************!*\
+  !*** external "flarum.core.compat['helpers/icon']" ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['helpers/icon'];
+
+/***/ }),
+
+/***/ "flarum/utils/ItemList":
+/*!*******************************************************!*\
+  !*** external "flarum.core.compat['utils/ItemList']" ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['utils/ItemList'];
 
 /***/ })
 
