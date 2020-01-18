@@ -69,7 +69,7 @@ class InterruptPostProcess
              $this->settings->get(
                  // settings key
                  $this->settingsPrefix.'aliasBlockDelimiters'
-             ),
+             )
         );
 
         // get all of the inline delimiters
@@ -78,7 +78,7 @@ class InterruptPostProcess
              $this->settings->get(
                  // settings key
                  $this->settingsPrefix.'aliasInlineDelimiters'
-             ),
+             )
         );
 
         // BBCode delimiters for block expressions
