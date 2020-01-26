@@ -10,7 +10,7 @@ class ArrayHelpers
      * @param array $inlineDelimiters
      * @return array
      */
-    public function delimiterList(array $blockDelims, array $inlineDelims): array
+    public static function delimiterList(array $blockDelims, array $inlineDelims): array
     {
         return array_merge(
             self::setOptions($inlineDelims),
@@ -25,7 +25,7 @@ class ArrayHelpers
      * @param bool $isBlock
      * @return array
      */
-    private function setOptions(array $delimiters, bool $isBlock = false): array
+    private static function setOptions(array $delimiters, bool $isBlock = false): array
     {
         $r = [];
 
@@ -62,7 +62,7 @@ class ArrayHelpers
      * @param bool $bbOnly
      * @return array
      */
-    public function commaToArray(string $list, bool $bbOnly = false): array
+    public static function commaToArray(string $list, bool $bbOnly = false): array
     {
         $r = [];
 
@@ -83,7 +83,7 @@ class ArrayHelpers
      * @param string $list
      * @return array
      */
-    public function macroListAsAnArray(string $list): array
+    public static function macroListAsAnArray(string $list): array
     {
         $r = [];
 
@@ -113,7 +113,7 @@ class ArrayHelpers
      * @param array $r
      * @return array
      */
-    public function bbCodeMatcher(array $r): array
+    public static function bbCodeMatcher(array $r): array
     {
         return preg_grep('/\[(.*?)\]%e%\[(\/)?\1\]/', $r);
     }
