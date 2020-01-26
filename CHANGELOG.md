@@ -1,3 +1,6 @@
+### 0.2.1
+- **Fix** syntax error.
+
 ### 0.2.0
 - **Move** settings to the left pane.
     + It was a long set of options to be shown in a modal.
