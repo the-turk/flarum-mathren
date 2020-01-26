@@ -25,7 +25,7 @@ class ArrayHelpers
      * @param bool $isBlock
      * @return array
      */
-    private static function setOptions(array $delimiters, bool $isBlock = false): array
+    private function setOptions(array $delimiters, bool $isBlock = false): array
     {
         $r = [];
 
