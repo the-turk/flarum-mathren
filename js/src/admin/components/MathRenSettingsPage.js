@@ -6,7 +6,7 @@ import Select from 'flarum/components/Select';
 import Switch from 'flarum/components/Switch';
 import Alert from 'flarum/components/Alert';
 
-export default class MathRenSettingsModal extends Component {
+export default class MathRenSettingsPage extends Component {
   init() {
     // whether we are saving the settings or not right now
     this.loading = false;

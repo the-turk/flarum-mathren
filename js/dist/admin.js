@@ -172,7 +172,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MathRenSettingsModal; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MathRenSettingsPage; });
 /* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/inheritsLoose */ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js");
 /* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/app */ "flarum/app");
 /* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_app__WEBPACK_IMPORTED_MODULE_1__);
@@ -197,16 +197,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var MathRenSettingsModal =
+var MathRenSettingsPage =
 /*#__PURE__*/
 function (_Component) {
-  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(MathRenSettingsModal, _Component);
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(MathRenSettingsPage, _Component);
 
-  function MathRenSettingsModal() {
+  function MathRenSettingsPage() {
     return _Component.apply(this, arguments) || this;
   }
 
-  var _proto = MathRenSettingsModal.prototype;
+  var _proto = MathRenSettingsPage.prototype;
 
   _proto.init = function init() {
     var _this = this;
@@ -493,7 +493,7 @@ function (_Component) {
     return this.settingsPrefix + key;
   };
 
-  return MathRenSettingsModal;
+  return MathRenSettingsPage;
 }(flarum_Component__WEBPACK_IMPORTED_MODULE_2___default.a);
 
 
