@@ -84,6 +84,7 @@ class ConfigureTextFormatter
                 // to ignore Markdown and BBCode parsers
                 $tag = $event->configurator->tags[$newTag];
                 $tag->rules->ignoreTags();
+                $tag->rules->disableAutoLineBreaks();
             }
         }
     }
