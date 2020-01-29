@@ -278,7 +278,7 @@ function (_Component) {
       oninput: m.withAttr('value', this.values.inlineMathClass)
     }))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'wrapperStyle')), m('textarea.FormControl', {
       value: this.values.wrapperStyle() || '',
-      placeholder: '.mathren-block { } .mathren-inline { }',
+      placeholder: '.mathren-block { } .mathren-inline { } .mathren-ignore { }',
       oninput: m.withAttr('value', this.values.wrapperStyle)
     })]), m('h3', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'katexOptionsHeading')), m('hr'), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'delimiters')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'delimitersHelp'))]), m('.Form-group', [m('div', {
       className: 'inlineDivLabel'
@@ -297,10 +297,6 @@ function (_Component) {
       placeholder: '[imath]%e%[/imath]',
       oninput: m.withAttr('value', this.values.mainInlineDelimiter)
     }))]), m('.Form-group', [m('div', {
-      className: 'helpText'
-    }, m('i', {
-      className: 'fas fa-exclamation-circle'
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'delimiterWarning')))]), m('.Form-group', [m('div', {
       className: 'inlineDivLabel'
     }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'aliasBlockDelimiters'))), m('div', {
       className: 'inlineDivInput'

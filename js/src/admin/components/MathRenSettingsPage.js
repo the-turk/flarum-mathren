@@ -137,7 +137,7 @@ export default class MathRenSettingsModal extends Component {
               m('label', app.translator.trans(this.localePrefix + 'wrapperStyle')),
               m('textarea.FormControl', {
                 value: this.values.wrapperStyle() || '',
-                placeholder: '.mathren-block { } .mathren-inline { }',
+                placeholder: '.mathren-block { } .mathren-inline { } .mathren-ignore { }',
                 oninput: m.withAttr('value', this.values.wrapperStyle)
               })
             ]),
@@ -177,16 +177,6 @@ export default class MathRenSettingsModal extends Component {
                   placeholder: '[imath]%e%[/imath]',
                   oninput: m.withAttr('value', this.values.mainInlineDelimiter)
                 }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'helpText',
-                },
-                m('i', {
-                  className: 'fas fa-exclamation-circle',
-                }),
-                m('span', app.translator.trans(this.localePrefix + 'delimiterWarning')),
               ),
             ]),
             m('.Form-group', [

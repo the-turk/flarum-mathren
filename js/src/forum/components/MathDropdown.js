@@ -15,11 +15,8 @@ export default class extends Component {
     this.localePrefix = 'the-turk-mathren.forum.textEditor.';
 
     // main BBCode delimiters
-    this.mainBlockDelimiters = app.forum.attribute('mathRenMainBlockDelimiter').split('%e%');
-    this.mainInlineDelimiters = app.forum.attribute('mathRenMainInlineDelimiter').split('%e%');
-
-    // default ignoring keyword
-    this.decisiveKeyword = app.forum.attribute('mathRenDecisiveKeyword');
+    this.mainBlockDelimiter = app.forum.attribute('mathRenMainBlockDelimiter');
+    this.mainInlineDelimiter = app.forum.attribute('mathRenMainInlineDelimiter');
   }
 
   view() {
@@ -44,9 +41,9 @@ export default class extends Component {
         children: app.translator.trans(this.localePrefix + 'blockExpression'),
         onclick: () => {
           // opening tag (left delimiter)
-          const leftDelim = this.mainBlockDelimiters[0];
+          const leftDelim = this.mainBlockDelimiter['left'];
           // closing tag (right delimiter)
-          const rightDelim = this.mainBlockDelimiters[1];
+          const rightDelim = this.mainBlockDelimiter['right'];
 
           var wrapper = this.wrapSelection(leftDelim, rightDelim);
 
@@ -62,9 +59,9 @@ export default class extends Component {
         children: app.translator.trans(this.localePrefix + 'inlineExpression'),
         onclick: () => {
           // opening tag (left delimiter)
-          const leftDelim = this.mainInlineDelimiters[0];
+          const leftDelim = this.mainInlineDelimiter['left'];
           // closing tag (right delimiter)
-          const rightDelim = this.mainInlineDelimiters[1];
+          const rightDelim = this.mainInlineDelimiter['right'];
 
           var wrapper = this.wrapSelection(leftDelim, rightDelim);
 

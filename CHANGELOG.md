@@ -1,3 +1,11 @@
+### 0.2.3
+- **Fix** (hopefully) all PHP-related errors/warnings/notices.
+- **Fix** \\[%e%\\] must come last (if any) in the additional delimiters list.
+- **Improve** rendering performance.
+
+### 0.2.2
+- **Fix** static methods.
+
 ### 0.2.1
 - **Fix** syntax error.
 

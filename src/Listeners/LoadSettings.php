@@ -3,28 +3,23 @@ namespace TheTurk\MathRen\Listeners;
 
 use Flarum\Api\Event\Serializing;
 use Flarum\Api\Serializer\ForumSerializer;
-use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use TheTurk\MathRen\Helpers\ArrayHelpers;
+use TheTurk\MathRen\Helpers\Settings;
+use Illuminate\Support\Arr;
 
 class LoadSettings
 {
     /**
-     * @var SettingsRepositoryInterface
+     * @var Settings
      */
     protected $settings;
 
     /**
-     * @var string $settingsPrefix
-     */
-    public $settingsPrefix = 'the-turk-mathren.';
-
-    /**
-     * LoadSettingsFromDatabase constructor
+     * Gets the settings variable. Called on Object creation.
      *
-     * @param SettingsRepositoryInterface $settings
+     * @param Settings $settings
      */
-    public function __construct(SettingsRepositoryInterface $settings)
+    public function __construct(Settings $settings)
     {
         $this->settings = $settings;
     }
@@ -48,84 +43,15 @@ class LoadSettings
     public function prepareApiAttributes(Serializing $event)
     {
         if ($event->isSerializer(ForumSerializer::class)) {
-            // main delimiters
-            $mainBlockDelimiter = $this->settings->get(
-                // settings key
-                $this->settingsPrefix.'mainBlockDelimiter',
-                 // default value
-                 '[math]%e%[/math]'
-            );
-            $mainInlineDelimiter = $this->settings->get(
-                // settings key
-                $this->settingsPrefix.'mainInlineDelimiter',
-                 // default value
-                 '[imath]%e%[/imath]'
-            );
-
-            // get all of the block delimiters
-            $blockDelimiters = ArrayHelpers::commaToArray(
-                $mainBlockDelimiter.','.
-                 $this->settings->get(
-                     // settings key
-                     $this->settingsPrefix.'aliasBlockDelimiters'
-                 )
-            );
-
-            // get all of the inline delimiters
-            $inlineDelimiters = ArrayHelpers::commaToArray(
-                $mainInlineDelimiter.','.
-                 $this->settings->get(
-                     // settings key
-                     $this->settingsPrefix.'aliasInlineDelimiters'
-                 )
-            );
-
-            // BBCode delimiters for block expressions
-            $bbBlockDelimiters = ArrayHelpers::bbCodeMatcher($blockDelimiters);
-
-            // BBCode delimiters for inline expressions
-            $bbInlineDelimiters = ArrayHelpers::bbCodeMatcher($inlineDelimiters);
-
-            // get all of the BBCode delimiters
-            $bbDelimiters = ArrayHelpers::delimiterList(
-                $bbBlockDelimiters,
-                $bbInlineDelimiters
-            );
-
-            // this is the default decisive keyword
-            // which is the first keyword in the decisive keywords list
-            $decisiveKeyword = ArrayHelpers::commaToArray(
-                $this->settings->get(
-                    // settings key
-                    $this->settingsPrefix.'decisiveKeywords',
-                    // default value
-                    'ignore'
-                )
-            )[0];
+            // get all delimiters with options
+            $delimitersWithOptions = $this->settings->getDelimitersWithOptions();
 
             // get ignored tags as an array
-            $ignoredTags = ArrayHelpers::commaToArray(
-                $this->settings->get(
-                    // settings key
-                    $this->settingsPrefix.'ignoredTags',
-                    // default value
-                    ''
-                )
-            );
-
-            // get ignored classes as an array
-            $ignoredClasses = ArrayHelpers::commaToArray(
-                $this->settings->get(
-                    // settings key
-                    $this->settingsPrefix.'ignoredClasses',
-                    // default value
-                    'mathren-ignore'
-                )
-            );
+            $ignored = $this->settings->getIgnored();
 
             // Set macro list as an array
             $macros = $this->settings->get(
-                $this->settingsPrefix.'macros',
+                'macros',
                 []
             );
 
@@ -134,29 +60,86 @@ class LoadSettings
                 if (is_array($macros)) {
                     $macroList = $macros;
                 } else {
-                    $macroList = ArrayHelpers::macroListAsAnArray($macros);
+                    $macroList = $this->settings->macroListAsAnArray($macros);
                 }
             }
 
             $event->attributes += [
-                'mathRenMainBlockDelimiter' => (string)$mainBlockDelimiter,
-                'mathRenMainInlineDelimiter' => (string)$mainInlineDelimiter,
-                'mathRenDelimiters' => (array)$bbDelimiters,
-                'mathRenDecisiveKeyword' => (string)$decisiveKeyword,
-                'mathRenIgnoredTags' => (array)$ignoredTags,
-                'mathRenIgnoredClasses' => (array)$ignoredClasses,
-                'mathRenOutputMode' => (string)$this->settings->get($this->settingsPrefix.'outputMode', 'htmlAndMathml'),
-                'mathRenEnableFleqn' => (bool)$this->settings->get($this->settingsPrefix.'enableFleqn', false),
-                'mathRenEnableLeqno' => (bool)$this->settings->get($this->settingsPrefix.'enableLeqno', false),
-                'mathRenEnableColorIsTextColor' => (bool)$this->settings->get($this->settingsPrefix.'enableColorIsTextColor', false),
-                'mathRenEnableThrowOnError' => (bool)$this->settings->get($this->settingsPrefix.'enableThrowOnError', false),
-                'mathRenErrorColor' => (string)$this->settings->get($this->settingsPrefix.'errorColor', '#cc0000'),
-                'mathRenMinRuleThickness' => floatval(preg_replace('/[^-0-9\.]/', '', $this->settings->get($this->settingsPrefix.'minRuleThickness', 0.05))),
-                'mathRenMaxSize' => floatval(preg_replace('/[^-0-9\.]/', '', $this->settings->get($this->settingsPrefix.'maxSize', 10))),
-                'mathRenMaxExpand' => (int)$this->settings->get($this->settingsPrefix.'maxExpand', 1000),
-                'mathRenMacros' => json_encode((array)$macroList),
-                'mathRenEnableTextEditorButtons' => (bool)$this->settings->get($this->settingsPrefix.'enableTextEditorButtons', false),
+                'mathRenMainBlockDelimiter' => (array)
+                    $this->settings->getMainDelimiter($delimitersWithOptions, true),
+                'mathRenMainInlineDelimiter' => (array)
+                    $this->settings->getMainDelimiter($delimitersWithOptions),
+                'mathRenDelimiters' => (array)
+                    Arr::get($delimitersWithOptions, 'bbcodes'),
+                'mathRenIgnoredTags' => (array)
+                    $ignored['tags'],
+                'mathRenIgnoredClasses' => (array)
+                    $ignored['classes'],
+                'mathRenOutputMode' => (string)
+                    $this->settings->get(
+                        'outputMode',
+                        Arr::get($this->settings->getDefaults(), 'htmlAndMathml')
+                    ),
+                'mathRenEnableFleqn' => (bool)
+                    $this->settings->get(
+                        'enableFleqn',
+                        Arr::get($this->settings->getDefaults(), 'enableFleqn')
+                    ),
+                'mathRenEnableLeqno' => (bool)
+                    $this->settings->get(
+                        'enableLeqno',
+                        Arr::get($this->settings->getDefaults(), 'enableLeqno')
+                    ),
+                'mathRenEnableColorIsTextColor' => (bool)
+                    $this->settings->get(
+                        'enableColorIsTextColor',
+                        Arr::get($this->settings->getDefaults(), 'enableColorIsTextColor')
+                    ),
+                'mathRenEnableThrowOnError' => (bool)
+                    $this->settings->get(
+                        'enableThrowOnError',
+                        Arr::get($this->settings->getDefaults(), 'enableThrowOnError')
+                    ),
+                'mathRenErrorColor' => (string)
+                    $this->settings->get(
+                        'errorColor',
+                        Arr::get($this->settings->getDefaults(), 'errorColor')
+                    ),
+                'mathRenMinRuleThickness' => (float)
+                    $this->sanitizeFloat(
+                        $this->settings->get(
+                            'minRuleThickness',
+                            Arr::get($this->settings->getDefaults(), 'minRuleThickness')
+                        )
+                    ),
+                'mathRenMaxSize' => (float)
+                    $this->sanitizeFloat(
+                        $this->settings->get(
+                            'maxSize',
+                            Arr::get($this->settings->getDefaults(), 'maxSize')
+                        )
+                    ),
+                'mathRenMaxExpand' => (int)
+                    $this->settings->get(
+                        'maxExpand',
+                        Arr::get($this->settings->getDefaults(), 'maxExpand')
+                    ),
+                'mathRenMacros' => (string)
+                    json_encode((array)$macroList),
+                'mathRenEnableTextEditorButtons' => (bool)
+                    $this->settings->get(
+                        'enableTextEditorButtons',
+                        Arr::get($this->settings->getDefaults(), 'enableTextEditorButtons')
+                    ),
             ];
         }
+    }
+
+    /**
+     * @param float $number
+     * @return float
+     */
+    public function sanitizeFloat(float $number) {
+        return floatval(preg_replace('/[^-0-9\.]/', '', $number));
     }
 }

@@ -24,11 +24,6 @@ the-turk-mathren:
                         bu özel sınırlayıcıları bulup ana sınırlayıcılarla değiştirmeye çalışır. Bu durum mesajın kaydedilme süresini
                         uzatabilir. Bu etkiden kaçınmak için buraya yazacağınız ek sınırlayıcılarda özel sınırlayıcılar
                         yerine BBCode formatını kullanmak isteyebilirsiniz.
-            delimiterWarning:         >-
-                        <strong>UYARI</strong> Aşağıdaki listelerin herhangi birinde eğer <code>\[%e%\]</code> sınırlayıcısını
-                        kullanmak isterseniz, listenin en sonuna yazmalısınız. Aksi durumda MathRen, diğer sınırlayıcılardan önce <code>\[</code>
-                        sınırlayıcısını arayacaktır. Bu durum, başka bir sınırlayıcı içinde yazılmış <code>\\[0.3em]</code> gibi bir kodun
-                        bulunmasına ve matematiksel ifadenin yanlış yerden başlatılmasına neden olabilir.
             ignoringExpressions:      Atlanacak İfadeler
             ignoringExpressionsHelp:  Virgül ile ayırın.
             decisiveKeywords:         Atlamayı belirleyici kelimeler

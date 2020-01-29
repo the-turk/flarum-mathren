@@ -6,7 +6,7 @@ Bu eklenti yardımıyla [Flarum](https://github.com/flarum) tartışmalarınız 
 
 ![Ekran görüntüsü](https://i.ibb.co/whsx4Yf/math-Ren-Post.png)
 
-[Ayarların ekran görüntüsü için buraya tıklayın](https://i.ibb.co/3hVCKz0/math-Ren-Settings-Page.png)
+[Ayarların ekran görüntüsü için buraya tıklayın](https://i.ibb.co/FD96YTr/adminn.png)
 
 ## Özellikler
 

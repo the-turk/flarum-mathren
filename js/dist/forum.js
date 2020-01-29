@@ -17790,10 +17790,8 @@ function (_Component) {
 
     this.localePrefix = 'the-turk-mathren.forum.textEditor.'; // main BBCode delimiters
 
-    this.mainBlockDelimiters = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainBlockDelimiter').split('%e%');
-    this.mainInlineDelimiters = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainInlineDelimiter').split('%e%'); // default ignoring keyword
-
-    this.decisiveKeyword = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenDecisiveKeyword');
+    this.mainBlockDelimiter = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainBlockDelimiter');
+    this.mainInlineDelimiter = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainInlineDelimiter');
   };
 
   _proto.view = function view() {
@@ -17820,9 +17818,9 @@ function (_Component) {
       children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'blockExpression'),
       onclick: function onclick() {
         // opening tag (left delimiter)
-        var leftDelim = _this.mainBlockDelimiters[0]; // closing tag (right delimiter)
+        var leftDelim = _this.mainBlockDelimiter['left']; // closing tag (right delimiter)
 
-        var rightDelim = _this.mainBlockDelimiters[1];
+        var rightDelim = _this.mainBlockDelimiter['right'];
 
         var wrapper = _this.wrapSelection(leftDelim, rightDelim);
 
@@ -17836,9 +17834,9 @@ function (_Component) {
       children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'inlineExpression'),
       onclick: function onclick() {
         // opening tag (left delimiter)
-        var leftDelim = _this.mainInlineDelimiters[0]; // closing tag (right delimiter)
+        var leftDelim = _this.mainInlineDelimiter['left']; // closing tag (right delimiter)
 
-        var rightDelim = _this.mainInlineDelimiters[1];
+        var rightDelim = _this.mainInlineDelimiter['right'];
 
         var wrapper = _this.wrapSelection(leftDelim, rightDelim);
 
