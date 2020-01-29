@@ -57,25 +57,19 @@ class ConfigureTextFormatter
             $decisiveKeywords = implode(',', $this->settings->getDecisiveKeywords());
 
             foreach ($bbDelimiters as $d) {
-                // we will use opening tags for filter rules
+                // we will use opening tags
                 // [mathren] => mathren, for example
                 // ToDo: check it at the settings page
-                $newFilter = Str::after(Str::before($d['left'], ']'), '[');
-
-                // Allow new BBCode
-                array_push(
-                    $event->configurator->BBCodes->bbcodeMonkey->allowedFilters,
-                    $newFilter
-                );
+                $newTag = Str::after(Str::before($d['left'], ']'), '[');
 
                 $display = $d['display'] === true ? 'block' : 'inline';
 
                 // add custom BBCode
                 $event->configurator->BBCodes->addCustom(
-                    '['.$newFilter.'={CHOICE='.$decisiveKeywords.';optional}]{TEXT}'.$d['right'],
+                    '['.$newTag.'={CHOICE='.$decisiveKeywords.';optional}]{TEXT}'.$d['right'],
                     '<span>
                         <xsl:choose>
-                         <xsl:when test="@'.$newFilter.'">
+                         <xsl:when test="@'.$newTag.'">
                           <xsl:attribute name="class">'.$classes[$display].' '.$classes['ignore'].'</xsl:attribute>
                          </xsl:when>
                          <xsl:otherwise>
@@ -88,7 +82,7 @@ class ConfigureTextFormatter
 
                 // this dark magic allowing us
                 // to ignore Markdown and BBCode parsers
-                $tag = $event->configurator->tags[$newFilter];
+                $tag = $event->configurator->tags[$newTag];
                 $tag->rules->ignoreTags();
             }
         }
