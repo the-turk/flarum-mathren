@@ -17774,9 +17774,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _default =
-/*#__PURE__*/
-function (_Component) {
+var _default = /*#__PURE__*/function (_Component) {
   Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(_default, _Component);
 
   function _default() {

@@ -197,9 +197,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var MathRenSettingsPage =
-/*#__PURE__*/
-function (_Component) {
+var MathRenSettingsPage = /*#__PURE__*/function (_Component) {
   Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(MathRenSettingsPage, _Component);
 
   function MathRenSettingsPage() {
