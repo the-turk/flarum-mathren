@@ -1,3 +1,18 @@
+### 0.2.7
+- **Update** version constraints for Flarum 0.1.0-beta.13.
+
+### 0.2.6
+- **Update** version constraints for Flarum 0.1.0-beta.12.
+
+### 0.2.5
+- **Add** Ukranian language
+
+### 0.2.4
+- **Remove** unnecessary files.
+- **Remove** filter definitions.
+- **Fix** a typo in settings page component.
+- **Fix** linebreaks ruins rendering expressions.
+
 ### 0.2.3
 - **Fix** (hopefully) all PHP-related errors/warnings/notices.
 - **Fix** \\[%e%\\] must come last (if any) in the additional delimiters list.
