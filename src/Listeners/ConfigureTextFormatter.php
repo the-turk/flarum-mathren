@@ -94,14 +94,6 @@ class ConfigureTextFormatter
              * the KaTeX's Custom Script Type Extension but it is not well-written
              * and doesn't allows us to use any option that the KaTeX provides.
              * Also, it's pretty much the same thing - the same find and render operation.
-             *
-             * This workaround has one flaw that I can think of. There will be
-             * leftover BBCodes once the extension is disabled.
-             * (`[math]x^2[/math]` instead of `x^2` for example)
-             * But they will be indicating that they were expressions before and
-             * they can easily be rendered even when you directly inject the KaTeX's
-             * auto-render plugin without using any extension.
-             * So it's not a big deal for me, I can live with it.
              */
             $event->configurator->BBCodes->addCustom(
                 '['.$newTag.'={CHOICE='.$decisiveKeywords.';optional}]{TEXT}'.$delim['right'],
