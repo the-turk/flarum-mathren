@@ -6,7 +6,7 @@ An extension that handles TeX math rendering for your [Flarum](https://github.co
 
 ![Screenshot](https://i.ibb.co/3WpHVrH/mathren.png)
 
-![Action](https://i.imgur.com/K3rFUhY.gifv)
+![Action](https://i.imgur.com/GEkwFtR.gif)
 
 [Click to view settings screenshot](https://i.ibb.co/nnVnqZs/mathren-settings.png)
 

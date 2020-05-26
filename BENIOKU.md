@@ -6,7 +6,7 @@ Bu eklenti yardımıyla [Flarum](https://github.com/flarum) tartışmalarınız 
 
 ![Ekran görüntüsü](https://i.ibb.co/3WpHVrH/mathren.png)
 
-![Ön izleme](https://i.imgur.com/K3rFUhY.gifv)
+![Ön izleme](https://i.imgur.com/GEkwFtR.gif)
 
 [Ayarların ekran görüntüsü için buraya tıklayın](https://i.ibb.co/nnVnqZs/mathren-settings.png)
 
