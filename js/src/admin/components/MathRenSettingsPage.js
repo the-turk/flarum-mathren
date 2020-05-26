@@ -5,76 +5,53 @@ import Button from 'flarum/components/Button';
 import Select from 'flarum/components/Select';
 import Switch from 'flarum/components/Switch';
 import Alert from 'flarum/components/Alert';
+import Page from 'flarum/components/Page';
 
-export default class MathRenSettingsPage extends Component {
+/* Regex constants those will be used to validate some fields */
+// bbcode delimiters
+const bbcode_regex = /^\[([a-zA-Z_-]+)\]%e%\[\/\1\](?:,\s*\[([a-zA-Z_-]+)\]%e%\[\/\2\])*$/;
+// comma seperated lists, except the bbcode delimiters
+const comma_regex = /^[a-zA-Z_-]+(?:,\s*[a-zA-Z_-]+)*$/;
+// hexadecimal colors
+const hex_regex = /^#[0-9a-f]{3}([0-9a-f]{3})?$/i;
+// floating point numbers
+const float_regex = /^[0-9]*[.]?[0-9]+$/;
+// zero or positive integer values
+const int_regex = /^\+?(0|[1-9]\d*)$/;
+
+/* Other constants those will be used through this page */
+const settingsPrefix = 'the-turk-mathren.';
+const localePrefix = 'the-turk-mathren.admin.settings.';
+
+export default class MathRenSettingsPage extends Page {
   init() {
-    // whether we are saving the settings or not right now
+    super.init();
+
+    this.settings = {};
     this.loading = false;
 
-    // the fields we need to watch and to save
-    this.fields = [
-      // the code tag options
-      'blockMathClass',
-      'inlineMathClass',
-      'wrapperStyle',
-      // KaTeX options
-      'mainBlockDelimiter',
-      'mainInlineDelimiter',
-      'aliasBlockDelimiters',
-      'aliasInlineDelimiters',
-      'decisiveKeywords',
-      'ignoredTags',
-      'ignoredClasses',
-      'errorColor',
-      'minRuleThickness',
-      'maxSize',
-      'macros',
-      'maxExpand',
-      'outputMode'
-    ];
-
-    // the checkboxes we need to watch and to save
-    this.checkboxes = [
-      // KaTeX options
-      'enableFleqn',
-      'enableLeqno',
-      'enableColorIsTextColor',
-      'enableThrowOnError',
-      'enableTextEditorButtons'
-    ];
-
-    // select options for output mode
+    // select options for the output mode
     this.outputModeOptions = {
       'html': 'HTML',
       'mathml': 'MathML',
       'htmlAndMathml': 'HTML & MathML'
     };
 
-    // get the saved settings from the database
-    const settings = app.data.settings;
-
-    // settings prefix
-    // (to be added to every field and checkbox in the setting table)
-    this.settingsPrefix = 'the-turk-mathren.';
-
-    // translation prefix
-    this.localePrefix = 'the-turk-mathren.admin.settings.';
-
-    // contains default values
-    this.values = {};
-
-    // bind the values of the fields and checkboxes
-    // to the getter/setter functions
-    this.fields.forEach(key =>
-      this.values[key] = m.prop(settings[this.addPrefix(key)])
-    );
-    this.checkboxes.forEach(key => {
-      this.values[key] = m.prop(settings[this.addPrefix(key)] === '1');
-    });
+    this.validaton_rules = {
+      blockDelimiters: bbcode_regex,
+      inlineDelimiters: bbcode_regex,
+      decisiveKeywords: comma_regex,
+      ignoredTags: comma_regex,
+      ignoredClasses: comma_regex,
+      minRuleThickness: float_regex,
+      maxSize: float_regex,
+      errorColor: hex_regex,
+      maxExpand: int_regex
+    };
   }
 
   /**
-   * Show the actual MathRenSettingsPage.
+   * Show the actual settings page
    *
    * @returns {*}
    */
@@ -89,157 +66,11 @@ export default class MathRenSettingsPage extends Component {
           m('form', {
             onsubmit: this.onsubmit.bind(this)
           }, [
-            m('.Form-group', [
-              m('iframe', {
-                src: 'https://ghbtns.com/github-btn.html?user=the-turk' +
-                  '&repo=flarum-mathren&type=watch&count=true&v=2',
-                frameborder: '0',
-                scrolling: 'no'
-              }),
-            ]),
-            m('h3', app.translator.trans(this.localePrefix + 'wrapperOptionsHeading')),
+            m('h3', app.translator.trans(localePrefix + 'katexOptionsHeading')),
             m('hr'),
             m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'mathClasses')),
-              m('.helpText', app.translator.trans(this.localePrefix + 'mathClassesHelp'))
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'blockMathClass'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.blockMathClass() || 'mathren-block',
-                  oninput: m.withAttr('value', this.values.blockMathClass)
-                }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'inlineMathClass'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.inlineMathClass() || 'mathren-inline',
-                  oninput: m.withAttr('value', this.values.inlineMathClass)
-                }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'wrapperStyle')),
-              m('textarea.FormControl', {
-                value: this.values.wrapperStyle() || '',
-                placeholder: '.mathren-block { } .mathren-inline { } .mathren-ignore { }',
-                oninput: m.withAttr('value', this.values.wrapperStyle)
-              })
-            ]),
-            m('h3', app.translator.trans(this.localePrefix + 'katexOptionsHeading')),
-            m('hr'),
-            m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'delimiters')),
-              m('.helpText', app.translator.trans(this.localePrefix + 'delimitersHelp'))
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'mainBlockDelimiter'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.mainBlockDelimiter() || '[math]%e%[/math]',
-                  placeholder: '[math]%e%[/math]',
-                  oninput: m.withAttr('value', this.values.mainBlockDelimiter)
-                }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'mainInlineDelimiter'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.mainInlineDelimiter() || '[imath]%e%[/imath]',
-                  placeholder: '[imath]%e%[/imath]',
-                  oninput: m.withAttr('value', this.values.mainInlineDelimiter)
-                }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'aliasBlockDelimiters'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.aliasBlockDelimiters() || '',
-                  placeholder: '[mathren]%e%[/mathren],$$%e%$$,\\[%e%\\]',
-                  oninput: m.withAttr('value', this.values.aliasBlockDelimiters)
-                }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'aliasInlineDelimiters'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.aliasInlineDelimiters() || '',
-                  placeholder: '[mathren-inline]%e%[/mathren-inline],\\(%e%\\)',
-                  oninput: m.withAttr('value', this.values.aliasInlineDelimiters)
-                }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'helpText',
-                },
-                m('i', {
-                  className: 'fas fa-question-circle',
-                }),
-                m('span', app.translator.trans(this.localePrefix + 'aliasDelimitersHelp')),
-              ),
-            ]),
-            m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'ignoringExpressions')),
-              m('.helpText', app.translator.trans(this.localePrefix + 'ignoringExpressionsHelp'))
-            ]),
-            m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'decisiveKeywords'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.decisiveKeywords() || 'ignore',
-                  placeholder: 'ignore',
-                  oninput: m.withAttr('value', this.values.decisiveKeywords)
-                }),
-              ),
+              m('label', app.translator.trans(localePrefix + 'delimiters')),
+              m('.helpText', app.translator.trans(localePrefix + 'delimitersHelp'))
             ]),
             m('.Form-group', [
               m('div', {
@@ -248,54 +79,115 @@ export default class MathRenSettingsPage extends Component {
                 m('i', {
                   className: 'fas fa-exclamation-circle',
                 }),
-                m('span', app.translator.trans(this.localePrefix + 'decisiveKeywordsWarning')),
+                m('span', app.translator.trans(localePrefix + 'regexInfo')),
+              )
+            ]),
+            m('.Form-group .flex-container', [
+              m('div', {
+                  className: 'inline--label'
+                },
+                m('.helpText', app.translator.trans(localePrefix + 'blockDelimiters'))
               ),
+              m('div', {
+                  className: 'inline--input'
+                },
+                m('input[type=text].FormControl', {
+                  bidi: this.setting(settingsPrefix + 'blockDelimiters', '[math]%e%[/math]'),
+                  placeholder: '[math]%e%[/math]'
+                }),
+              ),
+            ]),
+            m('.Form-group .flex-container', [
+              m('div', {
+                  className: 'inline--label'
+                },
+                m('.helpText', app.translator.trans(localePrefix + 'inlineDelimiters'))
+              ),
+              m('div', {
+                  className: 'inline--input'
+                },
+                m('input[type=text].FormControl', {
+                  bidi: this.setting(settingsPrefix + 'inlineDelimiters', '[imath]%e%[/imath]'),
+                  placeholder: '[imath]%e%[/imath]'
+                }),
+              ),
+            ]),
+            m('.Form-group', [
               m('div', {
                   className: 'helpText',
                 },
                 m('i', {
                   className: 'fas fa-info-circle',
                 }),
-                m('span', app.translator.trans(this.localePrefix + 'decisiveKeywordsInfo')),
+                m('span', app.translator.trans(localePrefix + 'mainDelimitersInfo')),
               ),
+            ]),
+            m('.Form-group', [
+              m('label', app.translator.trans(localePrefix + 'ignoringExpressions')),
+              m('.helpText', app.translator.trans(localePrefix + 'ignoringExpressionsHelp'))
+            ]),
+            m('.Form-group', [
+              m('div', {
+                  className: 'helpText',
+                },
+                m('i', {
+                  className: 'fas fa-exclamation-circle',
+                }),
+                m('span', app.translator.trans(localePrefix + 'regexInfo')),
+              )
+            ]),
+            m('.Form-group .flex-container', [
+              m('div', {
+                  className: 'inline--label'
+                },
+                m('.helpText', app.translator.trans(localePrefix + 'decisiveKeywords'))
+              ),
+              m('div', {
+                  className: 'inline--input'
+                },
+                m('input[type=text].FormControl', {
+                  bidi: this.setting(settingsPrefix + 'decisiveKeywords', 'ignore'),
+                  placeholder: 'ignore'
+                }),
+              ),
+            ]),
+            m('.Form-group', [
               m('div', {
                   className: 'helpText',
                 },
                 m('i', {
                   className: 'fas fa-question-circle',
                 }),
-                m('span', app.translator.trans(this.localePrefix + 'decisiveKeywordsHelp')),
+                m('span', app.translator.trans(localePrefix + 'decisiveKeywordsHelp')),
               ),
             ]),
-            m('.Form-group', [
+            m('.Form-group .flex-container', [
               m('div', {
-                  className: 'inlineDivLabel'
+                  className: 'inline--label'
                 },
-                m('.helpText', app.translator.trans(this.localePrefix + 'ignoredTags'))
+                m('.helpText', app.translator.trans(localePrefix + 'ignoredTags'))
               ),
               m('div', {
-                  className: 'inlineDivInput'
+                  className: 'inline--input'
                 },
                 m('input[type=text].FormControl', {
-                  value: this.values.ignoredTags() || '',
-                  placeholder: 'script,noscript,style,textarea,pre,code',
-                  oninput: m.withAttr('value', this.values.ignoredTags)
+                  bidi: this.setting(settingsPrefix + 'ignoredTags', ''),
+                  placeholder: 'script,noscript,style,textarea,pre,code'
                 }),
               ),
             ]),
-            m('.Form-group', [
+            m('.Form-group .flex-container', [
               m('div', {
-                  className: 'inlineDivLabel'
+                  className: 'inline--label'
                 },
-                m('.helpText', app.translator.trans(this.localePrefix + 'ignoredClasses'))
+                m('.helpText', app.translator.trans(localePrefix + 'ignoredClasses'))
               ),
               m('div', {
-                  className: 'inlineDivInput'
+                  className: 'inline--input'
                 },
                 m('input[type=text].FormControl', {
-                  value: this.values.ignoredClasses() || 'mathren-ignore',
-                  placeholder: 'mathren-ignore',
-                  oninput: m.withAttr('value', this.values.ignoredClasses)
+                  bidi: this.setting(settingsPrefix + 'ignoredClasses', 'mathren-ignore'),
+                  placeholder: 'mathren-ignore'
                 }),
               ),
             ]),
@@ -306,130 +198,164 @@ export default class MathRenSettingsPage extends Component {
                 m('i', {
                   className: 'fas fa-info-circle',
                 }),
-                m('span', app.translator.trans(this.localePrefix + 'ignoredClassesInfo')),
+                m('span', app.translator.trans(localePrefix + 'ignoredClassesInfo')),
               ),
             ]),
             m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'outputMode')),
-              m('.helpText', app.translator.trans(this.localePrefix + 'outputModeHelp')),
+              m('label', app.translator.trans(localePrefix + 'outputMode')),
+              m('.helpText', app.translator.trans(localePrefix + 'outputModeHelp')),
               m('div', Select.component({
                 options: this.outputModeOptions,
-                onchange: this.values.outputMode,
-                value: this.values.outputMode() || 'htmlAndMathml'
+                onchange: this.setting(settingsPrefix + 'outputMode'),
+                value: this.setting(settingsPrefix + 'outputMode')() || 'htmlAndMathml'
               })),
             ]),
             m('.Form-group', [
               m('label', Switch.component({
-                state: this.values.enableFleqn(),
-                children: app.translator.trans(this.localePrefix + 'enableFleqn'),
-                onchange: this.values.enableFleqn
+                state: this.setting(settingsPrefix + 'enableFleqn', '0')() === '1',
+                children: app.translator.trans(localePrefix + 'enableFleqn'),
+                onchange: value => {
+                  this.setting(settingsPrefix + 'enableFleqn')(value ? '1' : '0');
+                }
               })),
             ]),
             m('.Form-group', [
               m('label', Switch.component({
-                state: this.values.enableLeqno(),
-                children: app.translator.trans(this.localePrefix + 'enableLeqno'),
-                onchange: this.values.enableLeqno
+                state: this.setting(settingsPrefix + 'enableLeqno', '0')() === '1',
+                children: app.translator.trans(localePrefix + 'enableLeqno'),
+                onchange: value => {
+                  this.setting(settingsPrefix + 'enableLeqno')(value ? '1' : '0');
+                }
               })),
             ]),
             m('.Form-group', [
               m('label', Switch.component({
-                state: this.values.enableColorIsTextColor(),
-                children: app.translator.trans(this.localePrefix + 'enableColorIsTextColor'),
-                onchange: this.values.enableColorIsTextColor
+                state: this.setting(settingsPrefix + 'enableColorIsTextColor', '0')() === '1',
+                children: app.translator.trans(localePrefix + 'enableColorIsTextColor'),
+                onchange: value => {
+                  this.setting(settingsPrefix + 'enableColorIsTextColor')(value ? '1' : '0');
+                }
               })),
             ]),
             m('.Form-group', [
               m('label', Switch.component({
-                state: this.values.enableThrowOnError(),
-                children: app.translator.trans(this.localePrefix + 'enableThrowOnError'),
-                onchange: this.values.enableThrowOnError
+                state: this.setting(settingsPrefix + 'enableThrowOnError', '0')() === '1',
+                children: app.translator.trans(localePrefix + 'enableThrowOnError'),
+                onchange: value => {
+                  this.setting(settingsPrefix + 'enableThrowOnError')(value ? '1' : '0');
+                }
               })),
             ]),
-            m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'errorColor')),
-              m('.helpText', app.translator.trans(this.localePrefix + 'errorColorHelp')),
-              m('input[type=color].FormControl', {
-                value: this.values.errorColor() || '#cc0000',
-                oninput: m.withAttr('value', this.values.errorColor),
-                disabled: this.values.enableThrowOnError()
-              })
-            ]),
-            m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'sizeSettings')),
-              m('.helpText', app.translator.trans(this.localePrefix + 'sizeSettingsHelp'))
-            ]),
-            m('.Form-group', [
+            m('.Form-group .flex-container', [
               m('div', {
-                  className: 'inlineDivLabel'
+                  className: 'inline--input-color-label'
                 },
-                m('.helpText', app.translator.trans(this.localePrefix + 'minRuleThickness'))
+                m('label', app.translator.trans(localePrefix + 'errorColor')),
+                m('.helpText', app.translator.trans(localePrefix + 'errorColorHelp')),
               ),
               m('div', {
-                  className: 'inlineDivInput'
+                  className: 'inline--input-color'
+                },
+                m('input[type=color].FormControl', {
+                  bidi: this.setting(settingsPrefix + 'errorColor', '#cc0000'),
+                  disabled: this.setting(settingsPrefix + 'enableThrowOnError')() === '1'
+                })
+              ),
+            ]),
+            m('.Form-group', [
+              m('label', app.translator.trans(localePrefix + 'sizeSettings')),
+              m('.helpText', app.translator.trans(localePrefix + 'sizeSettingsHelp'))
+            ]),
+            m('.Form-group .flex-container', [
+              m('div', {
+                  className: 'inline--label'
+                },
+                m('.helpText', app.translator.trans(localePrefix + 'minRuleThickness'))
+              ),
+              m('div', {
+                  className: 'inline--input'
                 },
                 m('input[type=text].FormControl', {
-                  value: this.values.minRuleThickness() || '0.05',
-                  placeholder: '0.05',
-                  oninput: m.withAttr('value', this.values.minRuleThickness)
+                  bidi: this.setting(settingsPrefix + 'minRuleThickness', '0.05'),
+                  placeholder: '0.05'
+                }),
+              ),
+            ]),
+            m('.Form-group .flex-container', [
+              m('div', {
+                  className: 'inline--label'
+                },
+                m('.helpText', app.translator.trans(localePrefix + 'maxSize'))
+              ),
+              m('div', {
+                  className: 'inline--input'
+                },
+                m('input[type=text].FormControl', {
+                  bidi: this.setting(settingsPrefix + 'maxSize', '10'),
+                  placeholder: '10'
                 }),
               ),
             ]),
             m('.Form-group', [
-              m('div', {
-                  className: 'inlineDivLabel'
-                },
-                m('.helpText', app.translator.trans(this.localePrefix + 'maxSize'))
-              ),
-              m('div', {
-                  className: 'inlineDivInput'
-                },
-                m('input[type=text].FormControl', {
-                  value: this.values.maxSize() || '10',
-                  placeholder: '10',
-                  oninput: m.withAttr('value', this.values.maxSize)
-                }),
-              ),
-            ]),
-            m('.Form-group', [
-              m('label', app.translator.trans(this.localePrefix + 'macros')),
-              m('.helpText', app.translator.trans(this.localePrefix + 'macrosHelp')),
+              m('label', app.translator.trans(localePrefix + 'macros')),
+              m('.helpText', app.translator.trans(localePrefix + 'macrosHelp')),
               m('textarea.FormControl', {
-                value: this.values.macros() || '',
-                placeholder: '\\RR: \\mathbb{R},\n\\NN: \\mathbb{N}',
-                oninput: m.withAttr('value', this.values.macros)
+                bidi: this.setting(settingsPrefix + 'macros', ''),
+                placeholder: '"\\\\RR": "\\\\mathbb{R}"\n"\\\\NN": "\\\\mathbb{N}"'
               })
             ]),
             m('.Form-group', [
               m('div', {
-                  className: 'inlineDivLabel'
+                  className: 'helpText',
                 },
-                m('.helpText', app.translator.trans(this.localePrefix + 'maxExpand'))
+                m('i', {
+                  className: 'fas fa-exclamation-circle',
+                }),
+                m('span', app.translator.trans(localePrefix + 'syntaxInfo')),
+              )
+            ]),
+            m('.Form-group .flex-container', [
+              m('div', {
+                  className: 'inline--label'
+                },
+                m('.helpText', app.translator.trans(localePrefix + 'maxExpand'))
               ),
               m('div', {
-                  className: 'inlineDivInput'
+                  className: 'inline--input'
                 },
                 m('input[type=text].FormControl', {
-                  value: this.values.maxExpand() || '1000',
-                  placeholder: '1000',
-                  oninput: m.withAttr('value', this.values.maxExpand)
+                  bidi: this.setting(settingsPrefix + 'maxExpand', '1000'),
+                  placeholder: '1000'
                 }),
               ),
             ]),
             m('.Form-group', [
               Alert.component({
-                children: app.translator.trans(this.localePrefix + 'katexOptionsInfo'),
+                children: app.translator.trans(localePrefix + 'katexOptionsInfo', {
+                  a: <a href="https://katex.org/docs/options.html" target="_blank" />
+                }),
                 type: 'success',
                 dismissible: false,
               }),
             ]),
-            m('h3', app.translator.trans(this.localePrefix + 'otherOptionsHeading')),
+            m('h3', app.translator.trans(localePrefix + 'otherOptionsHeading')),
             m('hr'),
             m('.Form-group', [
               m('label', Switch.component({
-                state: this.values.enableTextEditorButtons(),
-                children: app.translator.trans(this.localePrefix + 'enableTextEditorButtons'),
-                onchange: this.values.enableTextEditorButtons
+                state: this.setting(settingsPrefix + 'enableTextEditorButtons', '1')() === '1',
+                children: app.translator.trans(localePrefix + 'enableTextEditorButtons'),
+                onchange: value => {
+                  this.setting(settingsPrefix + 'enableTextEditorButtons')(value ? '1' : '0');
+                }
+              })),
+            ]),
+            m('.Form-group', [
+              m('label', Switch.component({
+                state: this.setting(settingsPrefix + 'enableCopyTeX', '1')() === '1',
+                children: app.translator.trans(localePrefix + 'enableCopyTeX'),
+                onchange: value => {
+                  this.setting(settingsPrefix + 'enableCopyTeX')(value ? '1' : '0');
+                }
               })),
             ]),
             Button.component({
@@ -445,67 +371,94 @@ export default class MathRenSettingsPage extends Component {
     ];
   }
 
+  setting(key, fallback = '') {
+    this.settings[key] = this.settings[key] || m.prop(app.data.settings[key] || fallback);
+
+    return this.settings[key];
+  }
+
+  dirty() {
+    const dirty = {};
+
+    Object.keys(this.settings).forEach((key) => {
+      const value = this.settings[key]();
+
+      if (value !== app.data.settings[key]) {
+        dirty[key] = value;
+      }
+    });
+
+    return dirty;
+  }
+
   /**
-   * Checks if the values of the fields and checkboxes are different from
-   * the ones stored in the database
+   * Check if settings differ from their stored values.
    *
-   * @returns boolean
+   * @returns {boolean}
    */
   changed() {
-    var fieldsCheck = this.fields.some(
-      key => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
-    var checkboxesCheck = this.checkboxes.some(
-      key => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
-    return fieldsCheck || checkboxesCheck
+    return Object.keys(this.dirty()).length;
   }
 
   /**
-   * Saves the settings to the database and redraw the page
+   * Handle form's submit event.
    *
-   * @param e
+   * @param {Event} e
    */
   onsubmit(e) {
-    // prevent the usual form submit behaviour
     e.preventDefault();
 
-    // if the page is already saving, do nothing
     if (this.loading) return;
 
-    // prevents multiple savings
     this.loading = true;
+    app.alerts.dismiss(this.alertComponent);
 
-    // remove previous success popup
-    app.alerts.dismiss(this.successAlert);
+    // validate settings
+    if (!this.validate.bind(this, this.validaton_rules)()) {
+      this.loading = false;
+      m.redraw();
+    } else {
+      saveSettings(this.dirty()).then(this.onsaved.bind(this));
+    }
+  }
 
-    const settings = {};
+  onsaved() {
+    app.alerts.show(this.alertComponent = new Alert({
+      type: 'success',
+      children: app.translator.trans(localePrefix + 'saved_message')
+    }));
 
-    // gets all the values from the form
-    this.fields.forEach(key => settings[this.addPrefix(key)] = this.values[key]());
-    this.checkboxes.forEach(key => settings[this.addPrefix(key)] = this.values[key]());
-
-    // actually saves everything in the database
-    saveSettings(settings)
-      .then(() => {
-        // on success, show popup
-        app.alerts.show(this.successAlert = new Alert({
-          type: 'success',
-          children: app.translator.trans('core.admin.basics.saved_message')
-        }));
-      })
-      .catch(() => {})
-      .then(() => {
-        // return to the initial state and redraw the page
-        this.loading = false;
-        m.redraw();
-      });
+    this.loading = false;
+    m.redraw();
   }
 
   /**
-   * Adds the prefix 'this.settingsPrefix' at the beginning of 'key'
+   * Validate fields.
    *
-   * @returns string
+   * @returns {boolean}
    */
-  addPrefix(key) {
-    return this.settingsPrefix + key;
+  validate(rules) {
+    let valid = true;
+
+    Object.keys(rules).every((field) => {
+      const value = this.setting(settingsPrefix + field)();
+
+      if (value && !rules[field].test(value)) {
+        valid = false;
+        app.alerts.show(this.alertComponent = new Alert({
+          type: 'error',
+          children: app.translator.trans(
+            localePrefix + 'validation',
+            {
+              field_key: app.translator.trans(localePrefix + field)
+            }
+          )
+        }));
+      }
+
+      return valid;
+    });
+
+    return valid;
   }
 }

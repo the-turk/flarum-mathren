@@ -1,3 +1,20 @@
+### 0.3.0
+- **Drop** special delimiters support (it is BBCodes-only now).
+    + Thus, it should work faster from `0.2.x`
+    + I'll continue looking for better solutions to use them.
+- **Remove** the ability to customize wrappers from the MathRen settings page.
+    + Because we can add custom CSS from the Appearance page already.
+- **Remove** the ability to change block and inline wrapper classes.
+- **Add** live previews.
+- **Add** [Copy-tex](https://github.com/KaTeX/KaTeX/tree/master/contrib/copy-tex) plugin.
+    + Now you can copy any expression's source to the clipboard. You can even quote it with selection.
+    + It's not working flawless though, see their repository for known issues and let's see if we can find unknown ones.
+- **Add** some validation for the MathRen settings page.
+- **Fix** macros weren't working all the time.
+    + Now you have to write them using JavaScript's syntax (e.g. `\name` => `\\name`)
+
+Also the backend has become more clear now, don't hesitate to join me.
+
 ### 0.2.7
 - **Update** version constraints for Flarum 0.1.0-beta.13.
 

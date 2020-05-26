@@ -1,59 +1,85 @@
 the-turk-mathren:
     admin:
         settings:
-            title:                    MathRen
-            description:              TeX işleyicisini kişiselleştirin.
-            wrapperOptionsHeading:    Gömme Seçenekleri
-            mathClasses:              <code>span</code> etiketi için sınıf isimleri
-            mathClassesHelp:          <code>span</code> etiketleri için sınıf adı girin ve bu sınıfı istediğiniz şekilde biçimlendirin.
-            blockMathClass:           Satır dışındaki <code>span</code> etiketi
-            inlineMathClass:          Satır içindeki <code>span</code> etiketi
-            wrapperStyle:             <code>span</code> etiketini biçimlendirin
-            katexOptionsHeading:      KaTeX Seçenekleri
-            enableFleqn:              Matematiksel ifadeleri sola yasla (fleqn)
-            enableLeqno:              İfade etiketlerini sola yasla (leqno)
-            delimiters:               Sınırlayıcılar
-            delimitersHelp:           Virgül ile ayırın. <strong>%e%</strong>, matematiksel ifadeyi temsil etmektedir.
-            mainBlockDelimiter:       Blok ifadeler için asıl <strong>BBCode</strong> sınırlayıcısı
-            mainInlineDelimiter:      Satır içindeki ifadeler için asıl <strong>BBCode</strong> sınırlayıcısı
-            aliasBlockDelimiters:     Blok ifadeler için ek sınırlayıcılar
-            aliasInlineDelimiters:    Satır içindeki ifadeler için ek sınırlayıcılar
-            aliasDelimitersHelp:      >-
-                        Ek sınırlayıcılar, <em>asıl BBCode sınırlayıcılarını</em> kullanmanın başka bir yoludur. Eğer ek sınırlayıcılar listenizde özel
-                        sınırlayıcılar bulunuyorsa (<code>$$</code> gibi) MathRen, gönderi kaydedilirken bütün yazıyı tarar ve
-                        bu özel sınırlayıcıları bulup ana sınırlayıcılarla değiştirmeye çalışır. Bu durum mesajın kaydedilme süresini
-                        uzatabilir. Bu etkiden kaçınmak için buraya yazacağınız ek sınırlayıcılarda özel sınırlayıcılar
-                        yerine BBCode formatını kullanmak isteyebilirsiniz.
-            ignoringExpressions:      Atlanacak İfadeler
-            ignoringExpressionsHelp:  Virgül ile ayırın.
-            decisiveKeywords:         Atlamayı belirleyici kelimeler
-            decisiveKeywordsHelp:     >-
-                        Matematiksel ifadelerin işlenmesini önlemek için bu kelimeleri süslü parantez kullanarak <em>özel</em> bir sağ
-                        sınırlayıcının (BBCode harici) hemen yanına (örn. <code>$$%e%$${<strong>kelime</strong>}</code>) ya da BBCode içine
-                        (örn. <code>[math=<strong>kelime</strong>]%e%[/math]</code>) yazacaksınız. <strong>Not:</strong>
-                        <code>[math]%e%[/math]{<strong>kelime</strong>}</code> ifadesi, yanlış bir kullanıma örnektir.
-            decisiveKeywordsInfo:     Listeye yazılan ilk kelime, metin editörü için varsayılan olarak kabul edilecektir.
-            decisiveKeywordsWarning:  Özel karakterler kullanmayın! Aksi durumda hata mesajıyla karşılaşırsınız.
-            ignoredTags:              Atlanacak etiketler
-            ignoredClasses:           Atlanacak sınıflar
-            ignoredClassesInfo:       Bu listeye yazılan ilk sınıf, dönüştürülmeyen ifadeler için varsayılan olarak kullanılacaktır.
-            outputMode:               Biçimlendirme
-            outputModeHelp:           Matematik ifadelerin gösterilmesinde kullanılacak biçimlendirme dilini seçin.
-            enableColorIsTextColor:   <code>\color</code> komutunun iki ifade içermesine izin ver (colorIsTextColor)
-            enableThrowOnError:       Desteklenmeyen komut girildiğinde konsola hata mesajı gönder
-            errorColor:               Hatalı komutu renklendir
-            errorColorHelp:           Konsola hata mesajı göndermek yerine desteklenmeyen komutu renklendirebilirsiniz.
-            sizeSettings:             Boyutlandırma ayarları
-            sizeSettingsHelp:         Ondalık değerler için <strong>nokta</strong> kullanın. <em>Sonsuz</em> değerler kabul edilmez!
-            minRuleThickness:         Minimum kalınlık (em)
-            maxSize:                  Maksimum yazı boyutu (em)
-            macros:                   Makrolar
-            macrosHelp:               Özelleştirilmiş makrolarınızı buraya yazabilirsiniz.
-            maxExpand:                Maksimum genişleme sınırı
-            katexOptionsInfo:         <strong>Not:</strong> KaTeX seçenekleri ile ilgili daha ayrıntılı bilgiyi https://katex.org/ adresinde bulabilirsiniz.
-            otherOptionsHeading:      Diğer Seçenekler
-            enableTextEditorButtons:  Metin editöründe butonları göster
+            # Settings Pane
+            title:                   MathRen
+            description:             TeX işleyicisini kişiselleştirin.
+
+            ####################
+            #   KaTeX Options  #
+            ####################
+
+            katexOptionsHeading:     KaTeX Seçenekleri
+            katexOptionsInfo:        KaTeX seçenekleri ile ilgili daha ayrıntılı bilgiyi <a>burada</a> bulabilirsiniz.
+
+            # Delimiters
+            delimiters:              Sınırlayıcılar
+            delimitersHelp:          Virgül ile ayırın. <strong>%e%</strong>, matematiksel ifadeyi temsil etmektedir.
+            blockDelimiters:         Blok ifadeler için <strong>BBCode</strong> sınırlayıcıları
+            inlineDelimiters:        Satır içindeki ifadeler için <strong>BBCode</strong> sınırlayıcıları
+            mainDelimitersInfo:      Yukarıda bulunan listelerdeki ilk sınırlayıcılar, metin editörü tarafından varsayılan olarak kabul edilecektir.
+
+            # Ignoring Expressions
+            ignoringExpressions:     Atlanacak İfadeler
+            ignoringExpressionsHelp: Virgül ile ayırın.
+            decisiveKeywords:        Atlamayı belirleyici kelimeler
+            decisiveKeywordsHelp:    >-
+                        Matematiksel ifadelerin işlenmesini önlemek için bu kelimeleri BBCode içine
+                        (örn. <code>[math=<strong>kelime</strong>]%e%[/math]</code>) yazacaksınız.
+            ignoredTags:             Atlanacak etiketler
+            ignoredClasses:          Atlanacak sınıflar
+            ignoredClassesInfo:      Bu listeye yazılan ilk sınıf, atlanan ifadeler için varsayılan olarak kullanılacaktır.
+
+            # Output mode
+            outputMode:              Biçimlendirme
+            outputModeHelp:          Matematik ifadelerin gösterilmesinde kullanılacak biçimlendirme dilini seçin.
+
+            # Unsupported commands
+            errorColor:              Hatalı komutu renklendir
+            errorColorHelp:          Konsola hata mesajı göndermek yerine desteklenmeyen komutu renklendirebilirsiniz.
+
+            # Sizing options
+            sizeSettings:            Boyutlandırma ayarları
+            sizeSettingsHelp:        Ondalık değerler için <strong>nokta</strong> kullanın.
+            minRuleThickness:        Minimum kalınlık (em)
+            maxSize:                 Maksimum yazı boyutu (em)
+
+            # Macros
+            macros:                  Makrolar
+            macrosHelp:              Kullanmak istediğiniz özel makroları buraya yazabilirsiniz.
+            syntaxInfo:              JavaScript sözdizimi kurallarına uymalısınız.
+            maxExpand:               Maksimum genişleme sınırı
+
+            # Switch Components
+            enableFleqn:             Matematiksel ifadeleri sola yasla (fleqn)
+            enableLeqno:             İfade etiketlerini sola yasla (leqno)
+            enableColorIsTextColor:  <code>\color</code> komutunun iki ifade içermesine izin ver (colorIsTextColor)
+            enableThrowOnError:      Desteklenmeyen komut girildiğinde konsola hata mesajı gönder
+
+            # ---
+
+            # Warnings
+            regexInfo:               Sadece büyük/küçük harf ve tire kullanabilirsiniz.
+
+            ####################
+            #   Other Options  #
+            ####################
+
+            otherOptionsHeading:     Diğer Seçenekler
+
+            # Switch Components
+            enableTextEditorButtons: Metin editöründe butonları göster
+            enableCopyTeX:           KaTeX tarafından işlenmiş ifadelerin kaynaklarının kopyalanmasına izin ver.
+
+            ####################
+            #  General Strings #
+            ####################
+
+            # Alerts
+            saved_message:           => core.admin.basics.saved_message
+            validation:              "\"{field_key}\" alanı doğrulanamadı."
     forum:
         textEditor:
-            blockExpression:          Blok İfade
-            inlineExpression:         Satır İçi İfade
+            # Text Editor Buttons
+            blockExpression:         Blok İfade
+            inlineExpression:        Satır İçi İfade

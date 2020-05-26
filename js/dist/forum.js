@@ -17737,10 +17737,334 @@ var katex_renderToHTMLTree = function renderToHTMLTree(expression, options) {
 
 /***/ }),
 
-/***/ "./src/forum/components/MathDropdown.js":
-/*!**********************************************!*\
-  !*** ./src/forum/components/MathDropdown.js ***!
-  \**********************************************/
+/***/ "./src/forum/addCopyListener.js":
+/*!**************************************!*\
+  !*** ./src/forum/addCopyListener.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return addCopyListener; });
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_components_DiscussionPage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/DiscussionPage */ "flarum/components/DiscussionPage");
+/* harmony import */ var flarum_components_DiscussionPage__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_DiscussionPage__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_katex2tex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/katex2tex */ "./src/forum/utils/katex2tex.js");
+/* harmony import */ var _utils_copyDelimiters__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/copyDelimiters */ "./src/forum/utils/copyDelimiters.js");
+/**
+ * Copied & modified from:
+ * https://github.com/KaTeX/KaTeX/blob/master/contrib/copy-tex/copy-tex.js
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013-2019 Khan Academy and other contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+
+
+
+function addCopyListener() {
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_DiscussionPage__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'config', function (original, isInitialized) {
+    if (isInitialized || !app.forum.attribute('mathRenEnableCopyTeX')) return;
+    var delimiters = {
+      inline: app.forum.attribute('mathRenMainInlineDelimiter'),
+      block: app.forum.attribute('mathRenMainBlockDelimiter')
+    }; // Global copy handler to modify behavior on .katex elements.
+
+    document.addEventListener('copy', function (event) {
+      var selection = window.getSelection();
+
+      if (selection.isCollapsed) {
+        return; // default action OK if selection is empty
+      }
+
+      var fragment = selection.getRangeAt(0).cloneContents();
+
+      if (!fragment.querySelector('.katex-mathml')) {
+        return; // default action OK if no .katex-mathml elements
+      } // Preserve usual HTML copy/paste behavior.
+
+
+      var html = [];
+
+      for (var i = 0; i < fragment.childNodes.length; i++) {
+        html.push(fragment.childNodes[i].outerHTML);
+      }
+
+      event.clipboardData.setData('text/html', html.join('')); // Rewrite plain-text version.
+
+      event.clipboardData.setData('text/plain', Object(_utils_katex2tex__WEBPACK_IMPORTED_MODULE_2__["default"])(fragment, Object(_utils_copyDelimiters__WEBPACK_IMPORTED_MODULE_3__["default"])(delimiters)).textContent); // Prevent normal copy handling.
+
+      event.preventDefault();
+    });
+  });
+}
+
+/***/ }),
+
+/***/ "./src/forum/addPostQuoteButton.js":
+/*!*****************************************!*\
+  !*** ./src/forum/addPostQuoteButton.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return addPostQuoteButton; });
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/CommentPost */ "flarum/components/CommentPost");
+/* harmony import */ var flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_PostQuoteButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/PostQuoteButton */ "./src/forum/components/PostQuoteButton.js");
+/* harmony import */ var _utils_selectedText__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/selectedText */ "./src/forum/utils/selectedText.js");
+/* harmony import */ var _utils_copyDelimiters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/copyDelimiters */ "./src/forum/utils/copyDelimiters.js");
+/**
+ * Copied & modified from:
+ * https://github.com/flarum/mentions/blob/master/js/src/forum/addPostQuoteButton.js
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Stichting Flarum (Flarum Foundation)
+ * Copyright (c) 2014-2019 Toby Zerner (toby.zerner@gmail.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
+
+
+
+
+function addPostQuoteButton() {
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'config', function (original, isInitialized) {
+    if (!app.forum.attribute('mathRenEnableCopyTeX')) return;
+    var post = this.props.post;
+    var delimiters = {
+      inline: app.forum.attribute('mathRenMainInlineDelimiter'),
+      block: app.forum.attribute('mathRenMainBlockDelimiter')
+    };
+    if (isInitialized || post.isHidden() || app.session.user && !post.discussion().canReply()) return;
+    var $postBody = this.$('.Post-body'); // Wrap the quote button in a wrapper element so that we can render
+    // button into it.
+
+    var $container = $('<div class="Post-quoteButtonContainer-mathRen"></div>');
+
+    var handler = function handler(e) {
+      setTimeout(function () {
+        var content = Object(_utils_selectedText__WEBPACK_IMPORTED_MODULE_3__["default"])($postBody, Object(_utils_copyDelimiters__WEBPACK_IMPORTED_MODULE_4__["default"])(delimiters));
+
+        if (content) {
+          var button = new _components_PostQuoteButton__WEBPACK_IMPORTED_MODULE_2__["default"]({
+            post: post,
+            content: content
+          });
+          m.render($container[0], button.render());
+          var rects = window.getSelection().getRangeAt(0).getClientRects();
+          var firstRect = rects[0];
+
+          if (e.clientY < firstRect.bottom && e.clientX - firstRect.right < firstRect.left - e.clientX) {
+            button.showStart(firstRect.left, firstRect.top);
+          } else {
+            var lastRect = rects[rects.length - 1];
+            button.showEnd(lastRect.right, lastRect.bottom);
+          }
+        }
+      }, 1);
+    };
+
+    this.$().after($container).on('mouseup', handler);
+
+    if ('ontouchstart' in window) {
+      document.addEventListener('selectionchange', handler, false);
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./src/forum/addTextEditorButton.js":
+/*!******************************************!*\
+  !*** ./src/forum/addTextEditorButton.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return addTextEditorButton; });
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/TextEditor */ "flarum/components/TextEditor");
+/* harmony import */ var flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_TextEditorButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/TextEditorButton */ "./src/forum/components/TextEditorButton.js");
+
+
+
+function addTextEditorButton() {
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'toolbarItems', function (items) {
+    if (app.forum.attribute('mathRenEnableTextEditorButtons') === true) {
+      var mathButton = new _components_TextEditorButton__WEBPACK_IMPORTED_MODULE_2__["default"]({
+        textEditor: this
+      });
+      items.add('the-turk-mathren', mathButton);
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./src/forum/components/PostQuoteButton.js":
+/*!*************************************************!*\
+  !*** ./src/forum/components/PostQuoteButton.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PostQuoteButton; });
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/inheritsLoose */ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js");
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/Button */ "flarum/components/Button");
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_utils_extract__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/utils/extract */ "flarum/utils/extract");
+/* harmony import */ var flarum_utils_extract__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_extract__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_reply__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/reply */ "./src/forum/utils/reply.js");
+
+
+/**
+ * Copied & modified from:
+ * https://github.com/flarum/mentions/blob/master/js/src/forum/components/PostQuoteButton.js
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Stichting Flarum (Flarum Foundation)
+ * Copyright (c) 2014-2019 Toby Zerner (toby.zerner@gmail.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
+
+
+
+var PostQuoteButton = /*#__PURE__*/function (_Button) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(PostQuoteButton, _Button);
+
+  function PostQuoteButton() {
+    return _Button.apply(this, arguments) || this;
+  }
+
+  var _proto = PostQuoteButton.prototype;
+
+  _proto.view = function view() {
+    var _this = this;
+
+    var post = flarum_utils_extract__WEBPACK_IMPORTED_MODULE_2___default()(this.props, 'post');
+    var content = flarum_utils_extract__WEBPACK_IMPORTED_MODULE_2___default()(this.props, 'content');
+    this.props.className = 'Button PostQuoteButton';
+    this.props.icon = 'fas fa-quote-left';
+    this.props.children = app.translator.trans('flarum-mentions.forum.post.quote_button');
+
+    this.props.onclick = function () {
+      _this.hide();
+
+      Object(_utils_reply__WEBPACK_IMPORTED_MODULE_3__["default"])(post, content);
+    };
+
+    this.props.onmousedown = function (e) {
+      return e.stopPropagation();
+    };
+
+    return _Button.prototype.view.call(this);
+  };
+
+  _proto.config = function config(isInitialized) {
+    if (isInitialized) return;
+    $(document).on('mousedown', this.hide.bind(this));
+  };
+
+  _proto.show = function show(left, top) {
+    var $this = this.$().show();
+    var parentOffset = $this.offsetParent().offset();
+    $this.css('left', left - parentOffset.left).css('top', top - parentOffset.top);
+  };
+
+  _proto.showStart = function showStart(left, top) {
+    var $this = this.$();
+    this.show(left, $(window).scrollTop() + top - $this.outerHeight() - 5);
+  };
+
+  _proto.showEnd = function showEnd(right, bottom) {
+    var $this = this.$();
+    this.show(right - $this.outerWidth(), $(window).scrollTop() + bottom + 5);
+  };
+
+  _proto.hide = function hide() {
+    this.$().hide();
+  };
+
+  return PostQuoteButton;
+}(flarum_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+
+
+/***/ }),
+
+/***/ "./src/forum/components/TextEditorButton.js":
+/*!**************************************************!*\
+  !*** ./src/forum/components/TextEditorButton.js ***!
+  \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -17758,12 +18082,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/utils/ItemList */ "flarum/utils/ItemList");
 /* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var flarum_components_Separator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/components/Separator */ "flarum/components/Separator");
-/* harmony import */ var flarum_components_Separator__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Separator__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/helpers/icon */ "flarum/helpers/icon");
-/* harmony import */ var flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var flarum_components_Alert__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/components/Alert */ "flarum/components/Alert");
-/* harmony import */ var flarum_components_Alert__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Alert__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/helpers/icon */ "flarum/helpers/icon");
+/* harmony import */ var flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_6__);
 
 
 
@@ -17771,8 +18091,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
+var localePrefix = 'the-turk-mathren.forum.textEditor.';
 
 var _default = /*#__PURE__*/function (_Component) {
   Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(_default, _Component);
@@ -17784,19 +18103,18 @@ var _default = /*#__PURE__*/function (_Component) {
   var _proto = _default.prototype;
 
   _proto.init = function init() {
-    this.textEditor = this.props.textEditor; // translation prefix
-
-    this.localePrefix = 'the-turk-mathren.forum.textEditor.'; // main BBCode delimiters
-
-    this.mainBlockDelimiter = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainBlockDelimiter');
-    this.mainInlineDelimiter = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainInlineDelimiter');
+    this.textEditor = this.props.textEditor;
+    this.delimiters = {
+      inline: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainInlineDelimiter'),
+      block: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMainBlockDelimiter')
+    };
   };
 
   _proto.view = function view() {
     return flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       className: 'MathRenDropdown',
       buttonClassName: 'Button Button--flat',
-      label: flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_7___default()('fas fa-square-root-alt'),
+      label: flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_6___default()('fas fa-square-root-alt'),
       children: this.items().toArray()
     });
   }
@@ -17813,12 +18131,12 @@ var _default = /*#__PURE__*/function (_Component) {
     var items = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_5___default.a();
     items.add('mathBlock', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
       icon: 'fas fa-vector-square',
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'blockExpression'),
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'blockExpression'),
       onclick: function onclick() {
         // opening tag (left delimiter)
-        var leftDelim = _this.mainBlockDelimiter['left']; // closing tag (right delimiter)
+        var leftDelim = _this.delimiters.block['left']; // closing tag (right delimiter)
 
-        var rightDelim = _this.mainBlockDelimiter['right'];
+        var rightDelim = _this.delimiters.block['right'];
 
         var wrapper = _this.wrapSelection(leftDelim, rightDelim);
 
@@ -17829,12 +18147,12 @@ var _default = /*#__PURE__*/function (_Component) {
     }), 50);
     items.add('mathInline', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
       icon: 'fas fa-grip-lines',
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'inlineExpression'),
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'inlineExpression'),
       onclick: function onclick() {
         // opening tag (left delimiter)
-        var leftDelim = _this.mainInlineDelimiter['left']; // closing tag (right delimiter)
+        var leftDelim = _this.delimiters.inline['left']; // closing tag (right delimiter)
 
-        var rightDelim = _this.mainInlineDelimiter['right'];
+        var rightDelim = _this.delimiters.inline['right'];
 
         var wrapper = _this.wrapSelection(leftDelim, rightDelim);
 
@@ -17848,11 +18166,11 @@ var _default = /*#__PURE__*/function (_Component) {
   /**
    * Wrap the current selection with BBCode tags
    * If there's no selection, put them around the cursor
-   * Adapted from flagrow/fonts extension
+   * Adapted from the flagrow/fonts extension (under The MIT License)
    *
    * @param string leftDelim
    * @param string rightDelim
-   * @return object
+   * @returns {object}
    */
   ;
 
@@ -17892,9 +18210,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../dist/auto-render.min */ "./dist/auto-render.min.js");
 /* harmony import */ var _dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/components/TextEditor */ "flarum/components/TextEditor");
-/* harmony import */ var flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _components_MathDropdown__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/MathDropdown */ "./src/forum/components/MathDropdown.js");
+/* harmony import */ var _addTextEditorButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./addTextEditorButton */ "./src/forum/addTextEditorButton.js");
+/* harmony import */ var _addPostQuoteButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./addPostQuoteButton */ "./src/forum/addPostQuoteButton.js");
+/* harmony import */ var _addCopyListener__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./addCopyListener */ "./src/forum/addCopyListener.js");
+
 
 
 
@@ -17902,36 +18221,306 @@ __webpack_require__.r(__webpack_exports__);
 
 
 flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.initializers.add('the-turk-mathren', function () {
-  // on every post loading
-  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_2___default.a.prototype, 'config', function () {
-    // run KaTeX renderer on the single post body
-    // more information on https://katex.org/docs/autorender.html
-    _dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3___default()($('.Post-body', this.element)[0], {
-      "ignoredTags": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenIgnoredTags'),
-      "ignoredClasses": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenIgnoredClasses'),
-      "fleqn": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenEnableFleqn'),
-      "leqno": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenEnableLeqno'),
-      "output": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenOutputMode'),
-      "throwOnError": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenEnableThrowOnError'),
-      "errorColor": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenErrorColor'),
-      "minRuleThickness": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMinRuleThickness'),
-      "maxSize": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMaxSize'),
-      "maxExpand": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMaxExpand'),
-      "macros": JSON.parse(flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenMacros')),
-      "delimiters": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenDelimiters'),
-      "colorIsTextColor": flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenEnableColorIsTextColor')
-    });
-  }); // add text editor buttons
+  // Add Text Editor buttons
+  Object(_addTextEditorButton__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  /**
+   * Show a Quote button when Post text is selected
+   *
+   * You may ask, `flarum/mentions` already doing it, why the hell
+   * are you duplicating it? Well, I have to run KaTeX's Copy-tex
+   * plugin on the selected post and I need to modify its `selectedText` function.
+   * It is impossible to modify that function from here because core extensions
+   * are not exporting their components properly.
+   *
+   * @see https://github.com/flarum/core/issues/1933
+   **/
 
-  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_TextEditor__WEBPACK_IMPORTED_MODULE_4___default.a.prototype, 'toolbarItems', function (items) {
-    if (flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenEnableTextEditorButtons') === true) {
-      var mathButton = new _components_MathDropdown__WEBPACK_IMPORTED_MODULE_5__["default"]({
-        textEditor: this
-      });
-      items.add('the-turk-mathren', mathButton);
-    }
+  Object(_addPostQuoteButton__WEBPACK_IMPORTED_MODULE_5__["default"])(); // Hook into global copy handler to modify behavior on `.katex` elements
+
+  Object(_addCopyListener__WEBPACK_IMPORTED_MODULE_6__["default"])();
+
+  var renderMath = function renderMath(element) {
+    return _dist_auto_render_min__WEBPACK_IMPORTED_MODULE_3___default()(element, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('mathRenKatexOptions'));
+  };
+  /* Run KaTeX renderer on every post loading */
+
+
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_2___default.a.prototype, 'config', function (original, isInitialized) {
+    renderMath($('.Post-body', this.element)[0]);
   });
+  /**
+   * Render the math in preview mode
+   * Note: We also have this TextFormatter's Live preview attributes
+   *
+   * @see https://github.com/s9e/TextFormatter/blob/master/docs/JavaScript/Live_preview_attributes.md
+   */
+
+  if (s9e && s9e.TextFormatter) {
+    Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(s9e.TextFormatter, 'preview', function (original, preview, element) {
+      if (element.matches('.Post *')) renderMath(element);
+    });
+  }
 });
+
+/***/ }),
+
+/***/ "./src/forum/utils/copyDelimiters.js":
+/*!*******************************************!*\
+  !*** ./src/forum/utils/copyDelimiters.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return copyDelimiters; });
+/**
+ * Define delimiters those will be used in Copy-tex plugin
+ *
+ * @see https://github.com/KaTeX/KaTeX/blob/master/contrib/copy-tex/katex2tex.js#L1-L5
+ * @returns {object}
+ */
+function copyDelimiters(delimiters) {
+  return {
+    inline: [delimiters.inline.left, delimiters.inline.right],
+    display: [delimiters.block.left, delimiters.block.right]
+  };
+}
+
+/***/ }),
+
+/***/ "./src/forum/utils/katex2tex.js":
+/*!**************************************!*\
+  !*** ./src/forum/utils/katex2tex.js ***!
+  \**************************************/
+/*! exports provided: katexReplaceWithTex, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "katexReplaceWithTex", function() { return katexReplaceWithTex; });
+/**
+ * Copied & modified from:
+ * https://github.com/KaTeX/KaTeX/blob/master/contrib/copy-tex/katex2tex.js
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013-2019 Khan Academy and other contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+// Replace .katex elements with their TeX source (<annotation> element).
+// Modifies fragment in-place.  Useful for writing your own 'copy' handler,
+// as in copy-tex.js.
+var katexReplaceWithTex = function katexReplaceWithTex(fragment, copyDelimiters) {
+  // Remove .katex-html blocks that are preceded by .katex-mathml blocks
+  // (which will get replaced below).
+  var katexHtml = fragment.querySelectorAll('.katex-mathml + .katex-html');
+
+  for (var i = 0; i < katexHtml.length; i++) {
+    var element = katexHtml[i];
+
+    if (element.remove) {
+      element.remove(null);
+    } else {
+      element.parentNode.removeChild(element);
+    }
+  } // Replace .katex-mathml elements with their annotation (TeX source)
+  // descendant, with inline delimiters.
+
+
+  var katexMathml = fragment.querySelectorAll('.katex-mathml');
+
+  for (var _i = 0; _i < katexMathml.length; _i++) {
+    var _element = katexMathml[_i];
+
+    var texSource = _element.querySelector('annotation');
+
+    if (texSource) {
+      if (_element.replaceWith) {
+        _element.replaceWith(texSource);
+      } else {
+        _element.parentNode.replaceChild(texSource, _element);
+      }
+
+      texSource.innerHTML = copyDelimiters.inline[0] + texSource.innerHTML + copyDelimiters.inline[1];
+    }
+  } // Switch display math to display delimiters.
+
+
+  var displays = fragment.querySelectorAll('.katex-display annotation');
+
+  for (var _i2 = 0; _i2 < displays.length; _i2++) {
+    var _element2 = displays[_i2];
+    _element2.innerHTML = copyDelimiters.display[0] + _element2.innerHTML.substr(copyDelimiters.inline[0].length, _element2.innerHTML.length - copyDelimiters.inline[0].length - copyDelimiters.inline[1].length) + copyDelimiters.display[1];
+  }
+
+  return fragment;
+};
+/* harmony default export */ __webpack_exports__["default"] = (katexReplaceWithTex);
+
+/***/ }),
+
+/***/ "./src/forum/utils/reply.js":
+/*!**********************************!*\
+  !*** ./src/forum/utils/reply.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return reply; });
+/* harmony import */ var flarum_utils_DiscussionControls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/utils/DiscussionControls */ "flarum/utils/DiscussionControls");
+/* harmony import */ var flarum_utils_DiscussionControls__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_DiscussionControls__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Copied from:
+ * https://github.com/flarum/mentions/blob/master/js/src/forum/utils/reply.js
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Stichting Flarum (Flarum Foundation)
+ * Copyright (c) 2014-2019 Toby Zerner (toby.zerner@gmail.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+
+function insertMention(post, component, quote) {
+  var user = post.user();
+  var mention = '@' + (user ? user.username() : post.number()) + '#' + post.id() + ' '; // If the composer is empty, then assume we're starting a new reply.
+  // In which case we don't want the user to have to confirm if they
+  // close the composer straight away.
+
+  if (!component.content()) {
+    component.props.originalContent = mention;
+  }
+
+  var cursorPosition = component.editor.getSelectionRange()[0];
+  var preceding = component.editor.value().slice(0, cursorPosition);
+  var precedingNewlines = preceding.length == 0 ? 0 : 3 - preceding.match(/(\n{0,2})$/)[0].length;
+  component.editor.insertAtCursor(Array(precedingNewlines).join('\n') + ( // Insert up to two newlines, depending on preceding whitespace
+  quote ? '> ' + mention + quote.trim().replace(/\n/g, '\n> ') + '\n\n' : mention));
+}
+
+function reply(post, quote) {
+  var component = app.composer.component;
+
+  if (component && component.props.post && component.props.post.discussion() === post.discussion()) {
+    insertMention(post, component, quote);
+  } else {
+    flarum_utils_DiscussionControls__WEBPACK_IMPORTED_MODULE_0___default.a.replyAction.call(post.discussion()).then(function (newComponent) {
+      return insertMention(post, newComponent, quote);
+    });
+  }
+}
+
+/***/ }),
+
+/***/ "./src/forum/utils/selectedText.js":
+/*!*****************************************!*\
+  !*** ./src/forum/utils/selectedText.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return selectedText; });
+/* harmony import */ var _katex2tex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./katex2tex */ "./src/forum/utils/katex2tex.js");
+/**
+ * Copied & modified from:
+ * https://github.com/flarum/mentions/blob/master/js/src/forum/utils/selectedText.js
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Stichting Flarum (Flarum Foundation)
+ * Copyright (c) 2014-2019 Toby Zerner (toby.zerner@gmail.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+function selectedText(body, copyDelimiters) {
+  var selection = window.getSelection();
+
+  if (selection.rangeCount) {
+    var range = selection.getRangeAt(0);
+    var parent = range.commonAncestorContainer;
+
+    if (body[0] === parent || $.contains(body[0], parent)) {
+      var fragment = selection.getRangeAt(0).cloneContents();
+
+      if (fragment.querySelector('.katex-mathml')) {
+        fragment = Object(_katex2tex__WEBPACK_IMPORTED_MODULE_0__["default"])(fragment, copyDelimiters);
+      }
+
+      var clone = $("<div>").append(fragment); // Replace emoji images with their shortcode (found in alt attribute)
+
+      clone.find('img.emoji').replaceWith(function () {
+        return this.alt;
+      }); // Replace all other images with a Markdown image
+
+      clone.find('img').replaceWith(function () {
+        return '![](' + this.src + ')';
+      }); // Replace all links with a Markdown link
+
+      clone.find('a').replaceWith(function () {
+        return '[' + this.innerText + '](' + this.href + ')';
+      });
+      return clone.text();
+    }
+  }
+
+  return "";
+}
 
 /***/ }),
 
@@ -17957,17 +18546,6 @@ module.exports = flarum.core.compat['app'];
 
 /***/ }),
 
-/***/ "flarum/components/Alert":
-/*!*********************************************************!*\
-  !*** external "flarum.core.compat['components/Alert']" ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = flarum.core.compat['components/Alert'];
-
-/***/ }),
-
 /***/ "flarum/components/Button":
 /*!**********************************************************!*\
   !*** external "flarum.core.compat['components/Button']" ***!
@@ -17990,6 +18568,17 @@ module.exports = flarum.core.compat['components/CommentPost'];
 
 /***/ }),
 
+/***/ "flarum/components/DiscussionPage":
+/*!******************************************************************!*\
+  !*** external "flarum.core.compat['components/DiscussionPage']" ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/DiscussionPage'];
+
+/***/ }),
+
 /***/ "flarum/components/Dropdown":
 /*!************************************************************!*\
   !*** external "flarum.core.compat['components/Dropdown']" ***!
@@ -17998,17 +18587,6 @@ module.exports = flarum.core.compat['components/CommentPost'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['components/Dropdown'];
-
-/***/ }),
-
-/***/ "flarum/components/Separator":
-/*!*************************************************************!*\
-  !*** external "flarum.core.compat['components/Separator']" ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = flarum.core.compat['components/Separator'];
 
 /***/ }),
 
@@ -18045,6 +18623,17 @@ module.exports = flarum.core.compat['helpers/icon'];
 
 /***/ }),
 
+/***/ "flarum/utils/DiscussionControls":
+/*!*****************************************************************!*\
+  !*** external "flarum.core.compat['utils/DiscussionControls']" ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['utils/DiscussionControls'];
+
+/***/ }),
+
 /***/ "flarum/utils/ItemList":
 /*!*******************************************************!*\
   !*** external "flarum.core.compat['utils/ItemList']" ***!
@@ -18053,6 +18642,17 @@ module.exports = flarum.core.compat['helpers/icon'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['utils/ItemList'];
+
+/***/ }),
+
+/***/ "flarum/utils/extract":
+/*!******************************************************!*\
+  !*** external "flarum.core.compat['utils/extract']" ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['utils/extract'];
 
 /***/ })
 

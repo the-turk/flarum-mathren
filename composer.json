@@ -5,21 +5,19 @@
         "flarum",
         "mathren",
         "mathematics",
-		"expressions",
-		"tex",
-		"latex",
-		"katex"
+        "expressions",
+        "tex",
+        "latex",
+        "katex"
     ],
     "type": "flarum-extension",
-	"license": "MIT",
-    "authors": [
-        {
-            "name": "Hasan Özbey",
-            "email": "hasanoozbey@gmail.com",
-            "homepage": "https://github.com/the-turk"
-        }
-    ],
-	"support": {
+    "license": "MIT",
+    "authors": [{
+        "name": "Hasan Özbey",
+        "email": "hasanoozbey@gmail.com",
+        "homepage": "https://github.com/the-turk"
+    }],
+    "support": {
         "issues": "https://github.com/the-turk/flarum-mathren/issues",
         "source": "https://github.com/the-turk/flarum-mathren"
     },
@@ -27,7 +25,9 @@
         "flarum/core": ">=0.1.0-beta.10 <0.1.0-beta.14"
     },
     "autoload": {
-        "psr-4": {"TheTurk\\MathRen\\": "src/"}
+        "psr-4": {
+            "TheTurk\\MathRen\\": "src/"
+        }
     },
     "extra": {
         "flarum-extension": {

@@ -43,103 +43,38 @@ class LoadSettings
     public function prepareApiAttributes(Serializing $event)
     {
         if ($event->isSerializer(ForumSerializer::class)) {
-            // get all delimiters with options
-            $delimitersWithOptions = $this->settings->getDelimitersWithOptions();
+            $katexOptions = $this->settings->getKatexOptions();
 
-            // get ignored tags as an array
-            $ignored = $this->settings->getIgnored();
-
-            // Set macro list as an array
-            $macros = $this->settings->get(
-                'macros',
-                []
-            );
-
-            $macroList = [];
-            if (!empty($macros)) {
-                if (is_array($macros)) {
-                    $macroList = $macros;
-                } else {
-                    $macroList = $this->settings->macroListAsAnArray($macros);
-                }
-            }
+            // all of our delimiters
+            $delimiters = Arr::get($katexOptions, 'delimiters');
 
             $event->attributes += [
-                'mathRenMainBlockDelimiter' => (array)
-                    $this->settings->getMainDelimiter($delimitersWithOptions, true),
-                'mathRenMainInlineDelimiter' => (array)
-                    $this->settings->getMainDelimiter($delimitersWithOptions),
-                'mathRenDelimiters' => (array)
-                    Arr::get($delimitersWithOptions, 'bbcodes'),
-                'mathRenIgnoredTags' => (array)
-                    $ignored['tags'],
-                'mathRenIgnoredClasses' => (array)
-                    $ignored['classes'],
-                'mathRenOutputMode' => (string)
-                    $this->settings->get(
-                        'outputMode',
-                        Arr::get($this->settings->getDefaults(), 'htmlAndMathml')
+                'mathRenKatexOptions' => $katexOptions,
+                'mathRenMainBlockDelimiter' =>
+                    Arr::first(
+                        $delimiters,
+                        function ($val) {
+                            return $val['display'] === true;
+                        }
                     ),
-                'mathRenEnableFleqn' => (bool)
-                    $this->settings->get(
-                        'enableFleqn',
-                        Arr::get($this->settings->getDefaults(), 'enableFleqn')
+                'mathRenMainInlineDelimiter' =>
+                    Arr::first(
+                        $delimiters,
+                        function ($val) {
+                            return $val['display'] === false;
+                        }
                     ),
-                'mathRenEnableLeqno' => (bool)
-                    $this->settings->get(
-                        'enableLeqno',
-                        Arr::get($this->settings->getDefaults(), 'enableLeqno')
-                    ),
-                'mathRenEnableColorIsTextColor' => (bool)
-                    $this->settings->get(
-                        'enableColorIsTextColor',
-                        Arr::get($this->settings->getDefaults(), 'enableColorIsTextColor')
-                    ),
-                'mathRenEnableThrowOnError' => (bool)
-                    $this->settings->get(
-                        'enableThrowOnError',
-                        Arr::get($this->settings->getDefaults(), 'enableThrowOnError')
-                    ),
-                'mathRenErrorColor' => (string)
-                    $this->settings->get(
-                        'errorColor',
-                        Arr::get($this->settings->getDefaults(), 'errorColor')
-                    ),
-                'mathRenMinRuleThickness' => (float)
-                    $this->sanitizeFloat(
-                        $this->settings->get(
-                            'minRuleThickness',
-                            Arr::get($this->settings->getDefaults(), 'minRuleThickness')
-                        )
-                    ),
-                'mathRenMaxSize' => (float)
-                    $this->sanitizeFloat(
-                        $this->settings->get(
-                            'maxSize',
-                            Arr::get($this->settings->getDefaults(), 'maxSize')
-                        )
-                    ),
-                'mathRenMaxExpand' => (int)
-                    $this->settings->get(
-                        'maxExpand',
-                        Arr::get($this->settings->getDefaults(), 'maxExpand')
-                    ),
-                'mathRenMacros' => (string)
-                    json_encode((array)$macroList),
                 'mathRenEnableTextEditorButtons' => (bool)
                     $this->settings->get(
                         'enableTextEditorButtons',
                         Arr::get($this->settings->getDefaults(), 'enableTextEditorButtons')
                     ),
+                'mathRenEnableCopyTeX' => (bool)
+                    $this->settings->get(
+                        'enableCopyTeX',
+                        Arr::get($this->settings->getDefaults(), 'enableCopyTeX')
+                    ),
             ];
         }
-    }
-
-    /**
-     * @param float $number
-     * @return float
-     */
-    public function sanitizeFloat(float $number) {
-        return floatval(preg_replace('/[^-0-9\.]/', '', $number));
     }
 }

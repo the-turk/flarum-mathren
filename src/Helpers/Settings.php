@@ -9,24 +9,17 @@ class Settings
 {
     const EXPRESSION_PLACEHOLDER = '%e%';
 
-    // opening and closing symbols for
-    // decisive keywords
-    // it's easier to control them from here
-    const DECISIVE_OPENING = '{';
-    const DECISIVE_CLOSING = '}';
-
     /**
     * All default setting options of this extension.
     *
     * @var array
     */
    protected $defaults = [
-       'mainBlockDelimiter' => '[math]'.self::EXPRESSION_PLACEHOLDER.'[/math]',
-       'mainInlineDelimiter' => '[imath]'.self::EXPRESSION_PLACEHOLDER.'[/imath]',
+       'blockDelimiters' => '[math]'.self::EXPRESSION_PLACEHOLDER.'[/math]',
+       'inlineDelimiters' => '[imath]'.self::EXPRESSION_PLACEHOLDER.'[/imath]',
        'decisiveKeywords' => 'ignore',
        'ignoredClasses' => 'mathren-ignore',
-       'blockMathClass' => 'mathren-block',
-       'inlineMathClass' => 'mathren-inline',
+       'ignoredTags' => '',
        'outputMode' => 'htmlAndMathml',
        'enableFleqn' => false,
        'enableLeqno' => false,
@@ -35,8 +28,10 @@ class Settings
        'errorColor' => '#cc0000',
        'minRuleThickness' => 0.05,
        'maxSize' => 10,
+       'macros' => '',
        'maxExpand' => 1000,
-       'enableTextEditorButtons' => false
+       'enableTextEditorButtons' => true,
+       'enableCopyTeX' => false
    ];
 
     protected $prefix = 'the-turk-mathren.';
@@ -94,113 +89,75 @@ class Settings
     }
 
     /**
+     * KaTeX options those
+     * can be used through this extension.
+     *
+     * @see https://katex.org/docs/autorender.html
      * @return array
      */
-    public function getDelimitersByType()
-    {
-        // main delimiters for block expressions
-        $mainBlockDelimiter = $this->get(
-            // settings key
-            'mainBlockDelimiter',
-            // default value
-            Arr::get($this->getDefaults(), 'mainBlockDelimiter')
-        );
-
-        // main delimiters for inline expressions
-        $mainInlineDelimiter = $this->get(
-            // settings key
-            'mainInlineDelimiter',
-            // default value
-            Arr::get($this->getDefaults(), 'mainInlineDelimiter')
-        );
-
-        // get all of the block delimiters
-        $blockDelimiters = $this->commaToArray(
-            $mainBlockDelimiter.','.
-             $this->get(
-                 // settings key
-                 'aliasBlockDelimiters'
-             )
-        );
-
-        // get all of the inline delimiters
-        $inlineDelimiters = $this->commaToArray(
-            $mainInlineDelimiter.','.
-             $this->get(
-                 // settings key
-                 'aliasInlineDelimiters'
-             )
-        );
-
-        // BBCode delimiters for block expressions
-        $bbBlockDelimiters = $this->bbCodeMatcher($blockDelimiters);
-
-        // BBCode delimiters for inline expressions
-        $bbInlineDelimiters = $this->bbCodeMatcher($inlineDelimiters);
-
-        // Special delimiters for block expressions
-        $specialBlockDelimiters = array_diff(
-            $blockDelimiters,
-            $bbBlockDelimiters
-        );
-
-        // Special delimiters for inline expressions
-        $specialInlineDelimiters = array_diff(
-            $inlineDelimiters,
-            $bbInlineDelimiters
-        );
-
+    public function getKatexOptions() {
         return [
-            'all' => [
-                'block' => $blockDelimiters,
-                'inline' => $inlineDelimiters
-            ],
-            'main' => [
-                'block' => Arr::wrap($mainBlockDelimiter),
-                'inline' => Arr::wrap($mainInlineDelimiter)
-            ],
-            'specials' => [
-                'block' => $specialBlockDelimiters,
-                'inline' => $specialInlineDelimiters
-            ],
-            'bbcodes' => [
-                'block' => $bbBlockDelimiters,
-                'inline' => $bbInlineDelimiters
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getDecisiveKeywords()
-    {
-        return $this->commaToArray($this->get(
-            // settings key
-            'decisiveKeywords',
-            // default value
-            Arr::get($this->getDefaults(), 'decisiveKeywords')
-        ));
-    }
-
-    /**
-     * @return array
-     */
-    public function getIgnored()
-    {
-        return [
-            'tags' => $this->commaToArray($this->get(
-                // settings key
-                'ignoredTags',
-                // dafault value
-                ''
-            )),
-            'classes' => $this->commaToArray($this->get(
-                // settings key
-                'ignoredClasses',
-                // default value
-                Arr::get($this->getDefaults(), 'ignoredClasses')
-            ))
+            'ignoredTags' => Arr::get($this->getIgnored(), 'tags'),
+            'ignoredClasses' => Arr::get($this->getIgnored(), 'classes'),
+            'fleqn' => (bool)
+                $this->get(
+                    'enableFleqn',
+                    Arr::get($this->getDefaults(), 'enableFleqn')
+                ),
+            'leqno' => (bool)
+                $this->get(
+                    'enableLeqno',
+                    Arr::get($this->getDefaults(), 'enableLeqno')
+                ),
+            'output' =>
+                $this->get(
+                    'outputMode',
+                    Arr::get($this->getDefaults(), 'htmlAndMathml')
+                ),
+            'throwOnError' => (bool)
+                $this->get(
+                    'enableThrowOnError',
+                    Arr::get($this->getDefaults(), 'enableThrowOnError')
+                ),
+            'errorColor' =>
+                $this->get(
+                    'errorColor',
+                    Arr::get($this->getDefaults(), 'errorColor')
+                ),
+            'minRuleThickness' =>
+                \floatval(
+                    $this->get(
+                        'minRuleThickness',
+                        Arr::get($this->getDefaults(), 'minRuleThickness')
+                    )
+                ),
+            'maxSize' =>
+                \floatval(
+                    $this->get(
+                        'maxSize',
+                        Arr::get($this->getDefaults(), 'maxSize')
+                    )
+                ),
+            'maxExpand' => (int)
+                $this->get(
+                    'maxExpand',
+                    Arr::get($this->getDefaults(), 'maxExpand')
+                ),
+            'macros' =>
+                \json_decode(
+                  '{' .
+                  $this->get(
+                      'macros',
+                      Arr::get($this->getDefaults(), 'macros')
+                  )
+                  . '}'
+                ),
+            'colorIsTextColor' => (bool)
+                $this->get(
+                    'enableColorIsTextColor',
+                    Arr::get($this->getDefaults(), 'enableColorIsTextColor')
+                ),
+            'delimiters' => $this->getDelimitersWithOptions(),
         ];
     }
 
@@ -221,75 +178,81 @@ class Settings
                 )
             )),
             // class for block expressions
-            'block' => $this->get(
-                // settings key
-                'blockMathClass',
-                // default value
-                Arr::get($this->getDefaults(), 'blockMathClass')
-            ),
+            'block' => 'mathren-block',
             // class for inline expressions
-            'inline' => $this->get(
-                // settings key
-                'inlineMathClass',
-                // default value
-                Arr::get($this->getDefaults(), 'inlineMathClass')
-            )
+            'inline' => 'mathren-inline'
         ];
     }
 
     /**
      * @return array
      */
-    public function getDelimitersWithOptions()
+    private function getDelimitersByType()
+    {
+        // get all of the block delimiters
+        $blockDelimiters = $this->commaToArray(
+            $this->get(
+                'blockDelimiters',
+                Arr::get($this->getDefaults(), 'blockDelimiters')
+            )
+        );
+
+        // get all of the inline delimiters
+        $inlineDelimiters = $this->commaToArray(
+            $this->get(
+                'inlineDelimiters',
+                Arr::get($this->getDefaults(), 'inlineDelimiters')
+            )
+        );
+
+        return [
+            'block' => $blockDelimiters,
+            'inline' => $inlineDelimiters
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getIgnored()
+    {
+        return [
+            'tags' => $this->commaToArray(
+                $this->get(
+                    'ignoredTags',
+                    Arr::get($this->getDefaults(), 'ignoredTags')
+                )
+            ),
+            'classes' => $this->commaToArray(
+                $this->get(
+                    'ignoredClasses',
+                    Arr::get($this->getDefaults(), 'ignoredClasses')
+                )
+            )
+        ];
+    }
+
+    /**
+     * This function creates an array for KaTeX's options.
+     * All of our delimiters will be in this array.
+     * Its elements are also an array and looks like this:
+     * [[left] => '[math]', [right] => '[/math]', [display] => true]
+     * ^ they're created by `$this->setOptions()`
+     *
+     * @return array
+     */
+    private function getDelimitersWithOptions()
     {
         $delimiters = $this->getDelimitersByType();
         $delimitersWithOptions = [];
-        $hasSpecial = false;
 
-        foreach ($delimiters as $a => $b) {
-            $delimitersWithOptions[$a] = [];
-            foreach ($delimiters[$a] as $c => $d) {
-                $isBlock = ($c == 'block' ? true : false);
-                if (is_array($d)) {
-                    // \[…\] must come last in the special delimiters array. Otherwise, wrapMathInText
-                    // function will search for \[ before it searches for $$ or \(
-                    // That makes it susceptible to finding a \\[0.3em] row delimiter and
-                    // treating it as if it were the start of a KaTeX math zone.
-                    if($a === 'specials' && $hasSpecial === false) {
-                        $specialDelimiter = Arr::where($d, function ($val, $key) {
-                            return $val === '\['.self::EXPRESSION_PLACEHOLDER.'\]';
-                        });
-                        if(!empty($specialDelimiter)) {
-                            $d = Arr::except($d, key($specialDelimiter));
-                            $specialDelimiter = Arr::first(
-                                $this->setOptions($specialDelimiter, $isBlock)
-                            );
-                            $hasSpecial = true;
-                        }
-                    }
-
-                    if($hasSpecial === true && $a !== 'specials') {
-                        array_push(
-                            $delimitersWithOptions['specials'],
-                            [
-                                'left' => '\[',
-                                'right' => '\]',
-                                'display' => $specialDelimiter['display']
-                            ]
-                        );
-
-                        $hasSpecial = false;
-                    }
-
-                    if(empty($delimitersWithOptions[$a])) {
-                        $delimitersWithOptions[$a] = $this->setOptions($d, $isBlock);
-                    } else {
-                        $delimitersWithOptions[$a] = array_merge(
-                            $delimitersWithOptions[$a],
-                            $this->setOptions($d, $isBlock)
-                        );
-                    }
-                }
+        foreach ($delimiters as $key => $delims_r) {
+            $isBlock = ($key == 'block' ? true : false);
+            foreach ($delims_r as $delim) {
+                $delimitersWithOptions = array_merge(
+                    $delimitersWithOptions,
+                    $this->setOptions($delim, $isBlock)
+                );
             }
         }
 
@@ -297,60 +260,31 @@ class Settings
     }
 
     /**
-     * @param array $delimitersWithOptions
-     * @param bool $isBlock
-     * @return array
-     */
-    public function getMainDelimiter(array $delimitersWithOptions, bool $isBlock = false) {
-        // we don't want to execute this function again
-        // if it is already executed
-        if (empty($delimitersWithOptions)) {
-            $delimitersWithOptions = $this->getDelimitersWithOptions();
-        }
-
-        return Arr::except(
-            Arr::first(
-                Arr::where(
-                    Arr::get($delimitersWithOptions, 'main'),
-                    function ($v, $k) use ($isBlock) {
-                        return $v['display'] === $isBlock;
-                    }
-                )
-            )
-        , ['display']);
-    }
-
-    /**
      * Creates delimiter list with options.
      *
-     * @param array $delimiters
+     * @param string $delimiter
      * @param bool $isBlock
      * @return array
      */
-    public function setOptions(array $delimiters, bool $isBlock = false)
+    private function setOptions(string $delimiter, bool $isBlock = false)
     {
         $r = [];
 
-        if (!empty($delimiters)) {
-            foreach ($delimiters as $d) {
-                // let d = [mathren]%e%[/mathren]
-                // %e% stands for mathematical expressions
-                // left delimiter
-                $left = Str::before($d, self::EXPRESSION_PLACEHOLDER);
-                // right delimiter
-                $right = Str::after($d, self::EXPRESSION_PLACEHOLDER);
-                if (!empty($left) && !empty($right)) {
-                    array_push(
-                        $r,
-                        [
-                            'left' => $left,
-                            'right' => $right,
-                            'display' => $isBlock
-                        ]
-                    );
-                }
-            }
-        }
+        // let d = [mathren]%e%[/mathren]
+        // %e% stands for mathematical expressions
+        // left delimiter
+        $left = Str::before($delimiter, self::EXPRESSION_PLACEHOLDER);
+        // right delimiter
+        $right = Str::after($delimiter, self::EXPRESSION_PLACEHOLDER);
+
+        array_push(
+            $r,
+            [
+                'left' => $left,
+                'right' => $right,
+                'display' => $isBlock
+            ]
+        );
 
         return $r;
     }
@@ -361,7 +295,7 @@ class Settings
      * @param string $list
      * @return array
      */
-    public function commaToArray(string $list)
+    private function commaToArray(string $list)
     {
         $r = [];
 
@@ -371,49 +305,5 @@ class Settings
 
         // remove duplicated values
         return array_unique($r);
-    }
-
-    /**
-     * Match only BBCodes in array.
-     * ToDo: Regex expression needs to be improved.
-     *
-     * @param array $r
-     * @return array
-     */
-    public function bbCodeMatcher(array $r)
-    {
-        return Arr::where($r, function ($value, $key) {
-            return preg_match('/\[(.*?)\]'.self::EXPRESSION_PLACEHOLDER.'\[(\/)?\1\]/', $value);
-        });
-    }
-
-    /**
-     * Returns macro inputs as an array.
-     * ToDo: This function needs to be improved.
-     *
-     * @param string $list
-     * @return array
-     */
-    public function macroListAsAnArray(string $list)
-    {
-        $r = [];
-
-        if (!empty($list)) {
-            // convert new lines into a space
-            $list = trim(preg_replace('/\s+/', ' ', $list));
-            // remove quotation marks
-            $list = preg_replace('/[\'"]+/', '', $list);
-            // convert \\ to \
-            $list = str_replace('\\\\', '\\', $list);
-
-            $item = array_filter(explode(',', trim($list)));
-
-            foreach ($item as $m) {
-                $s = explode(':', $m);
-                $r[trim($s[0])] = trim($s[1]);
-            }
-        }
-
-        return $r;
     }
 }

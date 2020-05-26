@@ -128,6 +128,7 @@ function _inheritsLoose(subClass, superClass) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return addSettingsPane; });
 /* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
 /* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var flarum_components_AdminNav__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/AdminNav */ "flarum/components/AdminNav");
@@ -139,7 +140,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function () {
+function addSettingsPane() {
   // create the route
   app.routes['the-turk-mathren'] = {
     path: '/the-turk/mathren',
@@ -159,7 +160,7 @@ __webpack_require__.r(__webpack_exports__);
       description: app.translator.trans('the-turk-mathren.admin.settings.description')
     }));
   });
-});
+}
 
 /***/ }),
 
@@ -188,6 +189,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var flarum_components_Alert__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/components/Alert */ "flarum/components/Alert");
 /* harmony import */ var flarum_components_Alert__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Alert__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var flarum_components_Page__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/components/Page */ "flarum/components/Page");
+/* harmony import */ var flarum_components_Page__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Page__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
@@ -197,223 +200,210 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var MathRenSettingsPage = /*#__PURE__*/function (_Component) {
-  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(MathRenSettingsPage, _Component);
+/* Regex constants those will be used to validate some fields */
+// bbcode delimiters
+
+var bbcode_regex = /^\[([a-zA-Z_-]+)\]%e%\[\/\1\](?:,\s*\[([a-zA-Z_-]+)\]%e%\[\/\2\])*$/; // comma seperated lists, except the bbcode delimiters
+
+var comma_regex = /^[a-zA-Z_-]+(?:,\s*[a-zA-Z_-]+)*$/; // hexadecimal colors
+
+var hex_regex = /^#[0-9a-f]{3}([0-9a-f]{3})?$/i; // floating point numbers
+
+var float_regex = /^[0-9]*[.]?[0-9]+$/; // zero or positive integer values
+
+var int_regex = /^\+?(0|[1-9]\d*)$/;
+/* Other constants those will be used through this page */
+
+var settingsPrefix = 'the-turk-mathren.';
+var localePrefix = 'the-turk-mathren.admin.settings.';
+
+var MathRenSettingsPage = /*#__PURE__*/function (_Page) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(MathRenSettingsPage, _Page);
 
   function MathRenSettingsPage() {
-    return _Component.apply(this, arguments) || this;
+    return _Page.apply(this, arguments) || this;
   }
 
   var _proto = MathRenSettingsPage.prototype;
 
   _proto.init = function init() {
-    var _this = this;
+    _Page.prototype.init.call(this);
 
-    // whether we are saving the settings or not right now
-    this.loading = false; // the fields we need to watch and to save
-
-    this.fields = [// the code tag options
-    'blockMathClass', 'inlineMathClass', 'wrapperStyle', // KaTeX options
-    'mainBlockDelimiter', 'mainInlineDelimiter', 'aliasBlockDelimiters', 'aliasInlineDelimiters', 'decisiveKeywords', 'ignoredTags', 'ignoredClasses', 'errorColor', 'minRuleThickness', 'maxSize', 'macros', 'maxExpand', 'outputMode']; // the checkboxes we need to watch and to save
-
-    this.checkboxes = [// KaTeX options
-    'enableFleqn', 'enableLeqno', 'enableColorIsTextColor', 'enableThrowOnError', 'enableTextEditorButtons']; // select options for output mode
+    this.settings = {};
+    this.loading = false; // select options for the output mode
 
     this.outputModeOptions = {
       'html': 'HTML',
       'mathml': 'MathML',
       'htmlAndMathml': 'HTML & MathML'
-    }; // get the saved settings from the database
-
-    var settings = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.settings; // settings prefix
-    // (to be added to every field and checkbox in the setting table)
-
-    this.settingsPrefix = 'the-turk-mathren.'; // translation prefix
-
-    this.localePrefix = 'the-turk-mathren.admin.settings.'; // contains default values
-
-    this.values = {}; // bind the values of the fields and checkboxes
-    // to the getter/setter functions
-
-    this.fields.forEach(function (key) {
-      return _this.values[key] = m.prop(settings[_this.addPrefix(key)]);
-    });
-    this.checkboxes.forEach(function (key) {
-      _this.values[key] = m.prop(settings[_this.addPrefix(key)] === '1');
-    });
+    };
+    this.validaton_rules = {
+      blockDelimiters: bbcode_regex,
+      inlineDelimiters: bbcode_regex,
+      decisiveKeywords: comma_regex,
+      ignoredTags: comma_regex,
+      ignoredClasses: comma_regex,
+      minRuleThickness: float_regex,
+      maxSize: float_regex,
+      errorColor: hex_regex,
+      maxExpand: int_regex
+    };
   }
   /**
-   * Show the actual MathRenSettingsPage.
+   * Show the actual settings page
    *
    * @returns {*}
    */
   ;
 
   _proto.view = function view() {
+    var _this = this;
+
     return [m('div', {
       className: 'MathRenPage'
     }, [m('div', {
       className: 'container'
     }, [m('form', {
       onsubmit: this.onsubmit.bind(this)
-    }, [m('.Form-group', [m('iframe', {
-      src: 'https://ghbtns.com/github-btn.html?user=the-turk' + '&repo=flarum-mathren&type=watch&count=true&v=2',
-      frameborder: '0',
-      scrolling: 'no'
-    })]), m('h3', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'wrapperOptionsHeading')), m('hr'), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'mathClasses')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'mathClassesHelp'))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'blockMathClass'))), m('div', {
-      className: 'inlineDivInput'
-    }, m('input[type=text].FormControl', {
-      value: this.values.blockMathClass() || 'mathren-block',
-      oninput: m.withAttr('value', this.values.blockMathClass)
-    }))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'inlineMathClass'))), m('div', {
-      className: 'inlineDivInput'
-    }, m('input[type=text].FormControl', {
-      value: this.values.inlineMathClass() || 'mathren-inline',
-      oninput: m.withAttr('value', this.values.inlineMathClass)
-    }))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'wrapperStyle')), m('textarea.FormControl', {
-      value: this.values.wrapperStyle() || '',
-      placeholder: '.mathren-block { } .mathren-inline { } .mathren-ignore { }',
-      oninput: m.withAttr('value', this.values.wrapperStyle)
-    })]), m('h3', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'katexOptionsHeading')), m('hr'), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'delimiters')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'delimitersHelp'))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'mainBlockDelimiter'))), m('div', {
-      className: 'inlineDivInput'
-    }, m('input[type=text].FormControl', {
-      value: this.values.mainBlockDelimiter() || '[math]%e%[/math]',
-      placeholder: '[math]%e%[/math]',
-      oninput: m.withAttr('value', this.values.mainBlockDelimiter)
-    }))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'mainInlineDelimiter'))), m('div', {
-      className: 'inlineDivInput'
-    }, m('input[type=text].FormControl', {
-      value: this.values.mainInlineDelimiter() || '[imath]%e%[/imath]',
-      placeholder: '[imath]%e%[/imath]',
-      oninput: m.withAttr('value', this.values.mainInlineDelimiter)
-    }))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'aliasBlockDelimiters'))), m('div', {
-      className: 'inlineDivInput'
-    }, m('input[type=text].FormControl', {
-      value: this.values.aliasBlockDelimiters() || '',
-      placeholder: '[mathren]%e%[/mathren],$$%e%$$,\\[%e%\\]',
-      oninput: m.withAttr('value', this.values.aliasBlockDelimiters)
-    }))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'aliasInlineDelimiters'))), m('div', {
-      className: 'inlineDivInput'
-    }, m('input[type=text].FormControl', {
-      value: this.values.aliasInlineDelimiters() || '',
-      placeholder: '[mathren-inline]%e%[/mathren-inline],\\(%e%\\)',
-      oninput: m.withAttr('value', this.values.aliasInlineDelimiters)
-    }))]), m('.Form-group', [m('div', {
-      className: 'helpText'
-    }, m('i', {
-      className: 'fas fa-question-circle'
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'aliasDelimitersHelp')))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'ignoringExpressions')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'ignoringExpressionsHelp'))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'decisiveKeywords'))), m('div', {
-      className: 'inlineDivInput'
-    }, m('input[type=text].FormControl', {
-      value: this.values.decisiveKeywords() || 'ignore',
-      placeholder: 'ignore',
-      oninput: m.withAttr('value', this.values.decisiveKeywords)
-    }))]), m('.Form-group', [m('div', {
+    }, [m('h3', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'katexOptionsHeading')), m('hr'), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'delimiters')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'delimitersHelp'))]), m('.Form-group', [m('div', {
       className: 'helpText'
     }, m('i', {
       className: 'fas fa-exclamation-circle'
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'decisiveKeywordsWarning'))), m('div', {
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'regexInfo')))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'blockDelimiters'))), m('div', {
+      className: 'inline--input'
+    }, m('input[type=text].FormControl', {
+      bidi: this.setting(settingsPrefix + 'blockDelimiters', '[math]%e%[/math]'),
+      placeholder: '[math]%e%[/math]'
+    }))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'inlineDelimiters'))), m('div', {
+      className: 'inline--input'
+    }, m('input[type=text].FormControl', {
+      bidi: this.setting(settingsPrefix + 'inlineDelimiters', '[imath]%e%[/imath]'),
+      placeholder: '[imath]%e%[/imath]'
+    }))]), m('.Form-group', [m('div', {
       className: 'helpText'
     }, m('i', {
       className: 'fas fa-info-circle'
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'decisiveKeywordsInfo'))), m('div', {
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'mainDelimitersInfo')))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'ignoringExpressions')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'ignoringExpressionsHelp'))]), m('.Form-group', [m('div', {
+      className: 'helpText'
+    }, m('i', {
+      className: 'fas fa-exclamation-circle'
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'regexInfo')))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'decisiveKeywords'))), m('div', {
+      className: 'inline--input'
+    }, m('input[type=text].FormControl', {
+      bidi: this.setting(settingsPrefix + 'decisiveKeywords', 'ignore'),
+      placeholder: 'ignore'
+    }))]), m('.Form-group', [m('div', {
       className: 'helpText'
     }, m('i', {
       className: 'fas fa-question-circle'
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'decisiveKeywordsHelp')))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'ignoredTags'))), m('div', {
-      className: 'inlineDivInput'
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'decisiveKeywordsHelp')))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'ignoredTags'))), m('div', {
+      className: 'inline--input'
     }, m('input[type=text].FormControl', {
-      value: this.values.ignoredTags() || '',
-      placeholder: 'script,noscript,style,textarea,pre,code',
-      oninput: m.withAttr('value', this.values.ignoredTags)
-    }))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'ignoredClasses'))), m('div', {
-      className: 'inlineDivInput'
+      bidi: this.setting(settingsPrefix + 'ignoredTags', ''),
+      placeholder: 'script,noscript,style,textarea,pre,code'
+    }))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'ignoredClasses'))), m('div', {
+      className: 'inline--input'
     }, m('input[type=text].FormControl', {
-      value: this.values.ignoredClasses() || 'mathren-ignore',
-      placeholder: 'mathren-ignore',
-      oninput: m.withAttr('value', this.values.ignoredClasses)
+      bidi: this.setting(settingsPrefix + 'ignoredClasses', 'mathren-ignore'),
+      placeholder: 'mathren-ignore'
     }))]), m('.Form-group', [m('div', {
       className: 'helpText'
     }, m('i', {
       className: 'fas fa-info-circle'
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'ignoredClassesInfo')))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'outputMode')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'outputModeHelp')), m('div', flarum_components_Select__WEBPACK_IMPORTED_MODULE_5___default.a.component({
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'ignoredClassesInfo')))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'outputMode')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'outputModeHelp')), m('div', flarum_components_Select__WEBPACK_IMPORTED_MODULE_5___default.a.component({
       options: this.outputModeOptions,
-      onchange: this.values.outputMode,
-      value: this.values.outputMode() || 'htmlAndMathml'
+      onchange: this.setting(settingsPrefix + 'outputMode'),
+      value: this.setting(settingsPrefix + 'outputMode')() || 'htmlAndMathml'
     }))]), m('.Form-group', [m('label', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default.a.component({
-      state: this.values.enableFleqn(),
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'enableFleqn'),
-      onchange: this.values.enableFleqn
+      state: this.setting(settingsPrefix + 'enableFleqn', '0')() === '1',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'enableFleqn'),
+      onchange: function onchange(value) {
+        _this.setting(settingsPrefix + 'enableFleqn')(value ? '1' : '0');
+      }
     }))]), m('.Form-group', [m('label', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default.a.component({
-      state: this.values.enableLeqno(),
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'enableLeqno'),
-      onchange: this.values.enableLeqno
+      state: this.setting(settingsPrefix + 'enableLeqno', '0')() === '1',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'enableLeqno'),
+      onchange: function onchange(value) {
+        _this.setting(settingsPrefix + 'enableLeqno')(value ? '1' : '0');
+      }
     }))]), m('.Form-group', [m('label', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default.a.component({
-      state: this.values.enableColorIsTextColor(),
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'enableColorIsTextColor'),
-      onchange: this.values.enableColorIsTextColor
+      state: this.setting(settingsPrefix + 'enableColorIsTextColor', '0')() === '1',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'enableColorIsTextColor'),
+      onchange: function onchange(value) {
+        _this.setting(settingsPrefix + 'enableColorIsTextColor')(value ? '1' : '0');
+      }
     }))]), m('.Form-group', [m('label', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default.a.component({
-      state: this.values.enableThrowOnError(),
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'enableThrowOnError'),
-      onchange: this.values.enableThrowOnError
-    }))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'errorColor')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'errorColorHelp')), m('input[type=color].FormControl', {
-      value: this.values.errorColor() || '#cc0000',
-      oninput: m.withAttr('value', this.values.errorColor),
-      disabled: this.values.enableThrowOnError()
-    })]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'sizeSettings')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'sizeSettingsHelp'))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'minRuleThickness'))), m('div', {
-      className: 'inlineDivInput'
+      state: this.setting(settingsPrefix + 'enableThrowOnError', '0')() === '1',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'enableThrowOnError'),
+      onchange: function onchange(value) {
+        _this.setting(settingsPrefix + 'enableThrowOnError')(value ? '1' : '0');
+      }
+    }))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--input-color-label'
+    }, m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'errorColor')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'errorColorHelp'))), m('div', {
+      className: 'inline--input-color'
+    }, m('input[type=color].FormControl', {
+      bidi: this.setting(settingsPrefix + 'errorColor', '#cc0000'),
+      disabled: this.setting(settingsPrefix + 'enableThrowOnError')() === '1'
+    }))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'sizeSettings')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'sizeSettingsHelp'))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'minRuleThickness'))), m('div', {
+      className: 'inline--input'
     }, m('input[type=text].FormControl', {
-      value: this.values.minRuleThickness() || '0.05',
-      placeholder: '0.05',
-      oninput: m.withAttr('value', this.values.minRuleThickness)
-    }))]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'maxSize'))), m('div', {
-      className: 'inlineDivInput'
+      bidi: this.setting(settingsPrefix + 'minRuleThickness', '0.05'),
+      placeholder: '0.05'
+    }))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'maxSize'))), m('div', {
+      className: 'inline--input'
     }, m('input[type=text].FormControl', {
-      value: this.values.maxSize() || '10',
-      placeholder: '10',
-      oninput: m.withAttr('value', this.values.maxSize)
-    }))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'macros')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'macrosHelp')), m('textarea.FormControl', {
-      value: this.values.macros() || '',
-      placeholder: '\\RR: \\mathbb{R},\n\\NN: \\mathbb{N}',
-      oninput: m.withAttr('value', this.values.macros)
+      bidi: this.setting(settingsPrefix + 'maxSize', '10'),
+      placeholder: '10'
+    }))]), m('.Form-group', [m('label', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'macros')), m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'macrosHelp')), m('textarea.FormControl', {
+      bidi: this.setting(settingsPrefix + 'macros', ''),
+      placeholder: '"\\\\RR": "\\\\mathbb{R}"\n"\\\\NN": "\\\\mathbb{N}"'
     })]), m('.Form-group', [m('div', {
-      className: 'inlineDivLabel'
-    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'maxExpand'))), m('div', {
-      className: 'inlineDivInput'
+      className: 'helpText'
+    }, m('i', {
+      className: 'fas fa-exclamation-circle'
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'syntaxInfo')))]), m('.Form-group .flex-container', [m('div', {
+      className: 'inline--label'
+    }, m('.helpText', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'maxExpand'))), m('div', {
+      className: 'inline--input'
     }, m('input[type=text].FormControl', {
-      value: this.values.maxExpand() || '1000',
-      placeholder: '1000',
-      oninput: m.withAttr('value', this.values.maxExpand)
+      bidi: this.setting(settingsPrefix + 'maxExpand', '1000'),
+      placeholder: '1000'
     }))]), m('.Form-group', [flarum_components_Alert__WEBPACK_IMPORTED_MODULE_7___default.a.component({
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'katexOptionsInfo'),
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'katexOptionsInfo', {
+        a: m("a", {
+          href: "https://katex.org/docs/options.html",
+          target: "_blank"
+        })
+      }),
       type: 'success',
       dismissible: false
-    })]), m('h3', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'otherOptionsHeading')), m('hr'), m('.Form-group', [m('label', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default.a.component({
-      state: this.values.enableTextEditorButtons(),
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(this.localePrefix + 'enableTextEditorButtons'),
-      onchange: this.values.enableTextEditorButtons
+    })]), m('h3', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'otherOptionsHeading')), m('hr'), m('.Form-group', [m('label', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default.a.component({
+      state: this.setting(settingsPrefix + 'enableTextEditorButtons', '1')() === '1',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'enableTextEditorButtons'),
+      onchange: function onchange(value) {
+        _this.setting(settingsPrefix + 'enableTextEditorButtons')(value ? '1' : '0');
+      }
+    }))]), m('.Form-group', [m('label', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_6___default.a.component({
+      state: this.setting(settingsPrefix + 'enableCopyTeX', '1')() === '1',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'enableCopyTeX'),
+      onchange: function onchange(value) {
+        _this.setting(settingsPrefix + 'enableCopyTeX')(value ? '1' : '0');
+      }
     }))]), flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
       type: 'submit',
       className: 'Button Button--primary',
@@ -421,78 +411,100 @@ var MathRenSettingsPage = /*#__PURE__*/function (_Component) {
       loading: this.loading,
       disabled: !this.changed()
     })])])])];
+  };
+
+  _proto.setting = function setting(key, fallback) {
+    if (fallback === void 0) {
+      fallback = '';
+    }
+
+    this.settings[key] = this.settings[key] || m.prop(flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.settings[key] || fallback);
+    return this.settings[key];
+  };
+
+  _proto.dirty = function dirty() {
+    var _this2 = this;
+
+    var dirty = {};
+    Object.keys(this.settings).forEach(function (key) {
+      var value = _this2.settings[key]();
+
+      if (value !== flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.settings[key]) {
+        dirty[key] = value;
+      }
+    });
+    return dirty;
   }
   /**
-   * Checks if the values of the fields and checkboxes are different from
-   * the ones stored in the database
+   * Check if settings differ from their stored values.
    *
-   * @returns boolean
+   * @returns {boolean}
    */
   ;
 
   _proto.changed = function changed() {
-    var _this2 = this;
-
-    var fieldsCheck = this.fields.some(function (key) {
-      return _this2.values[key]() !== flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.settings[_this2.addPrefix(key)];
-    });
-    var checkboxesCheck = this.checkboxes.some(function (key) {
-      return _this2.values[key]() !== (flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.settings[_this2.addPrefix(key)] == '1');
-    });
-    return fieldsCheck || checkboxesCheck;
+    return Object.keys(this.dirty()).length;
   }
   /**
-   * Saves the settings to the database and redraw the page
+   * Handle form's submit event.
    *
-   * @param e
+   * @param {Event} e
    */
   ;
 
   _proto.onsubmit = function onsubmit(e) {
-    var _this3 = this;
+    e.preventDefault();
+    if (this.loading) return;
+    this.loading = true;
+    flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.alerts.dismiss(this.alertComponent); // validate settings
 
-    // prevent the usual form submit behaviour
-    e.preventDefault(); // if the page is already saving, do nothing
-
-    if (this.loading) return; // prevents multiple savings
-
-    this.loading = true; // remove previous success popup
-
-    flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.alerts.dismiss(this.successAlert);
-    var settings = {}; // gets all the values from the form
-
-    this.fields.forEach(function (key) {
-      return settings[_this3.addPrefix(key)] = _this3.values[key]();
-    });
-    this.checkboxes.forEach(function (key) {
-      return settings[_this3.addPrefix(key)] = _this3.values[key]();
-    }); // actually saves everything in the database
-
-    flarum_utils_saveSettings__WEBPACK_IMPORTED_MODULE_3___default()(settings).then(function () {
-      // on success, show popup
-      flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.alerts.show(_this3.successAlert = new flarum_components_Alert__WEBPACK_IMPORTED_MODULE_7___default.a({
-        type: 'success',
-        children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('core.admin.basics.saved_message')
-      }));
-    })["catch"](function () {}).then(function () {
-      // return to the initial state and redraw the page
-      _this3.loading = false;
+    if (!this.validate.bind(this, this.validaton_rules)()) {
+      this.loading = false;
       m.redraw();
-    });
+    } else {
+      flarum_utils_saveSettings__WEBPACK_IMPORTED_MODULE_3___default()(this.dirty()).then(this.onsaved.bind(this));
+    }
+  };
+
+  _proto.onsaved = function onsaved() {
+    flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.alerts.show(this.alertComponent = new flarum_components_Alert__WEBPACK_IMPORTED_MODULE_7___default.a({
+      type: 'success',
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'saved_message')
+    }));
+    this.loading = false;
+    m.redraw();
   }
   /**
-   * Adds the prefix 'this.settingsPrefix' at the beginning of 'key'
+   * Validate fields.
    *
-   * @returns string
+   * @returns {boolean}
    */
   ;
 
-  _proto.addPrefix = function addPrefix(key) {
-    return this.settingsPrefix + key;
+  _proto.validate = function validate(rules) {
+    var _this3 = this;
+
+    var valid = true;
+    Object.keys(rules).every(function (field) {
+      var value = _this3.setting(settingsPrefix + field)();
+
+      if (value && !rules[field].test(value)) {
+        valid = false;
+        flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.alerts.show(_this3.alertComponent = new flarum_components_Alert__WEBPACK_IMPORTED_MODULE_7___default.a({
+          type: 'error',
+          children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + 'validation', {
+            field_key: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans(localePrefix + field)
+          })
+        }));
+      }
+
+      return valid;
+    });
+    return valid;
   };
 
   return MathRenSettingsPage;
-}(flarum_Component__WEBPACK_IMPORTED_MODULE_2___default.a);
+}(flarum_components_Page__WEBPACK_IMPORTED_MODULE_8___default.a);
 
 
 
@@ -514,7 +526,7 @@ __webpack_require__.r(__webpack_exports__);
  // initialize settings modal
 
 flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.initializers.add('the-turk-mathren', function (app) {
-  // add the admin pane
+  // Add the admin pane
   Object(_addSettingsPane__WEBPACK_IMPORTED_MODULE_1__["default"])();
 });
 
@@ -583,6 +595,17 @@ module.exports = flarum.core.compat['components/Alert'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['components/Button'];
+
+/***/ }),
+
+/***/ "flarum/components/Page":
+/*!********************************************************!*\
+  !*** external "flarum.core.compat['components/Page']" ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Page'];
 
 /***/ }),
 

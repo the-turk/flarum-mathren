@@ -1,0 +1,67 @@
+.MathRenPage {
+	padding: 20px 0;
+
+	// placeholders were looking like
+	// as they're real inputs
+	.FormControl {
+		color: @text-color;
+	}
+
+	& .flex-container {
+		display: -ms-flexbox;
+	  display: -webkit-box;
+	  display: flex;
+		-ms-flex-wrap: wrap;
+  	flex-wrap: wrap;
+		-ms-flex-align: center;
+	  -webkit-box-align: center;
+	  align-items: center;
+	  -ms-flex-pack: justify;
+	  -webkit-box-pack: justify;
+	  justify-content: space-between;
+
+		& > div {
+			padding: 5px;
+		}
+
+		& > .inline--label {
+			width: 220px;
+		}
+
+		& > .inline--input-color-label {
+			width: 450px;
+
+			& > label {
+				font-size: 14px;
+				font-weight: bold;
+			}
+		}
+
+		& > .inline--input {
+			width: 300px;
+		}
+
+		& > .inline--input-color {
+			width: 65px;
+			
+			@media @phone {
+				width: 100%;
+			}
+		}
+
+		& .helpText {
+			margin: 0;
+		}
+	}
+
+	& i.fas {
+		margin: 5px;
+	}
+
+	@media @desktop-up {
+		& .container {
+			max-width: 600px;
+			margin: 0;
+		}
+	}
+}

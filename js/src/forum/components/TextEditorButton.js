@@ -3,20 +3,18 @@ import Component from 'flarum/Component';
 import Dropdown from 'flarum/components/Dropdown';
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
-import Separator from 'flarum/components/Separator';
 import icon from 'flarum/helpers/icon';
-import Alert from 'flarum/components/Alert';
+
+const localePrefix = 'the-turk-mathren.forum.textEditor.';
 
 export default class extends Component {
   init() {
     this.textEditor = this.props.textEditor;
 
-    // translation prefix
-    this.localePrefix = 'the-turk-mathren.forum.textEditor.';
-
-    // main BBCode delimiters
-    this.mainBlockDelimiter = app.forum.attribute('mathRenMainBlockDelimiter');
-    this.mainInlineDelimiter = app.forum.attribute('mathRenMainInlineDelimiter');
+    this.delimiters = {
+      inline: app.forum.attribute('mathRenMainInlineDelimiter'),
+      block: app.forum.attribute('mathRenMainBlockDelimiter')
+    };
   }
 
   view() {
@@ -38,12 +36,12 @@ export default class extends Component {
 
     items.add('mathBlock', Button.component({
         icon: 'fas fa-vector-square',
-        children: app.translator.trans(this.localePrefix + 'blockExpression'),
+        children: app.translator.trans(localePrefix + 'blockExpression'),
         onclick: () => {
           // opening tag (left delimiter)
-          const leftDelim = this.mainBlockDelimiter['left'];
+          const leftDelim = this.delimiters.block['left'];
           // closing tag (right delimiter)
-          const rightDelim = this.mainBlockDelimiter['right'];
+          const rightDelim = this.delimiters.block['right'];
 
           var wrapper = this.wrapSelection(leftDelim, rightDelim);
 
@@ -56,12 +54,12 @@ export default class extends Component {
 
     items.add('mathInline', Button.component({
         icon: 'fas fa-grip-lines',
-        children: app.translator.trans(this.localePrefix + 'inlineExpression'),
+        children: app.translator.trans(localePrefix + 'inlineExpression'),
         onclick: () => {
           // opening tag (left delimiter)
-          const leftDelim = this.mainInlineDelimiter['left'];
+          const leftDelim = this.delimiters.inline['left'];
           // closing tag (right delimiter)
-          const rightDelim = this.mainInlineDelimiter['right'];
+          const rightDelim = this.delimiters.inline['right'];
 
           var wrapper = this.wrapSelection(leftDelim, rightDelim);
 
@@ -78,11 +76,11 @@ export default class extends Component {
   /**
    * Wrap the current selection with BBCode tags
    * If there's no selection, put them around the cursor
-   * Adapted from flagrow/fonts extension
+   * Adapted from the flagrow/fonts extension (under The MIT License)
    *
    * @param string leftDelim
    * @param string rightDelim
-   * @return object
+   * @returns {object}
    */
   wrapSelection(leftDelim, rightDelim) {
     const range = this.textEditor.getSelectionRange();

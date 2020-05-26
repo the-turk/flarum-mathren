@@ -1,9 +1,9 @@
-import { extend } from "flarum/extend";
-import AdminNav from "flarum/components/AdminNav";
-import AdminLinkButton from "flarum/components/AdminLinkButton";
-import MathRenSettingsPage from "./components/MathRenSettingsPage";
+import { extend } from 'flarum/extend';
+import AdminNav from 'flarum/components/AdminNav';
+import AdminLinkButton from 'flarum/components/AdminLinkButton';
+import MathRenSettingsPage from './components/MathRenSettingsPage';
 
-export default function() {
+export default function addSettingsPane() {
   // create the route
   app.routes['the-turk-mathren'] = {
     path: '/the-turk/mathren',
