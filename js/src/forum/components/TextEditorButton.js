@@ -46,7 +46,7 @@ export default class extends Component {
           var wrapper = this.wrapSelection(leftDelim, rightDelim);
 
           this.textEditor.setValue(wrapper.value);
-          this.textEditor.setSelectionRange(wrapper.range);
+          this.textEditor.setSelectionRange(wrapper.range.start, wrapper.range.end);
         },
       }),
       50
@@ -64,7 +64,7 @@ export default class extends Component {
           var wrapper = this.wrapSelection(leftDelim, rightDelim);
 
           this.textEditor.setValue(wrapper.value);
-          this.textEditor.setSelectionRange(wrapper.range);
+          this.textEditor.setSelectionRange(wrapper.range.start, wrapper.range.end);
         },
       }),
       0
@@ -92,7 +92,10 @@ export default class extends Component {
 
     return {
       value: before + leftDelim + selected + rightDelim + after,
-      range: before.length + leftDelim.length + before.length + rightDelim.length + selected.length
+      range: {
+        start: before.length + leftDelim.length,
+        end: before.length + leftDelim.length + selected.length
+      }
     }
   }
 }
