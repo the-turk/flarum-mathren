@@ -24,7 +24,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
-*/
+ */
 
 import { extend } from 'flarum/extend';
 import CommentPost from 'flarum/components/CommentPost';
@@ -33,14 +33,14 @@ import selectedText from './utils/selectedText';
 import copyDelimiters from './utils/copyDelimiters';
 
 export default function addPostQuoteButton() {
-  extend(CommentPost.prototype, 'config', function(original, isInitialized) {
+  extend(CommentPost.prototype, 'config', function (original, isInitialized) {
     if (!app.forum.attribute('mathRenEnableCopyTeX')) return;
 
     const post = this.props.post;
     const delimiters = {
       inline: app.forum.attribute('mathRenMainInlineDelimiter'),
-      block: app.forum.attribute('mathRenMainBlockDelimiter')
-    }
+      block: app.forum.attribute('mathRenMainBlockDelimiter'),
+    };
 
     if (isInitialized || post.isHidden() || (app.session.user && !post.discussion().canReply())) return;
 
@@ -50,11 +50,11 @@ export default function addPostQuoteButton() {
     // button into it.
     const $container = $('<div class="Post-quoteButtonContainer-mathRen"></div>');
 
-    const handler = function(e) {
+    const handler = function (e) {
       setTimeout(() => {
         const content = selectedText($postBody, copyDelimiters(delimiters));
         if (content) {
-          const button = new PostQuoteButton({post, content});
+          const button = new PostQuoteButton({ post, content });
           m.render($container[0], button.render());
 
           const rects = window.getSelection().getRangeAt(0).getClientRects();

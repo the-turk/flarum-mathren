@@ -26,15 +26,12 @@ app.initializers.add('the-turk-mathren', () => {
   // Hook into global copy handler to modify behavior on `.katex` elements
   addCopyListener();
 
-  var renderMath = function(element) {
-    return renderMathInElement(
-      element,
-      app.forum.attribute('mathRenKatexOptions')
-    );
-  }
+  var renderMath = function (element) {
+    return renderMathInElement(element, app.forum.attribute('mathRenKatexOptions'));
+  };
 
   /* Run KaTeX renderer on every post loading */
-  extend(CommentPost.prototype, 'config', function(original, isInitialized) {
+  extend(CommentPost.prototype, 'config', function (original, isInitialized) {
     renderMath($('.Post-body', this.element)[0]);
   });
 
@@ -45,7 +42,7 @@ app.initializers.add('the-turk-mathren', () => {
    * @see https://github.com/s9e/TextFormatter/blob/master/docs/JavaScript/Live_preview_attributes.md
    */
   if (s9e && s9e.TextFormatter) {
-    extend(s9e.TextFormatter, 'preview', function(original, preview, element) {
+    extend(s9e.TextFormatter, 'preview', function (original, preview, element) {
       if (element.matches('.Post *')) renderMath(element);
     });
   }

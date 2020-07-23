@@ -13,7 +13,7 @@ export default class extends Component {
 
     this.delimiters = {
       inline: app.forum.attribute('mathRenMainInlineDelimiter'),
-      block: app.forum.attribute('mathRenMainBlockDelimiter')
+      block: app.forum.attribute('mathRenMainBlockDelimiter'),
     };
   }
 
@@ -22,7 +22,7 @@ export default class extends Component {
       className: 'MathRenDropdown',
       buttonClassName: 'Button Button--flat',
       label: icon('fas fa-square-root-alt'),
-      children: this.items().toArray()
+      children: this.items().toArray(),
     });
   }
 
@@ -34,7 +34,9 @@ export default class extends Component {
   items() {
     const items = new ItemList();
 
-    items.add('mathBlock', Button.component({
+    items.add(
+      'mathBlock',
+      Button.component({
         icon: 'fas fa-vector-square',
         children: app.translator.trans(localePrefix + 'blockExpression'),
         onclick: () => {
@@ -52,7 +54,9 @@ export default class extends Component {
       50
     );
 
-    items.add('mathInline', Button.component({
+    items.add(
+      'mathInline',
+      Button.component({
         icon: 'fas fa-grip-lines',
         children: app.translator.trans(localePrefix + 'inlineExpression'),
         onclick: () => {
@@ -94,8 +98,8 @@ export default class extends Component {
       value: before + leftDelim + selected + rightDelim + after,
       range: {
         start: before.length + leftDelim.length,
-        end: before.length + leftDelim.length + selected.length
-      }
-    }
+        end: before.length + leftDelim.length + selected.length,
+      },
+    };
   }
 }

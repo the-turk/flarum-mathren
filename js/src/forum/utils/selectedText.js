@@ -36,29 +36,29 @@ export default function selectedText(body, copyDelimiters) {
     if (body[0] === parent || $.contains(body[0], parent)) {
       let fragment = selection.getRangeAt(0).cloneContents();
 
-  	  if (fragment.querySelector('.katex-mathml')) {
-  		  fragment = katexReplaceWithTex(fragment, copyDelimiters);
-  	  }
+      if (fragment.querySelector('.katex-mathml')) {
+        fragment = katexReplaceWithTex(fragment, copyDelimiters);
+      }
 
-      const clone = $("<div>").append(fragment);
+      const clone = $('<div>').append(fragment);
 
       // Replace emoji images with their shortcode (found in alt attribute)
-      clone.find('img.emoji').replaceWith(function() {
+      clone.find('img.emoji').replaceWith(function () {
         return this.alt;
       });
 
       // Replace all other images with a Markdown image
-      clone.find('img').replaceWith(function() {
+      clone.find('img').replaceWith(function () {
         return '![](' + this.src + ')';
       });
 
       // Replace all links with a Markdown link
-      clone.find('a').replaceWith(function() {
+      clone.find('a').replaceWith(function () {
         return '[' + this.innerText + '](' + this.href + ')';
       });
 
       return clone.text();
     }
   }
-  return "";
+  return '';
 }

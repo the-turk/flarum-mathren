@@ -8,6 +8,6 @@
 export default function copyDelimiters(delimiters) {
   return {
     inline: [delimiters.inline.left, delimiters.inline.right],
-    display: [delimiters.block.left, delimiters.block.right]
+    display: [delimiters.block.left, delimiters.block.right],
   };
 }

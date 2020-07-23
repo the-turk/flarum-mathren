@@ -44,10 +44,7 @@ function insertMention(post, component, quote) {
   const precedingNewlines = preceding.length == 0 ? 0 : 3 - preceding.match(/(\n{0,2})$/)[0].length;
 
   component.editor.insertAtCursor(
-    Array(precedingNewlines).join('\n') + // Insert up to two newlines, depending on preceding whitespace
-    (quote
-      ? '> ' + mention + quote.trim().replace(/\n/g, '\n> ') + '\n\n'
-      : mention)
+    Array(precedingNewlines).join('\n') + (quote ? '> ' + mention + quote.trim().replace(/\n/g, '\n> ') + '\n\n' : mention) // Insert up to two newlines, depending on preceding whitespace
   );
 }
 
@@ -56,7 +53,6 @@ export default function reply(post, quote) {
   if (component && component.props.post && component.props.post.discussion() === post.discussion()) {
     insertMention(post, component, quote);
   } else {
-    DiscussionControls.replyAction.call(post.discussion())
-      .then(newComponent => insertMention(post, newComponent, quote));
+    DiscussionControls.replyAction.call(post.discussion()).then((newComponent) => insertMention(post, newComponent, quote));
   }
 }
