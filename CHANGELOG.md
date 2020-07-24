@@ -1,3 +1,6 @@
+### 0.3.2
+- **Fix** can't disable options if their default value is set to `true`.
+
 ### 0.3.1
 - **Fix** wrong selection range after adding BBCodes via composer buttons.
 - **Fix** it was rendering the same post x2 times for no reason. 🤦‍♂️
