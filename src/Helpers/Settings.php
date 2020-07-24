@@ -69,7 +69,7 @@ class Settings
      */
     public function get($name, $default = null)
     {
-        return $this->{$name} ? $this->{$name} : $default;
+        return isset($this->{$name}) ? $this->{$name} : $default;
     }
 
     /**
