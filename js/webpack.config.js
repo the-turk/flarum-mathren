@@ -11,19 +11,9 @@ let config = flarumConfig();
 
 config.plugins = config.plugins || [];
 
-config.plugins.push(new CopyPlugin([
-	{
-		from: 'node_modules/katex/dist/contrib/auto-render.min.js',
-		to: 'auto-render.min.js'
-	},
-	{
-		from: 'node_modules/katex/dist/katex.min.css',
-		to: '../../assets/katex.min.css'
-	},
-	{
-		from: 'node_modules/katex/dist/fonts',
-		to: '../../assets/fonts'
-	},
-]));
+config.plugins.push(new CopyPlugin([{
+  from: 'node_modules/katex',
+  to: '../../assets/katex'
+}, ]));
 
 module.exports = config;

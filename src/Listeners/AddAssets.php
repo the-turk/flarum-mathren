@@ -20,7 +20,7 @@ class AddAssets
         // doing it this way because we also have the fonts
         // in the assets folder
         $urlGenerator = app()->make(UrlGenerator::class);
-        $katexCSS = $urlGenerator->to('forum')->path('assets/extensions/the-turk-mathren/katex.min.css');
+        $katexCSS = $urlGenerator->to('forum')->path('assets/extensions/the-turk-mathren/katex/dist/katex.min.css');
         $document->head[] = '<link rel="stylesheet" type="text/css" href="'.$katexCSS.'">';
     }
 }
