@@ -1,3 +1,14 @@
+### 0.3.1
+- **Fix** wrong selection range after adding BBCodes via composer buttons.
+- **Fix** it was rendering the same post x2 times for no reason. 🤦‍♂️
+- **Fix** wrong default value for "Allow copying the source of KaTeX-rendered elements" option.
+- Optimize page load time.
+    + Now it loads scripts only when it is necessary. Huge thanks to @datitisev
+- Switch to CDN.
+- **Update** KaTeX to v0.12.0 (see their [changelog](https://github.com/KaTeX/KaTeX/blob/master/CHANGELOG.md)).
+- Require `flarum/mentions` to make the quote button work.
+- Run prettier for all JS files.
+
 ### 0.3.0
 - **Drop** special delimiters support (it is BBCodes-only now).
     + Thus, it should work faster from `0.2.x`
