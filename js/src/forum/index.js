@@ -5,19 +5,16 @@ import addTextEditorButton from './addTextEditorButton';
 import addPostQuoteButton from './addPostQuoteButton';
 import addCopyListener from './addCopyListener';
 
-const ext = 'the-turk-mathren';
-
-app.initializers.add(ext, () => {
+app.initializers.add('the-turk-mathren', () => {
   let whenLoaded = {};
   let hasLoaded = false;
   let isLoading = false;
 
   const load = () => {
     isLoading = true;
-    const katexFolder = app.forum.attribute('baseUrl') + '/assets/extensions/' + ext + '/katex/dist';
 
-    $.getScript(katexFolder + '/katex.min.js', () => {
-      $.getScript(katexFolder + '/contrib/auto-render.min.js', () => {
+    $.getScript('//cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js', () => {
+      $.getScript('//cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js', () => {
         for (const id in whenLoaded) {
           whenLoaded[id]();
         }

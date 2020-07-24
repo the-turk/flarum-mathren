@@ -11,33 +11,31 @@
  * @author     Hasan Özbey <hasanoozbey@gmail.com>
  * @copyright  2020
  * @license    The MIT License
- * @version    Release: 0.3.0
+ * @version    Release: 0.3.1
  * @link       https://github.com/the-turk/flarum-mathren
  */
 
 namespace TheTurk\MathRen;
 
 use Flarum\Extend;
-use Illuminate\Contracts\Events\Dispatcher;
 use Flarum\Foundation\Application;
 use Flarum\Frontend\Assets;
 use Flarum\Frontend\Compiler\Source\SourceCollector;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
-use TheTurk\MathRen;
 use TheTurk\MathRen\Helpers\Settings;
 
 return [
     (new Extend\Frontend('forum'))
         ->css(__DIR__ . '/less/forum.less')
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->content(MathRen\Listeners\AddAssets::class),
+        ->js(__DIR__.'/js/dist/forum.js'),
     (new Extend\Frontend('admin'))
         ->css(__DIR__ . '/less/admin.less')
         ->js(__DIR__ . '/js/dist/admin.js'),
     (new Extend\Locales(__DIR__ . '/locale')),
     function (Dispatcher $events) {
-        $events->subscribe(MathRen\Listeners\LoadSettings::class);
-        $events->subscribe(MathRen\Listeners\ConfigureTextFormatter::class);
+        $events->subscribe(Listeners\LoadSettings::class);
+        $events->subscribe(Listeners\ConfigureTextFormatter::class);
     },
     // Have a custom less variable
     function (Application $app) {

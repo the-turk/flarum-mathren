@@ -18,7 +18,6 @@ An extension that handles TeX math rendering for your [Flarum](https://github.co
 - Copy any expression's source code to the clipboard.
 - Integration with `flarum/mentions` extension so you can quote expressions with selection.
 - Works on preview mode.
-- Fully self-hosted.
 
 ## Installation
 
