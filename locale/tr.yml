@@ -79,6 +79,7 @@ the-turk-mathren:
             saved_message:           => core.admin.basics.saved_message
             validation:              "\"{field_key}\" alanı doğrulanamadı."
     forum:
+        quoteButton:                 Alıntı
         textEditor:
             # Text Editor Buttons
             blockExpression:         Blok İfade
