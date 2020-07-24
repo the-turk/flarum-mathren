@@ -31,7 +31,7 @@ class Settings
        'macros' => '',
        'maxExpand' => 1000,
        'enableTextEditorButtons' => true,
-       'enableCopyTeX' => false
+       'enableCopyTeX' => true
    ];
 
     protected $prefix = 'the-turk-mathren.';
