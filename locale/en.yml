@@ -79,7 +79,6 @@ the-turk-mathren:
             saved_message:           => core.admin.basics.saved_message
             validation:              "Validation of \"{field_key}\" field has failed."
     forum:
-        quoteButton:                 Quote
         textEditor:
             # Text Editor Buttons
             blockExpression:         Block Expression
