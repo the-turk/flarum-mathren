@@ -18,7 +18,6 @@ Bu eklenti yardımıyla [Flarum](https://github.com/flarum) tartışmalarınız 
 - Ön izleme modunda çalışır.
 - Herhangi bir matematiksel ifadenin kaynak kodunu kopyalayabilirsiniz.
 - `flarum/mentions` eklentisi ile uyumludur. Matematiksel ifadeler üzerinden alıntı yapabilirsiniz.
-- Gereken bütün kaynak dosyaları paket içindedir.
 
 ## Kurulum
 
