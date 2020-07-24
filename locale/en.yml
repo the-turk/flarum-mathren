@@ -71,6 +71,11 @@ the-turk-mathren:
             enableTextEditorButtons: Show buttons on text editor
             enableCopyTeX:           Allow copying the source of KaTeX-rendered elements
 
+            # ---
+
+            # Informations
+            mentions:                You must enable the <code>flarum/mentions</code> extension to activate the quote button.
+
             ####################
             #  General Strings #
             ####################

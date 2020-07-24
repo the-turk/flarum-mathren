@@ -3,9 +3,10 @@ namespace TheTurk\MathRen\Listeners;
 
 use Flarum\Api\Event\Serializing;
 use Flarum\Api\Serializer\ForumSerializer;
+use Flarum\Extension\ExtensionManager;
 use Illuminate\Contracts\Events\Dispatcher;
-use TheTurk\MathRen\Helpers\Settings;
 use Illuminate\Support\Arr;
+use TheTurk\MathRen\Helpers\Settings;
 
 class LoadSettings
 {
@@ -15,12 +16,19 @@ class LoadSettings
     protected $settings;
 
     /**
+     * @var ExtensionManager
+     */
+    protected $extensions;
+
+    /**
      * Gets the settings variable. Called on Object creation.
      *
-     * @param Settings $settings
+     * @param ExtensionManager $extensions
+     * @param Settings         $settings
      */
-    public function __construct(Settings $settings)
+    public function __construct(ExtensionManager $extensions, Settings $settings)
     {
+        $this->extensions = $extensions;
         $this->settings = $settings;
     }
 
@@ -74,6 +82,7 @@ class LoadSettings
                         'enableCopyTeX',
                         Arr::get($this->settings->getDefaults(), 'enableCopyTeX')
                     ),
+                'mathRenAddQuoteButton' => $this->extensions->isEnabled('flarum-mentions'),
             ];
         }
     }

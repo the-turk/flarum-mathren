@@ -436,6 +436,18 @@ export default class MathRenSettingsPage extends Page {
                       })
                     ),
                   ]),
+                  m('.Form-group', [
+                    m(
+                      'div',
+                      {
+                        className: 'helpText',
+                      },
+                      m('i', {
+                        className: 'fas fa-info-circle',
+                      }),
+                      m('span', app.translator.trans(localePrefix + 'mentions'))
+                    ),
+                  ]),
                   Button.component({
                     type: 'submit',
                     className: 'Button Button--primary',

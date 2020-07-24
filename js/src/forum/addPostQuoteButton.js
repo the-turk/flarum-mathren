@@ -34,7 +34,7 @@ import copyDelimiters from './utils/copyDelimiters';
 
 export default function addPostQuoteButton() {
   extend(CommentPost.prototype, 'config', function (original, isInitialized) {
-    if (!app.forum.attribute('mathRenEnableCopyTeX')) return;
+    if (!app.forum.attribute('mathRenAddQuoteButton') || !app.forum.attribute('mathRenEnableCopyTeX')) return;
 
     const post = this.props.post;
     const delimiters = {

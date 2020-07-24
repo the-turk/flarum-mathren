@@ -71,6 +71,11 @@ the-turk-mathren:
             enableTextEditorButtons: Metin editöründe butonları göster
             enableCopyTeX:           KaTeX tarafından işlenmiş ifadelerin kaynaklarının kopyalanmasına izin ver.
 
+            # ---
+
+            # Informations
+            mentions:                Alıntı butonunu kullanabilmek için <code>flarum/mentions</code> eklentisini etkinleştirmelisiniz.
+
             ####################
             #  General Strings #
             ####################
