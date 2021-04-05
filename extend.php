@@ -8,11 +8,11 @@
  * with this source code.
  *
  * @package    the-turk/flarum-mathren
- * @author     Hasan Özbey <hasanoozbey@gmail.com>
- * @copyright  2020
+ * @author     weizixuan110@foxmail.com
+ * @copyright  2021
  * @license    The MIT License
- * @version    Release: 0.3.2
- * @link       https://github.com/the-turk/flarum-mathren
+ * @version    Release: 0.4.0
+ * @link       https://github.com/StarsRivers/flarum-mathren
  */
 
 namespace TheTurk\MathRen;
