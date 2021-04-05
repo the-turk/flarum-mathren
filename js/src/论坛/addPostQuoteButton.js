@@ -37,7 +37,6 @@ export default function addPostQuoteButton() {
     const post = this.attrs.post;
 
     if (post.isHidden() || (app.session.user && !post.discussion().canReply())) return;
-
     const $postBody = this.$('.Post-body');
 
     // Wrap the quote button in a wrapper element so that we can render
