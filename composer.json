@@ -1,5 +1,5 @@
 {
-    "name": "the-turk/flarum-mathren",
+    "name": "starsrivers/flarum-mathren",
     "description": "TeX math rendering for your forum.",
     "keywords": [
         "flarum",
@@ -13,16 +13,16 @@
     "type": "flarum-extension",
     "license": "MIT",
     "authors": [{
-        "name": "Hasan Özbey",
-        "email": "hasanoozbey@gmail.com",
-        "homepage": "https://github.com/the-turk"
+        "name": "StarsRivers",
+        "email": "weizixuan110@foxmail.com",
+        "homepage": "https://github.com/StarsRivers/flarum-mathren/"
     }],
     "support": {
-        "issues": "https://github.com/the-turk/flarum-mathren/issues",
-        "source": "https://github.com/the-turk/flarum-mathren"
+        "issues": "https://github.com/StarsRivers/flarum-mathren/issues",
+        "source": "https://github.com/StarsRivers/flarum-mathren/"
     },
     "require": {
-        "flarum/core": ">=0.1.0-beta.10 <0.1.0-beta.14"
+        "flarum/core": ">=0.1.0-beta.10"
     },
     "autoload": {
         "psr-4": {
