@@ -10,7 +10,7 @@ const localePrefix = 'the-turk-mathren.forum.textEditor.';
 export default class extends Component {
   oninit(vnode) {
     super.oninit(vnode);
-    
+
     this.delimiters = {
       inline: app.forum.attribute('mathRenMainInlineDelimiter'),
       block: app.forum.attribute('mathRenMainBlockDelimiter'),
@@ -84,14 +84,14 @@ export default class extends Component {
   /**
    * Wrap the current selection with BBCode tags
    * If there's no selection, put them around the cursor
-   * 
+   *
    * @param string leftDelim
    * @param string rightDelim
    */
   wrapSelection(leftDelim, rightDelim) {
     const selectionRange = this.attrs.textEditor.getSelectionRange();
 
-    if(selectionRange[0] != selectionRange[1]) {
+    if (selectionRange[0] != selectionRange[1]) {
       this.attrs.textEditor.insertAt(selectionRange[0], leftDelim);
       this.attrs.textEditor.insertAt(selectionRange[1] + leftDelim.length, rightDelim);
     } else {
