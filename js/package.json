@@ -2,7 +2,7 @@
   "name": "@the-turk/flarum-mathren",
   "description": "TeX math rendering for your forum.",
   "license": "MIT",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "dependencies": {
     "flarum-webpack-config": "0.1.0-beta.16.2",
     "webpack": "^4.46.0",

@@ -1,3 +1,6 @@
+### 0.3.4
+- **Fix** usernames were rendering in `.Post-body` if they contains math delimiters (such as `[math]username[/math]`).
+
 ### 0.3.3
 - Flarum v1.0.2 compatible
 - `fof/best-answer` compatible

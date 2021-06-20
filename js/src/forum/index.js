@@ -57,7 +57,11 @@ app.initializers.add('the-turk-mathren', () => {
 
   /* Run KaTeX renderer on every post loading */
   extend(CommentPost.prototype, 'oncreate', function () {
-    renderMath($(this.element)[0], this.attrs.post.id());
+    const postId = this.attrs.post.id();
+
+    $.each($('.Post-body', this.element), function (i, p) {
+      renderMath(p, postId + '_' + i);
+    });
   });
 
   /**
