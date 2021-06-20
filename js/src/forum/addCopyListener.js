@@ -4,7 +4,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2013-2019 Khan Academy and other contributors
+ * Copyright (c) 2013-2020 Khan Academy and other contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +25,14 @@
  * SOFTWARE.
  */
 
-import { extend } from 'flarum/extend';
+import { extend } from 'flarum/common/extend';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import katexReplaceWithTex from './utils/katex2tex';
 import copyDelimiters from './utils/copyDelimiters';
 
 export default function addCopyListener() {
-  extend(DiscussionPage.prototype, 'config', function (original, isInitialized) {
-    if (isInitialized || !app.forum.attribute('mathRenEnableCopyTeX')) return;
+  extend(DiscussionPage.prototype, 'oncreate', function () {
+    if (!app.forum.attribute('mathRenEnableCopyTeX')) return;
 
     const delimiters = {
       inline: app.forum.attribute('mathRenMainInlineDelimiter'),

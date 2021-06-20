@@ -4,7 +4,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2019 Stichting Flarum (Flarum Foundation)
+ * Copyright (c) 2019-2021 Stichting Flarum (Flarum Foundation)
  * Copyright (c) 2014-2019 Toby Zerner (toby.zerner@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,23 +26,23 @@
  * SOFTWARE.
  */
 
-import { extend } from 'flarum/extend';
+import { extend } from 'flarum/common/extend';
 import CommentPost from 'flarum/components/CommentPost';
-import PostQuoteButton from './components/PostQuoteButton';
+import PostQuoteButton from './fragments/PostQuoteButton';
 import selectedText from './utils/selectedText';
 import copyDelimiters from './utils/copyDelimiters';
 
 export default function addPostQuoteButton() {
-  extend(CommentPost.prototype, 'config', function (original, isInitialized) {
+  extend(CommentPost.prototype, 'oncreate', function () {
     if (!app.forum.attribute('mathRenAddQuoteButton') || !app.forum.attribute('mathRenEnableCopyTeX')) return;
 
-    const post = this.props.post;
+    const post = this.attrs.post;
     const delimiters = {
       inline: app.forum.attribute('mathRenMainInlineDelimiter'),
       block: app.forum.attribute('mathRenMainBlockDelimiter'),
     };
 
-    if (isInitialized || post.isHidden() || (app.session.user && !post.discussion().canReply())) return;
+    if (post.isHidden() || (app.session.user && !post.discussion().canReply())) return;
 
     const $postBody = this.$('.Post-body');
 
@@ -50,11 +50,13 @@ export default function addPostQuoteButton() {
     // button into it.
     const $container = $('<div class="Post-quoteButtonContainer-mathRen"></div>');
 
+    const button = new PostQuoteButton(post);
+
     const handler = function (e) {
       setTimeout(() => {
         const content = selectedText($postBody, copyDelimiters(delimiters));
         if (content) {
-          const button = new PostQuoteButton({ post, content });
+          button.content = content;
           m.render($container[0], button.render());
 
           const rects = window.getSelection().getRangeAt(0).getClientRects();

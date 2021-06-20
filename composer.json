@@ -22,7 +22,7 @@
         "source": "https://github.com/the-turk/flarum-mathren"
     },
     "require": {
-        "flarum/core": ">=0.1.0-beta.10 <0.1.0-beta.14"
+        "flarum/core": ">=1.0.2"
     },
     "autoload": {
         "psr-4": {

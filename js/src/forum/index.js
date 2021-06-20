@@ -1,5 +1,5 @@
-import { extend } from 'flarum/extend';
-import app from 'flarum/app';
+import { extend } from 'flarum/common/extend';
+import app from 'flarum/common/app';
 import CommentPost from 'flarum/components/CommentPost';
 import addTextEditorButton from './addTextEditorButton';
 import addPostQuoteButton from './addPostQuoteButton';
@@ -13,8 +13,8 @@ app.initializers.add('the-turk-mathren', () => {
   const load = () => {
     isLoading = true;
 
-    $.getScript('//cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js', () => {
-      $.getScript('//cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js', () => {
+    $.getScript('//cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js', () => {
+      $.getScript('//cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js', () => {
         for (const id in whenLoaded) {
           whenLoaded[id]();
         }
@@ -32,13 +32,9 @@ app.initializers.add('the-turk-mathren', () => {
   /**
    * Show a Quote button when Post text is selected
    *
-   * You may ask, `flarum/mentions` already doing it, why the hell
-   * are you duplicating it? Well, I have to run KaTeX's Copy-tex
-   * plugin on the selected post and I need to modify its `selectedText` function.
-   * It is impossible to modify that function from here because core extensions
-   * are not exporting their components properly.
-   *
-   * @see https://github.com/flarum/core/issues/1933
+   * We have to run KaTeX's Copy-tex plugin on the selected post
+   * and need to modify `selectedText` function which comes with
+   * `flarum/mentions` extension.
    **/
   addPostQuoteButton();
 
@@ -60,9 +56,8 @@ app.initializers.add('the-turk-mathren', () => {
   };
 
   /* Run KaTeX renderer on every post loading */
-  extend(CommentPost.prototype, 'config', function (original, isInitialized) {
-    if (!isInitialized) return;
-    renderMath($('.Post-body', this.element)[0], this.props.post.id());
+  extend(CommentPost.prototype, 'oncreate', function () {
+    renderMath($(this.element)[0], this.attrs.post.id());
   });
 
   /**

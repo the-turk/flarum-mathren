@@ -1,11 +1,10 @@
 <?php
-namespace TheTurk\MathRen\Listeners;
+namespace TheTurk\MathRen;
 
 use TheTurk\MathRen\Helpers\Settings;
-use Illuminate\Contracts\Events\Dispatcher;
-use Flarum\Formatter\Event\Configuring;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use s9e\TextFormatter\Configurator;
 
 class ConfigureTextFormatter
 {
@@ -25,16 +24,6 @@ class ConfigureTextFormatter
     }
 
     /**
-     * Subscribes to the Flarum events
-     *
-     * @param Dispatcher $events
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        $events->listen(Configuring::class, [$this, 'textFormatterConfigurator']);
-    }
-
-    /**
      * Configure s9e/TextFormatter
      *
      * Find more info in:
@@ -42,9 +31,9 @@ class ConfigureTextFormatter
      * https://s9etextformatter.readthedocs.io/Plugins/BBCodes/Use_template_parameters/
      * https://s9etextformatter.readthedocs.io/Rules/Tag_rules/
      *
-     * @param Configuring $event
+     * @param Configurator $config
      */
-    public function textFormatterConfigurator(Configuring $event)
+    public function __invoke(Configurator $config)
     {
         $katexOptions = $this->settings->getKatexOptions();
 
@@ -95,7 +84,7 @@ class ConfigureTextFormatter
              * and doesn't allows us to use any option that the KaTeX provides.
              * Also, it's pretty much the same thing - the same find and render operation.
              */
-            $event->configurator->BBCodes->addCustom(
+            $config->BBCodes->addCustom(
                 '['.$newTag.'={CHOICE='.$decisiveKeywords.';optional}]{TEXT}'.$delim['right'],
                 '<span>
                     <xsl:choose>
@@ -114,7 +103,7 @@ class ConfigureTextFormatter
                 </span>'
             );
 
-            $tag = $event->configurator->tags[$newTag];
+            $tag = $config->tags[$newTag];
             $tag->rules->ignoreTags(); // ignores Markdown and BBCode parsers
             $tag->rules->disableAutoLineBreaks(); // ignores line breaks
         }

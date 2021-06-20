@@ -1,3 +1,8 @@
+### 0.3.3
+- Flarum v1.0.2 compatible
+- `fof/best-answer` compatible
+- **Update** KaTeX to v0.13.11 (see their [changelog](https://github.com/KaTeX/KaTeX/blob/master/CHANGELOG.md)).
+
 ### 0.3.2
 - **Fix** can't disable options if their default value is set to `true`.
 

@@ -1,10 +1,10 @@
 /**
  * Copied & modified from:
- * https://github.com/flarum/mentions/blob/master/js/src/forum/components/PostQuoteButton.js
+ * https://github.com/flarum/mentions/blob/master/js/src/forum/fragments/PostQuoteButton.js
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2019 Stichting Flarum (Flarum Foundation)
+ * Copyright (c) 2019-2021 Stichting Flarum (Flarum Foundation)
  * Copyright (c) 2014-2019 Toby Zerner (toby.zerner@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,32 +26,30 @@
  * SOFTWARE.
  */
 
-import Button from 'flarum/components/Button';
-import extract from 'flarum/utils/extract';
+import Fragment from 'flarum/Fragment';
+import icon from 'flarum/common/helpers/icon';
 
 import reply from '../utils/reply';
 
-export default class PostQuoteButton extends Button {
-  view() {
-    const post = extract(this.props, 'post');
-    const content = extract(this.props, 'content');
+export default class PostQuoteButton extends Fragment {
+  constructor(post) {
+    super();
 
-    this.props.className = 'Button PostQuoteButton';
-    this.props.icon = 'fas fa-quote-left';
-    this.props.children = app.translator.trans('flarum-mentions.forum.post.quote_button');
-    this.props.onclick = () => {
-      this.hide();
-      reply(post, content);
-    };
-    this.props.onmousedown = (e) => e.stopPropagation();
-
-    return super.view();
+    this.post = post;
   }
 
-  config(isInitialized) {
-    if (isInitialized) return;
-
-    $(document).on('mousedown', this.hide.bind(this));
+  view() {
+    return (
+      <button
+        class="Button PostQuoteButton"
+        onclick={() => {
+          reply(this.post, this.content);
+        }}
+      >
+        {icon('fas fa-quote-left', { className: 'Button-icon' })}
+        {app.translator.trans('flarum-mentions.forum.post.quote_button')}
+      </button>
+    );
   }
 
   show(left, top) {
@@ -59,6 +57,9 @@ export default class PostQuoteButton extends Button {
     const parentOffset = $this.offsetParent().offset();
 
     $this.css('left', left - parentOffset.left).css('top', top - parentOffset.top);
+
+    this.hideHandler = this.hide.bind(this);
+    $(document).on('mouseup', this.hideHandler);
   }
 
   showStart(left, top) {
@@ -75,5 +76,6 @@ export default class PostQuoteButton extends Button {
 
   hide() {
     this.$().hide();
+    $(document).off('mouseup', this.hideHandler);
   }
 }

@@ -1,11 +1,11 @@
-import app from 'flarum/app';
-import Component from 'flarum/Component';
-import saveSettings from 'flarum/utils/saveSettings';
-import Button from 'flarum/components/Button';
-import Select from 'flarum/components/Select';
-import Switch from 'flarum/components/Switch';
-import Alert from 'flarum/components/Alert';
-import Page from 'flarum/components/Page';
+import app from 'flarum/common/app';
+import Alert from 'flarum/common/components/Alert';
+import Button from 'flarum/common/components/Button';
+import ExtensionPage from 'flarum/admin/components/ExtensionPage';
+import saveSettings from 'flarum/common/utils/saveSettings';
+import Select from 'flarum/common/components/Select';
+import Stream from 'flarum/common/utils/Stream';
+import Switch from 'flarum/common/components/Switch';
 
 /* Regex constants those will be used to validate some fields */
 // bbcode delimiters
@@ -23,9 +23,9 @@ const int_regex = /^\+?(0|[1-9]\d*)$/;
 const settingsPrefix = 'the-turk-mathren.';
 const localePrefix = 'the-turk-mathren.admin.settings.';
 
-export default class MathRenSettingsPage extends Page {
-  init() {
-    super.init();
+export default class MathRenSettingsPage extends ExtensionPage {
+  oninit(vnode) {
+    super.oninit(vnode);
 
     this.settings = {};
     this.loading = false;
@@ -55,7 +55,7 @@ export default class MathRenSettingsPage extends Page {
    *
    * @returns {*}
    */
-  view() {
+  content() {
     return [
       m(
         'div',
@@ -255,49 +255,57 @@ export default class MathRenSettingsPage extends Page {
                   m('.Form-group', [
                     m(
                       'label',
-                      Switch.component({
-                        state: this.setting(settingsPrefix + 'enableFleqn', '0')() === '1',
-                        children: app.translator.trans(localePrefix + 'enableFleqn'),
-                        onchange: (value) => {
-                          this.setting(settingsPrefix + 'enableFleqn')(value ? '1' : '0');
+                      Switch.component(
+                        {
+                          state: this.setting(settingsPrefix + 'enableFleqn', '0')() === '1',
+                          onchange: (value) => {
+                            this.setting(settingsPrefix + 'enableFleqn')(value ? '1' : '0');
+                          },
                         },
-                      })
+                        app.translator.trans(localePrefix + 'enableFleqn')
+                      )
                     ),
                   ]),
                   m('.Form-group', [
                     m(
                       'label',
-                      Switch.component({
-                        state: this.setting(settingsPrefix + 'enableLeqno', '0')() === '1',
-                        children: app.translator.trans(localePrefix + 'enableLeqno'),
-                        onchange: (value) => {
-                          this.setting(settingsPrefix + 'enableLeqno')(value ? '1' : '0');
+                      Switch.component(
+                        {
+                          state: this.setting(settingsPrefix + 'enableLeqno', '0')() === '1',
+                          onchange: (value) => {
+                            this.setting(settingsPrefix + 'enableLeqno')(value ? '1' : '0');
+                          },
                         },
-                      })
+                        app.translator.trans(localePrefix + 'enableLeqno')
+                      )
                     ),
                   ]),
                   m('.Form-group', [
                     m(
                       'label',
-                      Switch.component({
-                        state: this.setting(settingsPrefix + 'enableColorIsTextColor', '0')() === '1',
-                        children: app.translator.trans(localePrefix + 'enableColorIsTextColor'),
-                        onchange: (value) => {
-                          this.setting(settingsPrefix + 'enableColorIsTextColor')(value ? '1' : '0');
+                      Switch.component(
+                        {
+                          state: this.setting(settingsPrefix + 'enableColorIsTextColor', '0')() === '1',
+                          onchange: (value) => {
+                            this.setting(settingsPrefix + 'enableColorIsTextColor')(value ? '1' : '0');
+                          },
                         },
-                      })
+                        app.translator.trans(localePrefix + 'enableColorIsTextColor')
+                      )
                     ),
                   ]),
                   m('.Form-group', [
                     m(
                       'label',
-                      Switch.component({
-                        state: this.setting(settingsPrefix + 'enableThrowOnError', '0')() === '1',
-                        children: app.translator.trans(localePrefix + 'enableThrowOnError'),
-                        onchange: (value) => {
-                          this.setting(settingsPrefix + 'enableThrowOnError')(value ? '1' : '0');
+                      Switch.component(
+                        {
+                          state: this.setting(settingsPrefix + 'enableThrowOnError', '0')() === '1',
+                          onchange: (value) => {
+                            this.setting(settingsPrefix + 'enableThrowOnError')(value ? '1' : '0');
+                          },
                         },
-                      })
+                        app.translator.trans(localePrefix + 'enableThrowOnError')
+                      )
                     ),
                   ]),
                   m('.Form-group .flex-container', [
@@ -402,38 +410,44 @@ export default class MathRenSettingsPage extends Page {
                     ),
                   ]),
                   m('.Form-group', [
-                    Alert.component({
-                      children: app.translator.trans(localePrefix + 'katexOptionsInfo', {
+                    Alert.component(
+                      {
+                        type: 'success',
+                        dismissible: false,
+                      },
+                      app.translator.trans(localePrefix + 'katexOptionsInfo', {
                         a: <a href="https://katex.org/docs/options.html" target="_blank" />,
-                      }),
-                      type: 'success',
-                      dismissible: false,
-                    }),
+                      })
+                    ),
                   ]),
                   m('h3', app.translator.trans(localePrefix + 'otherOptionsHeading')),
                   m('hr'),
                   m('.Form-group', [
                     m(
                       'label',
-                      Switch.component({
-                        state: this.setting(settingsPrefix + 'enableTextEditorButtons', '1')() === '1',
-                        children: app.translator.trans(localePrefix + 'enableTextEditorButtons'),
-                        onchange: (value) => {
-                          this.setting(settingsPrefix + 'enableTextEditorButtons')(value ? '1' : '0');
+                      Switch.component(
+                        {
+                          state: this.setting(settingsPrefix + 'enableTextEditorButtons', '1')() === '1',
+                          onchange: (value) => {
+                            this.setting(settingsPrefix + 'enableTextEditorButtons')(value ? '1' : '0');
+                          },
                         },
-                      })
+                        app.translator.trans(localePrefix + 'enableTextEditorButtons')
+                      )
                     ),
                   ]),
                   m('.Form-group', [
                     m(
                       'label',
-                      Switch.component({
-                        state: this.setting(settingsPrefix + 'enableCopyTeX', '1')() === '1',
-                        children: app.translator.trans(localePrefix + 'enableCopyTeX'),
-                        onchange: (value) => {
-                          this.setting(settingsPrefix + 'enableCopyTeX')(value ? '1' : '0');
+                      Switch.component(
+                        {
+                          state: this.setting(settingsPrefix + 'enableCopyTeX', '1')() === '1',
+                          onchange: (value) => {
+                            this.setting(settingsPrefix + 'enableCopyTeX')(value ? '1' : '0');
+                          },
                         },
-                      })
+                        app.translator.trans(localePrefix + 'enableCopyTeX')
+                      )
                     ),
                   ]),
                   m('.Form-group', [
@@ -448,13 +462,15 @@ export default class MathRenSettingsPage extends Page {
                       m('span', app.translator.trans(localePrefix + 'mentions'))
                     ),
                   ]),
-                  Button.component({
-                    type: 'submit',
-                    className: 'Button Button--primary',
-                    children: app.translator.trans('core.admin.basics.submit_button'),
-                    loading: this.loading,
-                    disabled: !this.changed(),
-                  }),
+                  Button.component(
+                    {
+                      type: 'submit',
+                      className: 'Button Button--primary',
+                      loading: this.loading,
+                      disabled: !this.changed(),
+                    },
+                    app.translator.trans('core.admin.settings.submit_button')
+                  ),
                 ]
               ),
             ]
@@ -465,7 +481,7 @@ export default class MathRenSettingsPage extends Page {
   }
 
   setting(key, fallback = '') {
-    this.settings[key] = this.settings[key] || m.prop(app.data.settings[key] || fallback);
+    this.settings[key] = this.settings[key] || Stream(app.data.settings[key] || fallback);
 
     return this.settings[key];
   }
@@ -504,27 +520,24 @@ export default class MathRenSettingsPage extends Page {
     if (this.loading) return;
 
     this.loading = true;
-    app.alerts.dismiss(this.alertComponent);
+    app.alerts.dismiss(this.alertMessage);
 
     // validate settings
     if (!this.validate.bind(this, this.validaton_rules)()) {
       this.loading = false;
       m.redraw();
     } else {
-      saveSettings(this.dirty()).then(this.onsaved.bind(this));
+      saveSettings(this.dirty())
+        .then(() => {
+          this.alertMessage = app.alerts.show(Alert, { type: 'success' }, app.translator.trans('core.admin.settings.saved_message'));
+        })
+        .catch(() => {})
+        .then(() => {
+          // return to the initial state and redraw the page
+          this.loading = false;
+          m.redraw();
+        });
     }
-  }
-
-  onsaved() {
-    app.alerts.show(
-      (this.alertComponent = new Alert({
-        type: 'success',
-        children: app.translator.trans(localePrefix + 'saved_message'),
-      }))
-    );
-
-    this.loading = false;
-    m.redraw();
   }
 
   /**
@@ -540,13 +553,12 @@ export default class MathRenSettingsPage extends Page {
 
       if (value && !rules[field].test(value)) {
         valid = false;
-        app.alerts.show(
-          (this.alertComponent = new Alert({
-            type: 'error',
-            children: app.translator.trans(localePrefix + 'validation', {
-              field_key: app.translator.trans(localePrefix + field),
-            }),
-          }))
+        this.alertMessage = app.alerts.show(
+          Alert,
+          { type: 'error' },
+          app.translator.trans(localePrefix + 'validation', {
+            field_key: app.translator.trans(localePrefix + field),
+          })
         );
       }
 
