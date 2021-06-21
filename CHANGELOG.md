@@ -3,7 +3,7 @@
 - **Fix** posts in discussion won't render if you change route while editing a post.
 
 ### 0.3.4
-- **Fix** usernames were rendering in `.Post-body` if they contains math delimiters (such as `[math]username[/math]`).
+- **Fix** usernames were rendering in `.PostStream-item` if they contains math delimiters (such as `[math]username[/math]`).
 
 ### 0.3.3
 - Flarum v1.0.2 compatible
