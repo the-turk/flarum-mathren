@@ -1,3 +1,7 @@
+### 0.3.5
+- **Fix** posts in discussion won't render if you edit and save a post.
+- **Fix** posts in discussion won't render if you change route while editing a post.
+
 ### 0.3.4
 - **Fix** usernames were rendering in `.Post-body` if they contains math delimiters (such as `[math]username[/math]`).
 
