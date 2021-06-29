@@ -1,3 +1,6 @@
+### 0.3.7
+- Use `['oncreate', 'onupdate']` lifecycle hooks for `CommentPost` component instead of `onupdate` only.
+
 ### 0.3.6
 - **Fix** wrong KaTeX css version.
 

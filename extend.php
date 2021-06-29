@@ -11,7 +11,7 @@
  * @author     Hasan Özbey <hasanoozbey@gmail.com>
  * @copyright  2020
  * @license    The MIT License
- * @version    Release: 0.3.5
+ * @version    Release: 0.3.7
  * @link       https://github.com/the-turk/flarum-mathren
  */
 
