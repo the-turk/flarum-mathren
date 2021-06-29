@@ -1,3 +1,6 @@
+### 0.3.6
+- **Fix** wrong KaTeX css version.
+
 ### 0.3.5
 - **Fix** posts in discussion won't render if you edit and save a post.
 - **Fix** posts in discussion won't render if you change route while editing a post.
