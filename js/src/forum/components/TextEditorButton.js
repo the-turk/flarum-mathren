@@ -1,30 +1,26 @@
+/*
+ * This file is part of MathRen.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 import app from 'flarum/common/app';
+
+import Button from 'flarum/common/components/Button';
 import Component from 'flarum/common/Component';
 import Dropdown from 'flarum/common/components/Dropdown';
-import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import icon from 'flarum/common/helpers/icon';
 
-const localePrefix = 'the-turk-mathren.forum.textEditor.';
+import getPrimaryDelimiters from '../utils/katex/getPrimaryDelimiters';
+import getFlarumComposers from '../utils/getFlarumComposers';
 
-export default class extends Component {
-  oninit(vnode) {
-    super.oninit(vnode);
-
-    this.delimiters = {
-      inline: app.forum.attribute('mathRenMainInlineDelimiter'),
-      block: app.forum.attribute('mathRenMainBlockDelimiter'),
-    };
-  }
-
-  oncreate(vnode) {
-    super.oncreate(vnode);
-  }
-
+export default class TextEditorButton extends Component {
   view() {
     return Dropdown.component(
       {
-        className: 'MathRenDropdown',
+        className: 'MathRen-buttonsDropdown',
         buttonClassName: 'Button Button--flat',
         label: icon('fas fa-square-root-alt'),
       },
@@ -41,39 +37,25 @@ export default class extends Component {
     const items = new ItemList();
 
     items.add(
-      'mathBlock',
+      'mathren-blockButton',
       Button.component(
         {
           icon: 'fas fa-vector-square',
-          onclick: () => {
-            // opening tag (left delimiter)
-            const leftDelim = this.delimiters.block['left'];
-            // closing tag (right delimiter)
-            const rightDelim = this.delimiters.block['right'];
-
-            this.wrapSelection(leftDelim, rightDelim);
-          },
+          onclick: () => this.wrapSelection(true),
         },
-        app.translator.trans(localePrefix + 'blockExpression')
+        app.translator.trans('the-turk-mathren.forum.composer.block_expression')
       ),
       50
     );
 
     items.add(
-      'mathInline',
+      'mathren-inlineButton',
       Button.component(
         {
           icon: 'fas fa-grip-lines',
-          onclick: () => {
-            // opening tag (left delimiter)
-            const leftDelim = this.delimiters.inline['left'];
-            // closing tag (right delimiter)
-            const rightDelim = this.delimiters.inline['right'];
-
-            this.wrapSelection(leftDelim, rightDelim);
-          },
+          onclick: () => this.wrapSelection(),
         },
-        app.translator.trans(localePrefix + 'inlineExpression')
+        app.translator.trans('the-turk-mathren.forum.composer.inline_expression')
       ),
       0
     );
@@ -82,13 +64,26 @@ export default class extends Component {
   }
 
   /**
-   * Wrap the current selection with BBCode tags
-   * If there's no selection, put them around the cursor
+   * Wrap the current selection with BBCode tags.
+   * If there's no selection, put them around the cursor.
    *
-   * @param string leftDelim
-   * @param string rightDelim
+   * @param displayMode Whether this button is used for block or inline expressions.
    */
-  wrapSelection(leftDelim, rightDelim) {
+  wrapSelection(displayMode = false) {
+    const composerClass = app.composer.body.componentClass;
+
+    // Get primary delimiters based on the `aliases_as_primary` setting.
+    // If this isn't a native Flarum composer (i.e. it created by an extension),
+    // then we will use BBCode delimiters no matter what because we're
+    // replacing alias delimiters on the fly. This causing wrong cursor location.
+    this.delimiters = getPrimaryDelimiters.bind(this, app.forum, getFlarumComposers().indexOf(composerClass) === -1)();
+
+    // opening tag (left delimiter)
+    const leftDelim = displayMode ? this.delimiters.block['left'] : this.delimiters.inline['left'];
+
+    // closing tag (right delimiter)
+    const rightDelim = displayMode ? this.delimiters.block['right'] : this.delimiters.inline['right'];
+
     const selectionRange = this.attrs.textEditor.getSelectionRange();
 
     if (selectionRange[0] != selectionRange[1]) {

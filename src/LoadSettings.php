@@ -1,76 +1,67 @@
 <?php
+
+/*
+ * This file is part of MathRen.
+ *
+ * For detailed copyright and license information, please view the
+ * LICENSE file that was distributed with this source code.
+ */
+
 namespace TheTurk\MathRen;
 
-use Flarum\Api\Event\Serializing;
-use Flarum\Api\Serializer\ForumSerializer;
-use Flarum\Extension\ExtensionManager;
 use Illuminate\Support\Arr;
-use TheTurk\MathRen\Helpers\Settings;
+use TheTurk\MathRen\Helpers\Util;
 
 class LoadSettings
 {
     /**
-     * @var Settings
+     * @var Util
      */
-    protected $settings;
+    protected $util;
 
     /**
-     * @var ExtensionManager
-     */
-    protected $extensions;
-
-    /**
-     * Gets the settings variable. Called on Object creation.
+     * Gets the settings variables. Called on Object creation.
      *
-     * @param ExtensionManager $extensions
-     * @param Settings         $settings
+     * @param Util $util Helper util that used by this extension.
      */
-    public function __construct(ExtensionManager $extensions, Settings $settings)
+    public function __construct(Util $util)
     {
-        $this->extensions = $extensions;
-        $this->settings = $settings;
+        $this->util = $util;
     }
 
     /**
-     * Get the setting values from the database
-     * and make them available in the forum
-     *
-     * @param Serializing $event
+     * Get the setting values from the database and make them available in the forum.
+     * 
+     * @return array
      */
-    public function __invoke(ForumSerializer $serializer): array
+    public function __invoke(): array
     {
-        $katexOptions = $this->settings->getKatexOptions();
-
-        // all of our delimiters
-        $delimiters = Arr::get($katexOptions, 'delimiters');
+        $bbCodeDelimiters = $this->util->getDelimitersWithOptions('bbcode');
+        $aliasDelimiters = $this->util->getDelimitersWithOptions('alias');
 
         return [
-            'mathRenKatexOptions' => $katexOptions,
-            'mathRenMainBlockDelimiter' =>
-                Arr::first(
-                    $delimiters,
-                    function ($val) {
-                        return $val['display'] === true;
-                    }
-                ),
-            'mathRenMainInlineDelimiter' =>
-                Arr::first(
-                    $delimiters,
-                    function ($val) {
-                        return $val['display'] === false;
-                    }
-                ),
-            'mathRenEnableTextEditorButtons' => (bool)
-                $this->settings->get(
-                    'enableTextEditorButtons',
-                    Arr::get($this->settings->getDefaults(), 'enableTextEditorButtons')
-                ),
-            'mathRenEnableCopyTeX' => (bool)
-                $this->settings->get(
-                    'enableCopyTeX',
-                    Arr::get($this->settings->getDefaults(), 'enableCopyTeX')
-                ),
-            'mathRenAddQuoteButton' => $this->extensions->isEnabled('flarum-mentions'),
+            'mathren.katex_options' => $this->util->getKatexOptions(),
+            'mathren.enable_editor_buttons' =>
+                \boolval($this->util->get('enable_editor_buttons')),
+            'mathren.aliases_as_primary' =>
+                \boolval($this->util->get('aliases_as_primary')),
+            'mathren.enable_copy_tex' =>
+                \boolval($this->util->get('enable_copy_tex')),
+
+            // Get type-specific delimiters.
+            'mathren.bbcode_delimiters' => $bbCodeDelimiters,
+            'mathren.alias_delimiters' => $aliasDelimiters,
+
+            // Set primiary delimiters.
+            // These will be the first delimiters those declared in delimiters list.
+            'mathren.primary_block_delimiter' =>
+                Arr::first($bbCodeDelimiters, fn($val) => $val['display'] === true),
+            'mathren.primary_inline_delimiter' =>
+                Arr::first($bbCodeDelimiters, fn($val) => $val['display'] === false),
+            'mathren.primary_block_delimiter_alias' =>
+                Arr::first($aliasDelimiters, fn($val) => $val['display'] === true),
+            'mathren.primary_inline_delimiter_alias' =>
+                Arr::first($aliasDelimiters, fn($val) => $val['display'] === false),
         ];
     }
 }

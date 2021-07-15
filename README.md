@@ -4,11 +4,11 @@
 
 An extension that handles TeX math rendering for your [Flarum](https://github.com/flarum) forum.
 
-![Screenshot](https://i.ibb.co/3WpHVrH/mathren.png)
+![Screenshot](https://i.imgur.com/OuT8Luf.png)
 
 ![Action](https://i.imgur.com/GEkwFtR.gif)
 
-[Click to view settings screenshot](https://i.ibb.co/nnVnqZs/mathren-settings.png)
+[Click to view settings screenshot](https://i.imgur.com/psB1noF.png)
 
 ## Features
 
@@ -36,7 +36,9 @@ php flarum cache:clear
 
 Enable the extension.
 
-#### Block Expressions
+___
+
+#### Block Expressions `displayMode: true`
 
 Wrap your TeX code with `[math]` and `[/math]` or your custom delimiters.
 
@@ -46,7 +48,7 @@ Wrap your TeX code with `[math]` and `[/math]` or your custom delimiters.
 
 Block expressions will be wrapped with `.mathren-block` class.
 
-#### Inline Expressions
+#### Inline Expressions `displayMode: false`
 
 Wrap your TeX code with `[imath]` and `[/imath]` or your custom delimiters.
 
@@ -56,18 +58,9 @@ Lorem ipsum dolor [imath]\varDelta = b^2-4ac[/imath] sit amet.
 
 Inline expressions will be wrapped with `.mathren-inline` class.
 
-#### Ignoring Expressions
+___
 
-If you're willing to show the TeX code with delimiters, there are three options:
-
-1. Wrap your expression with \`backticks\` or `code` tag.
-  + You must set it as an ignored tag from the settings page.
-2. Wrap your expression with an ignored class.
-  + You can set ignored classes from the settings page.
-3. Use a decisive keyword with your expressions.
-  + The keyword is `ignore` by default. But you can change it or assign multiple keywords from the settings page. You must write one of those keywords inside a BBCode (i.e. `[math=keyword]x^3[/math]`).
-
-`.mathren-ignore` class will be added into ignored expression's wrapper by default. But you can change it from the settings page.
+Wrap your expression with \`backticks\` or `code` tag to skip rendering.
 
 ## Links
 

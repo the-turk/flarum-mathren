@@ -1,111 +1,96 @@
 <?php
+
+/*
+ * This file is part of MathRen.
+ *
+ * For detailed copyright and license information, please view the
+ * LICENSE file that was distributed with this source code.
+ */
+
 namespace TheTurk\MathRen;
 
-use TheTurk\MathRen\Helpers\Settings;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use s9e\TextFormatter\Configurator;
+use TheTurk\MathRen\Helpers\Util;
 
 class ConfigureTextFormatter
 {
     /**
-     * @var Settings
+     * @var Util
      */
-    protected $settings;
+    protected $util;
 
     /**
-     * Gets the settings variable. Called on Object creation.
+     * Gets the util variable. Called on Object creation.
      *
-     * @param Settings $settings
+     * @param Util $util
      */
-    public function __construct(Settings $settings)
+    public function __construct(Util $util)
     {
-        $this->settings = $settings;
+        $this->util = $util;
     }
 
     /**
      * Configure s9e/TextFormatter
      *
-     * Find more info in:
-     * https://s9etextformatter.readthedocs.io/Plugins/BBCodes/Add_custom_BBCodes/
-     * https://s9etextformatter.readthedocs.io/Plugins/BBCodes/Use_template_parameters/
-     * https://s9etextformatter.readthedocs.io/Rules/Tag_rules/
+     * @param Configurator $config TextFormatter configurator.
      *
-     * @param Configurator $config
+     * @see    https://s9etextformatter.readthedocs.io/Plugins/BBCodes/Add_custom_BBCodes/
+     * @see    https://s9etextformatter.readthedocs.io/Plugins/BBCodes/Use_template_parameters/
+     * @see    https://s9etextformatter.readthedocs.io/Rules/Tag_rules/
+     * @see    https://github.com/s9e/TextFormatter/blob/master/docs/JavaScript/Live_preview_attributes.md
+     * @return void
      */
     public function __invoke(Configurator $config)
     {
-        $katexOptions = $this->settings->getKatexOptions();
+        $katexOptions = $this->util->getKatexOptions();
+        $bbDelimiters = $this->util->getDelimitersWithOptions('bbcode');
 
-        // all of our delimiters
-        $delimiters = Arr::get($katexOptions, 'delimiters');
+        // This will be used for wrapping expressions
+        // with corresponding class attributes.
+        $classes = $this->util->getClasses();
 
-        // to wrap expressions with class attributes
-        $classes = $this->settings->getClasses();
+        // We will configure each BBCode delimiter in our comma seperated list.
+        // Note that this list was converted into array in the `Util` class.
+        foreach ($bbDelimiters as $delimiter) {
+            // extract text from delimiter (remove brackets)
+            $delimiterText = Str::after(Str::before($delimiter['left'], ']'), '[');
 
-        // to ignore expressions
-        $decisiveKeywords = $this->settings->get(
-            'decisiveKeywords',
-            Arr::get($this->settings->getDefaults(), 'decisiveKeywords')
-        );
-
-        foreach ($delimiters as $delim) {
-            // we will use opening tags
-            // [mathren] => mathren, for example
-            $newTag = Str::after(Str::before($delim['left'], ']'), '[');
-
-            // is this a block or an inline expression?
-            $display = $delim['display'] === true ? 'block' : 'inline';
-
-            /**
-             * Add custom BBCode
-             *
-             * I use some kind of workaround here, so let me clear it for you.
-             *
-             * First of all we need to integrate this extension with Markdown
-             * and it's not an easy task when it comes to mathematical equations.
-             * So I've found this TextFormatter's `ignoreTags` method and its
-             * allows us to ignore Markdown and BBCode parsing between some
-             * special BBCode tags ([math][/math] for example). But the problem is,
-             * when we write [math][/math] into the text editor, it'll be automatically
-             * removed from the post by the TextFormatter.
-             * (still available in its XML form though, but it is useless for our case)
-             * We need this exact string `[math]x^2[/math]` in the post so
-             * the KaTeX's auto-render plugin can render them.
-             *
-             * What I'm doing here is to tell TextFormatter to replace `[math][/math]`
-             * with `[math][/math]` and do not parse any Markdown or BBCode inside it.
-             * So our tags will be reserved and auto-render plugin can easily find and
-             * render them while searching through the post.
-             *
-             * Another solution might be replacing our BBCodes with some
-             * HTML (i.e. `<script type="math/tex"></script>`) and using
-             * the KaTeX's Custom Script Type Extension but it is not well-written
-             * and doesn't allows us to use any option that the KaTeX provides.
-             * Also, it's pretty much the same thing - the same find and render operation.
-             */
+            // get the class name that the expression will be wrapped with
+            $className = $delimiter['display'] === true ? 'block' : 'inline';
+            
+            // will be passed into KaTeX options
+            $displayMode = $delimiter['display'] === true;
+            
+            // generate KaTeX options
+            $options
+                = \json_encode(Arr::add($katexOptions, 'displayMode', $displayMode));
+                
+            // add custom BBCode
             $config->BBCodes->addCustom(
-                '['.$newTag.'={CHOICE='.$decisiveKeywords.';optional}]{TEXT}'.$delim['right'],
+                $delimiter['left'].'{TEXT}'.$delimiter['right'],
                 '<span>
-                    <xsl:choose>
-                       <xsl:when test="@'.$newTag.'">
-                          <xsl:attribute name="class">
-                              '.$classes[$display].' '.$classes['ignore'].'
-                          </xsl:attribute>
-                       </xsl:when>
-                       <xsl:otherwise>
-                          <xsl:attribute name="class">
-                              '.$classes[$display].'
-                          </xsl:attribute>
-                       </xsl:otherwise>
-                    </xsl:choose>
-                    '.$delim['left'].'<xsl:apply-templates/>'.$delim['right'].'
+                    <xsl:attribute name="class">'.$classes[$className].'</xsl:attribute>
+                    <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render(this.innerText, this, '.$options.')</xsl:attribute>
+                    <xsl:apply-templates/>
+                    <script defer="" crossorigin="anonymous">
+                        <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof katex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
+                        <xsl:attribute name="integrity">sha384-YNHdsYkH6gMx9y3mRkmcJ2mFUjTd0qNQQvY9VYZgQd7DcN7env35GzlmFaZ23JGp</xsl:attribute>
+                        <xsl:attribute name="onload">katex.render(this.parentNode.innerText, this.parentNode, '.$options.')</xsl:attribute>
+                        <xsl:attribute name="src">https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js</xsl:attribute>
+                    </script>
                 </span>'
             );
 
-            $tag = $config->tags[$newTag];
-            $tag->rules->ignoreTags(); // ignores Markdown and BBCode parsers
-            $tag->rules->disableAutoLineBreaks(); // ignores line breaks
+            // current BBCode tag
+            $tag = $config->tags[$delimiterText];
+
+            // ignore Markdown and BBCode parsers
+            $tag->rules->ignoreTags();
+
+            // ignore line breaks
+            $tag->rules->disableAutoLineBreaks();
         }
     }
 }

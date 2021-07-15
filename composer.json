@@ -19,7 +19,8 @@
     }],
     "support": {
         "issues": "https://github.com/the-turk/flarum-mathren/issues",
-        "source": "https://github.com/the-turk/flarum-mathren"
+        "source": "https://github.com/the-turk/flarum-mathren",
+        "docs": "https://katex.org/docs/options.html"
     },
     "require": {
         "flarum/core": ">=1.0.2"
