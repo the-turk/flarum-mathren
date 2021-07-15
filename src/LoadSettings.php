@@ -31,7 +31,7 @@ class LoadSettings
 
     /**
      * Get the setting values from the database and make them available in the forum.
-     * 
+     *
      * @return array
      */
     public function __invoke(): array
@@ -40,28 +40,21 @@ class LoadSettings
         $aliasDelimiters = $this->util->getDelimitersWithOptions('alias');
 
         return [
-            'mathren.katex_options' => $this->util->getKatexOptions(),
-            'mathren.enable_editor_buttons' =>
-                \boolval($this->util->get('enable_editor_buttons')),
-            'mathren.aliases_as_primary' =>
-                \boolval($this->util->get('aliases_as_primary')),
-            'mathren.enable_copy_tex' =>
-                \boolval($this->util->get('enable_copy_tex')),
+            'mathren.katex_options'         => $this->util->getKatexOptions(),
+            'mathren.enable_editor_buttons' => \boolval($this->util->get('enable_editor_buttons')),
+            'mathren.aliases_as_primary'    => \boolval($this->util->get('aliases_as_primary')),
+            'mathren.enable_copy_tex'       => \boolval($this->util->get('enable_copy_tex')),
 
             // Get type-specific delimiters.
             'mathren.bbcode_delimiters' => $bbCodeDelimiters,
-            'mathren.alias_delimiters' => $aliasDelimiters,
+            'mathren.alias_delimiters'  => $aliasDelimiters,
 
             // Set primiary delimiters.
             // These will be the first delimiters those declared in delimiters list.
-            'mathren.primary_block_delimiter' =>
-                Arr::first($bbCodeDelimiters, fn($val) => $val['display'] === true),
-            'mathren.primary_inline_delimiter' =>
-                Arr::first($bbCodeDelimiters, fn($val) => $val['display'] === false),
-            'mathren.primary_block_delimiter_alias' =>
-                Arr::first($aliasDelimiters, fn($val) => $val['display'] === true),
-            'mathren.primary_inline_delimiter_alias' =>
-                Arr::first($aliasDelimiters, fn($val) => $val['display'] === false),
+            'mathren.primary_block_delimiter'        => Arr::first($bbCodeDelimiters, fn ($val) => $val['display'] === true),
+            'mathren.primary_inline_delimiter'       => Arr::first($bbCodeDelimiters, fn ($val) => $val['display'] === false),
+            'mathren.primary_block_delimiter_alias'  => Arr::first($aliasDelimiters, fn ($val) => $val['display'] === true),
+            'mathren.primary_inline_delimiter_alias' => Arr::first($aliasDelimiters, fn ($val) => $val['display'] === false),
         ];
     }
 }

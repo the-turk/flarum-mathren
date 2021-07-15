@@ -32,13 +32,13 @@ class Util
     {
         $this->settings = $settings;
     }
-    
+
     /**
      * This method will make prefixed calls easier.
      *
      * @param string $key     The setting key that will be fetched from the db.
      * @param string $default The default value if there is no setting record.
-     * 
+     *
      * @return string
      */
     public function get(string $key, string $default = ''): string
@@ -51,27 +51,28 @@ class Util
      * `displayMode` will be set on `ConfigureTextFormatter` class.
      *
      * @see    https://katex.org/docs/autorender.html
+     *
      * @return array
      */
     public function getKatexOptions(): array
     {
         return [
-            'fleqn' => \boolval($this->get('enable_fleqn')),
-            'leqno' => \boolval($this->get('enable_leqno')),
-            'output' => $this->get('output_mode'),
-            'throwOnError' => \boolval($this->get('throw_on_error')),
-            'errorColor' => $this->get('error_color'),
+            'fleqn'            => \boolval($this->get('enable_fleqn')),
+            'leqno'            => \boolval($this->get('enable_leqno')),
+            'output'           => $this->get('output_mode'),
+            'throwOnError'     => \boolval($this->get('throw_on_error')),
+            'errorColor'       => $this->get('error_color'),
             'minRuleThickness' => \floatval($this->get('min_rule_thickness')),
-            'maxSize' => \floatval($this->get('max_size')),
-            'maxExpand' => \intval($this->get('max_expand')),
-            'macros' => \json_decode('{'.$this->get('macros').'}'),
-            'colorIsTextColor' => \boolval($this->get('color_is_text_color'))
+            'maxSize'          => \floatval($this->get('max_size')),
+            'maxExpand'        => \intval($this->get('max_expand')),
+            'macros'           => \json_decode('{'.$this->get('macros').'}'),
+            'colorIsTextColor' => \boolval($this->get('color_is_text_color')),
         ];
     }
 
     /**
      * Create a classes array that will be used to wrap expressions.
-     * 
+     *
      * @return array
      */
     public function getClasses(): array
@@ -79,28 +80,24 @@ class Util
         return [
             // class for block expressions [displayMode: true]
             'block' => 'mathren-block',
-            
+
             // class for inline expressions [displayMode: false]
-            'inline' => 'mathren-inline'
+            'inline' => 'mathren-inline',
         ];
     }
 
     /**
      * Create a delimiters array that categorized by their type.
-     * 
+     *
      * @return array
      */
     private function _getDelimitersByType(): array
     {
         return [
-            'block' => 
-                $this->_commaToArray($this->get('block_delimiters')),
-            'inline' => 
-                $this->_commaToArray($this->get('inline_delimiters')),
-            'aliasBlock' => 
-                $this->_commaToArray($this->get('alias_block_delimiters')),
-            'aliasInline' => 
-                $this->_commaToArray($this->get('alias_inline_delimiters'))
+            'block'       => $this->_commaToArray($this->get('block_delimiters')),
+            'inline'      => $this->_commaToArray($this->get('inline_delimiters')),
+            'aliasBlock'  => $this->_commaToArray($this->get('alias_block_delimiters')),
+            'aliasInline' => $this->_commaToArray($this->get('alias_inline_delimiters')),
         ];
     }
 
@@ -108,12 +105,12 @@ class Util
      * This function creates an array of delimiters to be used in various places.
      * Its elements are also an array and looks like this:
      * [[left] => '[math]', [right] => '[/math]', [display] => true]
-     * ^ they're created by `$this->_setOptions();`
+     * ^ they're created by `$this->_setOptions();`.
      *
      * @param string $type The delimiter type that we're creating an array for.
      *                     Accepted types are `bbcode` and `alias`. If not set,
      *                     returning array will include all delimiters.
-     * 
+     *
      * @return array
      */
     public function getDelimitersWithOptions(string $type): array
@@ -140,7 +137,7 @@ class Util
             }
 
             $displayMode = in_array($key, ['block', 'aliasBlock']) ? true : false;
-            
+
             foreach ($delimiterArray as $delimiter) {
                 $delimitersWithOptions = array_merge(
                     $delimitersWithOptions,
@@ -156,9 +153,9 @@ class Util
                     array_push(
                         $delimitersWithOptions,
                         [
-                            'left' => '\\\begin{'.$environment.'}',
-                            'right' => '\\\end{'.$environment.'}',
-                            'display' => true
+                            'left'    => '\\\begin{'.$environment.'}',
+                            'right'   => '\\\end{'.$environment.'}',
+                            'display' => true,
                         ]
                     );
                 }
@@ -171,11 +168,11 @@ class Util
     /**
      * Creates delimiter list with options (left, right, display).
      *
-     * @param string $syntax      The delimiter syntax that 
+     * @param string $syntax      The delimiter syntax that
      *                            also including the expression placeholder.
      *                            i.e. `[math]%e%[/math]`
      * @param bool   $displayMode To check whether it's a block or inline delimiter.
-     * 
+     *
      * @return array
      */
     private function _setOptions(string $syntax, bool $displayMode = false): array
@@ -191,9 +188,9 @@ class Util
         array_push(
             $r,
             [
-                'left' => $left,
-                'right' => $right,
-                'display' => $displayMode
+                'left'    => $left,
+                'right'   => $right,
+                'display' => $displayMode,
             ]
         );
 
@@ -204,7 +201,7 @@ class Util
      * Converts comma seperated list into an array.
      *
      * @param string $list The list to be seperated.
-     * 
+     *
      * @return array
      */
     private function _commaToArray(string $list): array
