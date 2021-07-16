@@ -1,3 +1,6 @@
+### 1.0.2
+- Support PHP 7.3
+
 ### 1.0.1
 - **Fix** wrapping expressions with `code` should preserve alias delimiters when they set as primary delimiters (https://github.com/the-turk/flarum-mathren/issues/27).
 - **Fix** "Quote" button should be hidden if you disable the `flarum/mentions` extension.

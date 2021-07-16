@@ -51,10 +51,30 @@ class LoadSettings
 
             // Set primiary delimiters.
             // These will be the first delimiters those declared in delimiters list.
-            'mathren.primary_block_delimiter'        => Arr::first($bbCodeDelimiters, fn ($val) => $val['display'] === true),
-            'mathren.primary_inline_delimiter'       => Arr::first($bbCodeDelimiters, fn ($val) => $val['display'] === false),
-            'mathren.primary_block_delimiter_alias'  => Arr::first($aliasDelimiters, fn ($val) => $val['display'] === true),
-            'mathren.primary_inline_delimiter_alias' => Arr::first($aliasDelimiters, fn ($val) => $val['display'] === false),
+            'mathren.primary_block_delimiter'        => Arr::first(
+                $bbCodeDelimiters,
+                function ($val) {
+                    return $val['display'] === true;
+                }
+            ),
+            'mathren.primary_inline_delimiter'       => Arr::first(
+                $bbCodeDelimiters,
+                function ($val) {
+                    return $val['display'] === false;
+                }
+            ),
+            'mathren.primary_block_delimiter_alias'  => Arr::first(
+                $aliasDelimiters,
+                function ($val) {
+                    return $val['display'] === true;
+                }
+            ),
+            'mathren.primary_inline_delimiter_alias' => Arr::first(
+                $aliasDelimiters,
+                function ($val) {
+                    return $val['display'] === false;
+                }
+            ),
         ];
     }
 }
