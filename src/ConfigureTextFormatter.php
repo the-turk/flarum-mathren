@@ -32,7 +32,7 @@ class ConfigureTextFormatter
     }
 
     /**
-     * Configure s9e/TextFormatter
+     * Configure s9e/TextFormatter.
      *
      * @param Configurator $config TextFormatter configurator.
      *
@@ -40,6 +40,7 @@ class ConfigureTextFormatter
      * @see    https://s9etextformatter.readthedocs.io/Plugins/BBCodes/Use_template_parameters/
      * @see    https://s9etextformatter.readthedocs.io/Rules/Tag_rules/
      * @see    https://github.com/s9e/TextFormatter/blob/master/docs/JavaScript/Live_preview_attributes.md
+     *
      * @return void
      */
     public function __invoke(Configurator $config)
@@ -59,14 +60,14 @@ class ConfigureTextFormatter
 
             // get the class name that the expression will be wrapped with
             $className = $delimiter['display'] === true ? 'block' : 'inline';
-            
+
             // will be passed into KaTeX options
             $displayMode = $delimiter['display'] === true;
-            
+
             // generate KaTeX options
             $options
                 = \json_encode(Arr::add($katexOptions, 'displayMode', $displayMode));
-                
+
             // add custom BBCode
             $config->BBCodes->addCustom(
                 $delimiter['left'].'{TEXT}'.$delimiter['right'],
