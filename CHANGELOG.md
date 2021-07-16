@@ -1,5 +1,5 @@
 ### 1.0.2
-- Support PHP 7.3
+- PHP 7.3 support
 
 ### 1.0.1
 - **Fix** wrapping expressions with `code` should preserve alias delimiters when they set as primary delimiters (https://github.com/the-turk/flarum-mathren/issues/27).
