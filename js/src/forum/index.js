@@ -39,10 +39,6 @@ app.initializers.add(
 
       return delimiterReplacer(span, delimiterReplacerOptions(reverse), returnAsText);
     };
-
-    // Wrapping expressions with `code` should preserve alias delimiters
-    // if `aliases_as_primary` set to true.
-    // @see https://github.com/the-turk/flarum-mathren/issues/27
     
     /**
      * Wrapping expressions with `code` should preserve alias delimiters
