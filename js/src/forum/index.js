@@ -8,6 +8,7 @@
 import { extend, override } from 'flarum/common/extend';
 
 import app from 'flarum/common/app';
+import Page from 'flarum/common/components/Page';
 import TextEditor from 'flarum/common/components/TextEditor';
 
 import addCopyListener from './addCopyListener';
@@ -30,14 +31,36 @@ app.initializers.add(
      *
      * @return { string }
      **/
-    const replaceDelimiters = (text = '', reverse = false) => {
+    const replaceDelimiters = (text = '', reverse = false, returnAsText = true) => {
       const span = document.createElement('span');
 
       // using `span.innerText` destroys line breaks
       span.innerHTML = text;
 
-      return delimiterReplacer(span, delimiterReplacerOptions(reverse));
+      return delimiterReplacer(span, delimiterReplacerOptions(reverse), returnAsText);
     };
+
+    // Wrapping expressions with `code` should preserve alias delimiters
+    // if `aliases_as_primary` set to true.
+    // @see https://github.com/the-turk/flarum-mathren/issues/27
+    
+    /**
+     * Wrapping expressions with `code` should preserve alias delimiters
+     * if `aliases_as_primary` set to true.
+     *
+     * @param element The element that we're seeking code nodes inside.
+     *
+     * @see https://github.com/the-turk/flarum-mathren/issues/27
+     * @see https://github.com/s9e/TextFormatter/issues/166
+     **/
+    const preserveAliasesInCodeTag = (element) => {
+      if (!app.forum.attribute('mathren.aliases_as_primary')) return;
+
+      const codeNodeList = element.querySelectorAll('code');
+
+      // using `c.innerText` destroys line breaks
+      codeNodeList.forEach((c) => c.innerHTML = replaceDelimiters(c.innerText, true));
+    }
 
     /**
      * Options those will be used in `delimiterReplacer()` function.
@@ -78,12 +101,15 @@ app.initializers.add(
 
     // Hook into global copy handler to modify behavior on `.katex` elements.
     addCopyListener();
+    
+    extend(Page.prototype, ['oncreate', 'onupdate'], () => preserveAliasesInCodeTag(document));
 
     // Replace alias delimiters with BBCode delimiters in preview mode
     // so the `TextFormatter` can render them using BBCode definitions.
     if (s9e && s9e.TextFormatter) {
       override(s9e.TextFormatter, 'preview', function (original, preview, element) {
         original(replaceDelimiters(preview), element);
+        preserveAliasesInCodeTag(element);
       });
     }
 

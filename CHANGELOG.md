@@ -1,3 +1,7 @@
+### 1.0.1
+- **Fix** wrapping expressions with `code` should preserve alias delimiters when they set as primary delimiters (https://github.com/the-turk/flarum-mathren/issues/27).
+- **Fix** "Quote" button should be hidden if you disable the `flarum/mentions` extension.
+
 ### 1.0.0
 
 All hail the new TeX renderer solution! I practically rewritten the whole thing.

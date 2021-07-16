@@ -48,7 +48,7 @@ const replaceDelimitersInText = function (text, options) {
  *
  * @return { string }
  */
-const delimiterReplacer = function (elem, options) {
+const delimiterReplacer = function (elem, options, returnAsText) {
   for (let i = 0; i < elem.childNodes.length; i++) {
     const childNode = elem.childNodes[i];
 
@@ -66,7 +66,7 @@ const delimiterReplacer = function (elem, options) {
     // Otherwise, it's something else, and ignore it.
   }
 
-  return elem.innerText;
+  return returnAsText === true ? elem.innerText : elem;
 };
 
 export default delimiterReplacer;

@@ -18,7 +18,7 @@ export default function addPostQuoteButton() {
     // "flarum-mentions" is required for showing the Quote button.
     // Main cause of this, the user may not want to use Quote button Flarum-wide.
     // If they using "flarum-mentions" then they're okay with that button.
-    if (!('flarum-mentions' in flarum.extensions || app.forum.attribute('mathren.enable_copy_tex'))) return;
+    if (!('flarum-mentions' in flarum.extensions) || !app.forum.attribute('mathren.enable_copy_tex')) return;
 
     const post = this.attrs.post;
     const user = app.session.user;
