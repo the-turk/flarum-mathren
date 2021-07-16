@@ -12,7 +12,10 @@ All hail the new TeX renderer solution! I practically rewritten the whole thing.
 - **Drop** decisive keywords & DOM node excluders (they were causing too much confusion, wrap your expressions with the `code` tag instead).
 - The backend is more clear than ever, come and join me!
 
-Your settings won't be preserved.
+**Breaking changes!**
+
+- Your settings won't be preserved.
+- Old expressions might not be rendered until you edit and save the post.
 
 ### 0.3.7
 - Use `['oncreate', 'onupdate']` lifecycle hooks for `CommentPost` component instead of `onupdate` only.
