@@ -35,7 +35,8 @@ app.initializers.add(
       const span = document.createElement('span');
 
       // using `span.innerText` destroys line breaks
-      span.innerHTML = text;
+      // using `span.innerHTML` introduces security concerns
+      span.textContent = text;
 
       return delimiterReplacer(span, delimiterReplacerOptions(reverse), returnAsText);
     };
@@ -55,7 +56,8 @@ app.initializers.add(
       const codeNodeList = element.querySelectorAll('code');
 
       // using `c.innerText` destroys line breaks
-      codeNodeList.forEach((c) => c.innerHTML = replaceDelimiters(c.innerText, true));
+      // using `c.innerHTML` introduces security concerns
+      codeNodeList.forEach((c) => c.textContent = replaceDelimiters(c.textContent, true));
     }
 
     /**
