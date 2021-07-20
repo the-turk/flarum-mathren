@@ -1,3 +1,6 @@
+### 1.0.3
+- Fixed a possible security issue.
+
 ### 1.0.2
 - PHP 7.3 support
 
