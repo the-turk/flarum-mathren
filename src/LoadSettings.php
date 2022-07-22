@@ -6,10 +6,10 @@
  * For detailed copyright and license information, please view the
  * LICENSE file that was distributed with this source code.
  */
-
 namespace TheTurk\MathRen;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use TheTurk\MathRen\Helpers\Util;
 
 class LoadSettings
@@ -36,34 +36,47 @@ class LoadSettings
      */
     public function __invoke(): array
     {
+        // We will use this array for fixing the inline Litedown links issue.
+        // @see https://github.com/s9e/TextFormatter/issues/167#issuecomment-882106642
+        $explicitBBCodeDelimiters = [];
+
         $bbCodeDelimiters = $this->util->getDelimitersWithOptions('bbcode');
         $aliasDelimiters = $this->util->getDelimitersWithOptions('alias');
 
+        foreach ($bbCodeDelimiters as $delimiter) {
+            $explicitBBCodeDelimiters[] = [
+                'left' => Str::before($delimiter['left'], ']') . ':0' . ']',
+                'right' => Str::before($delimiter['right'], ']') . ':0' . ']',
+                'display' => $delimiter['display']
+            ];
+        }
+
         return [
-            'mathren.katex_options'         => $this->util->getKatexOptions(),
+            'mathren.katex_options' => $this->util->getKatexOptions(),
             'mathren.enable_editor_buttons' => \boolval($this->util->get('enable_editor_buttons')),
-            'mathren.aliases_as_primary'    => \boolval($this->util->get('aliases_as_primary')),
-            'mathren.enable_copy_tex'       => \boolval($this->util->get('enable_copy_tex')),
+            'mathren.aliases_as_primary' => \boolval($this->util->get('aliases_as_primary')),
+            'mathren.enable_copy_tex' => \boolval($this->util->get('enable_copy_tex')),
 
             // Get type-specific delimiters.
             'mathren.bbcode_delimiters' => $bbCodeDelimiters,
-            'mathren.alias_delimiters'  => $aliasDelimiters,
+            'mathren.alias_delimiters' => $aliasDelimiters,
+            'mathren.explicit_bbcode_delimiters' => $explicitBBCodeDelimiters,
 
-            // Set primiary delimiters.
+            // Set primary delimiters.
             // These will be the first delimiters those declared in delimiters list.
-            'mathren.primary_block_delimiter'        => Arr::first(
-                $bbCodeDelimiters,
+            'mathren.primary_block_delimiter' => Arr::first(
+                $explicitBBCodeDelimiters,
                 function ($val) {
                     return $val['display'] === true;
                 }
             ),
-            'mathren.primary_inline_delimiter'       => Arr::first(
-                $bbCodeDelimiters,
+            'mathren.primary_inline_delimiter' => Arr::first(
+                $explicitBBCodeDelimiters,
                 function ($val) {
                     return $val['display'] === false;
                 }
             ),
-            'mathren.primary_block_delimiter_alias'  => Arr::first(
+            'mathren.primary_block_delimiter_alias' => Arr::first(
                 $aliasDelimiters,
                 function ($val) {
                     return $val['display'] === true;

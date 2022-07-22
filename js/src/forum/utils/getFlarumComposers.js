@@ -5,9 +5,9 @@
  * file that was distributed with this source code.
  */
 
-import DiscussionComposer from 'flarum/common/components/DiscussionComposer';
-import EditPostComposer from 'flarum/common/components/EditPostComposer';
-import ReplyComposer from 'flarum/common/components/ReplyComposer';
+import DiscussionComposer from 'flarum/forum/components/DiscussionComposer';
+import EditPostComposer from 'flarum/forum/components/EditPostComposer';
+import ReplyComposer from 'flarum/forum/components/ReplyComposer';
 
 /**
  * Returns a list of native Flarum composer components.

@@ -11,6 +11,7 @@ import DiscussionPage from 'flarum/common/components/DiscussionPage';
 import copyDelimiters from './utils/katex/copyDelimiters';
 import katexReplaceWithTex from './utils/katex/katex2tex';
 import getPrimaryDelimiters from './utils/katex/getPrimaryDelimiters';
+import setKatexRange from './utils/katex/setKatexRange';
 
 export default function addCopyListener() {
   extend(DiscussionPage.prototype, 'oncreate', function () {
@@ -22,28 +23,26 @@ export default function addCopyListener() {
     document.addEventListener('copy', function (event) {
       const selection = window.getSelection();
 
-      if (selection.isCollapsed) {
-        return; // default action OK if selection is empty
+      if (selection.isCollapsed || !event.clipboardData) {
+        return; // default action OK if selection is empty or unchangeable
       }
+      const clipboardData = event.clipboardData;
+      const range = selection.getRangeAt(0);
 
-      const fragment = selection.getRangeAt(0).cloneContents();
+      setKatexRange(range);
+
+      const fragment = range.cloneContents();
 
       if (!fragment.querySelector('.katex-mathml')) {
         return; // default action OK if no .katex-mathml elements
       }
 
+      const htmlContents = Array.prototype.map.call(fragment.childNodes, (el) => (el instanceof Text ? el.textContent : el.outerHTML)).join('');
+
       // Preserve usual HTML copy/paste behavior.
-      const html = [];
-
-      for (let i = 0; i < fragment.childNodes.length; i++) {
-        html.push(fragment.childNodes[i].outerHTML);
-      }
-
-      event.clipboardData.setData('text/html', html.join(''));
-
+      clipboardData.setData('text/html', htmlContents);
       // Rewrite plain-text version.
-      event.clipboardData.setData('text/plain', katexReplaceWithTex(fragment, copyDelimiters(delimiters)).textContent);
-
+      clipboardData.setData('text/plain', katexReplaceWithTex(fragment, copyDelimiters(delimiters)).textContent);
       // Prevent normal copy handling.
       event.preventDefault();
     });

@@ -6,7 +6,6 @@
  * For detailed copyright and license information, please view the
  * LICENSE file that was distributed with this source code.
  */
-
 namespace TheTurk\MathRen\Helpers;
 
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -43,7 +42,7 @@ class Util
      */
     public function get(string $key, string $default = ''): string
     {
-        return $this->settings->get($this->prefix.$key, $default);
+        return $this->settings->get($this->prefix . $key, $default);
     }
 
     /**
@@ -57,15 +56,15 @@ class Util
     public function getKatexOptions(): array
     {
         return [
-            'fleqn'            => \boolval($this->get('enable_fleqn')),
-            'leqno'            => \boolval($this->get('enable_leqno')),
-            'output'           => $this->get('output_mode'),
-            'throwOnError'     => \boolval($this->get('throw_on_error')),
-            'errorColor'       => $this->get('error_color'),
+            'fleqn' => \boolval($this->get('enable_fleqn')),
+            'leqno' => \boolval($this->get('enable_leqno')),
+            'output' => $this->get('output_mode'),
+            'throwOnError' => \boolval($this->get('throw_on_error')),
+            'errorColor' => $this->get('error_color'),
             'minRuleThickness' => \floatval($this->get('min_rule_thickness')),
-            'maxSize'          => \floatval($this->get('max_size')),
-            'maxExpand'        => \intval($this->get('max_expand')),
-            'macros'           => \json_decode('{'.$this->get('macros').'}'),
+            'maxSize' => \floatval($this->get('max_size')),
+            'maxExpand' => \intval($this->get('max_expand')),
+            'macros' => \json_decode('{' . $this->get('macros') . '}'),
             'colorIsTextColor' => \boolval($this->get('color_is_text_color')),
         ];
     }
@@ -94,9 +93,9 @@ class Util
     private function _getDelimitersByType(): array
     {
         return [
-            'block'       => $this->_commaToArray($this->get('block_delimiters')),
-            'inline'      => $this->_commaToArray($this->get('inline_delimiters')),
-            'aliasBlock'  => $this->_commaToArray($this->get('alias_block_delimiters')),
+            'block' => $this->_commaToArray($this->get('block_delimiters')),
+            'inline' => $this->_commaToArray($this->get('inline_delimiters')),
+            'aliasBlock' => $this->_commaToArray($this->get('alias_block_delimiters')),
             'aliasInline' => $this->_commaToArray($this->get('alias_inline_delimiters')),
         ];
     }
@@ -120,15 +119,15 @@ class Util
         $desiredKeys = [];
 
         switch ($type) {
-        case 'bbcode':
-            $desiredKeys = ['block', 'inline'];
-            break;
-        case 'alias':
-            $desiredKeys = ['aliasBlock', 'aliasInline'];
-            break;
-        default:
-            $desiredKeys = ['block', 'inline', 'aliasBlock', 'aliasInline'];
-            break;
+            case 'bbcode':
+                $desiredKeys = ['block', 'inline'];
+                break;
+            case 'alias':
+                $desiredKeys = ['aliasBlock', 'aliasInline'];
+                break;
+            default:
+                $desiredKeys = ['block', 'inline', 'aliasBlock', 'aliasInline'];
+                break;
         }
 
         foreach ($categorizedDelimiters as $key => $delimiterArray) {
@@ -153,8 +152,8 @@ class Util
                     array_push(
                         $delimitersWithOptions,
                         [
-                            'left'    => '\\\begin{'.$environment.'}',
-                            'right'   => '\\\end{'.$environment.'}',
+                            'left' => '\\\begin{' . $environment . '}',
+                            'right' => '\\\end{' . $environment . '}',
                             'display' => true,
                         ]
                     );
@@ -188,8 +187,8 @@ class Util
         array_push(
             $r,
             [
-                'left'    => $left,
-                'right'   => $right,
+                'left' => $left,
+                'right' => $right,
                 'display' => $displayMode,
             ]
         );

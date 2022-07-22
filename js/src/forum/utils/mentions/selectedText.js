@@ -6,17 +6,22 @@
  */
 
 import katexReplaceWithTex from '../katex/katex2tex';
+import setKatexRange from '../katex/setKatexRange';
 
 export default function selectedText(body, copyDelimiters) {
   const selection = window.getSelection();
-  if (selection.rangeCount) {
+
+  if (!selection.isCollapsed) {
     const range = selection.getRangeAt(0);
     const parent = range.commonAncestorContainer;
+
     if (body[0] === parent || $.contains(body[0], parent)) {
-      let fragment = selection.getRangeAt(0).cloneContents();
+      setKatexRange(range);
+
+      let fragment = range.cloneContents();
 
       if (fragment.querySelector('.katex-mathml')) {
-        fragment = katexReplaceWithTex(fragment, copyDelimiters);
+        fragment = katexReplaceWithTex(fragment, copyDelimiters).textContent;
       }
 
       const clone = $('<div>').append(fragment);
@@ -28,12 +33,12 @@ export default function selectedText(body, copyDelimiters) {
 
       // Replace all other images with a Markdown image
       clone.find('img').replaceWith(function () {
-        return '![](' + this.src + ')';
+        return `![](${this.src})`;
       });
 
       // Replace all links with a Markdown link
       clone.find('a').replaceWith(function () {
-        return '[' + this.innerText + '](' + this.href + ')';
+        return `[${this.innerText}](${this.href})`;
       });
 
       return clone.text();

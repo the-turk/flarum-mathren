@@ -40,7 +40,7 @@ app.initializers.add(
 
       return delimiterReplacer(span, delimiterReplacerOptions(reverse), returnAsText);
     };
-    
+
     /**
      * Wrapping expressions with `code` should preserve alias delimiters
      * if `aliases_as_primary` set to true.
@@ -57,8 +57,8 @@ app.initializers.add(
 
       // using `c.innerText` destroys line breaks
       // using `c.innerHTML` introduces security concerns
-      codeNodeList.forEach((c) => c.textContent = replaceDelimiters(c.textContent, true));
-    }
+      codeNodeList.forEach((c) => (c.textContent = replaceDelimiters(c.textContent, true)));
+    };
 
     /**
      * Options those will be used in `delimiterReplacer()` function.
@@ -71,8 +71,9 @@ app.initializers.add(
     const delimiterReplacerOptions = (reverse = false) => {
       const primaryDelimiters = getPrimaryDelimiters.bind(this, app.forum, !reverse)();
       const bbDelimiters = app.forum.attribute('mathren.bbcode_delimiters');
+      const explicitBBDelimiters = app.forum.attribute('mathren.explicit_bbcode_delimiters');
       const aliasDelimiters = app.forum.attribute('mathren.alias_delimiters');
-      const splitAtDelimiters = reverse ? bbDelimiters : aliasDelimiters;
+      const splitAtDelimiters = reverse ? bbDelimiters.concat(explicitBBDelimiters) : aliasDelimiters;
 
       return {
         primaryBlockDelimiter: primaryDelimiters.block,
@@ -99,7 +100,7 @@ app.initializers.add(
 
     // Hook into global copy handler to modify behavior on `.katex` elements.
     addCopyListener();
-    
+
     extend(Page.prototype, ['oncreate', 'onupdate'], () => preserveAliasesInCodeTag(document));
 
     // Replace alias delimiters with BBCode delimiters in preview mode

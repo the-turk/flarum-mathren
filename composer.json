@@ -23,7 +23,7 @@
         "docs": "https://katex.org/docs/options.html"
     },
     "require": {
-        "flarum/core": ">=1.0.2"
+        "flarum/core": ">=1.2.0"
     },
     "autoload": {
         "psr-4": {

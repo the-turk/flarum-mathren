@@ -1,3 +1,13 @@
+### 1.0.4
+
+Requires Flarum v1.2.0+
+
+- **Fix** inline Litedown links have priority over regular BBCodes. (https://github.com/the-turk/flarum-mathren/issues/28)
+- **Update** KaTeX to v0.16.0 (see their [changelog](https://github.com/KaTeX/KaTeX/blob/master/CHANGELOG.md)) - _copy-tex now uses js instead of css which makes it more robust_.
+- **Update** js dependencies and imports.
+- Uses new `default` extender instead of deprecated `addSettings` migration helper.
+- Uses exported `flarum/mentions` fragment `PostQuoteButton` instead of replicating it.
+
 ### 1.0.3
 - Fixed a possible security issue.
 

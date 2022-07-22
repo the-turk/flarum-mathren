@@ -11,7 +11,6 @@ import CommentPost from 'flarum/common/components/CommentPost';
 import copyDelimiters from './utils/katex/copyDelimiters';
 import getPrimaryDelimiters from './utils/katex/getPrimaryDelimiters';
 import selectedText from './utils/mentions/selectedText';
-import PostQuoteButton from './fragments/mentions/PostQuoteButton';
 
 export default function addPostQuoteButton() {
   extend(CommentPost.prototype, 'oncreate', function () {
@@ -20,15 +19,17 @@ export default function addPostQuoteButton() {
     // If they using "flarum-mentions" then they're okay with that button.
     if (!('flarum-mentions' in flarum.extensions) || !app.forum.attribute('mathren.enable_copy_tex')) return;
 
+    const PostQuoteButton = require('flarum/mentions/fragments/PostQuoteButton');
+
     const post = this.attrs.post;
-    const user = app.session.user;
     const delimiters = getPrimaryDelimiters.bind(this, app.forum)();
 
-    if (post.isHidden() || (user && !post.discussion().canReply())) return;
+    if (post.isHidden() || (app.session.user && !post.discussion().canReply())) return;
 
     const $postBody = this.$('.Post-body');
 
-    // Wrap the quote button in a wrapper element so that we can render button into it.
+    // Wrap the quote button in a wrapper element so that we can render
+    // button into it.
     const $container = $('<div class="MathRen-quoteButtonContainer"></div>');
 
     const button = new PostQuoteButton(post);
@@ -36,7 +37,6 @@ export default function addPostQuoteButton() {
     const handler = function (e) {
       setTimeout(() => {
         const content = selectedText($postBody, copyDelimiters(delimiters));
-
         if (content) {
           button.content = content;
           m.render($container[0], button.render());
@@ -48,7 +48,6 @@ export default function addPostQuoteButton() {
             button.showStart(firstRect.left, firstRect.top);
           } else {
             const lastRect = rects[rects.length - 1];
-
             button.showEnd(lastRect.right, lastRect.bottom);
           }
         }

@@ -6,7 +6,6 @@
  * For detailed copyright and license information, please view the
  * LICENSE file that was distributed with this source code.
  */
-
 namespace TheTurk\MathRen;
 
 use Illuminate\Support\Arr;
@@ -70,16 +69,16 @@ class ConfigureTextFormatter
 
             // add custom BBCode
             $config->BBCodes->addCustom(
-                $delimiter['left'].'{TEXT}'.$delimiter['right'],
+                $delimiter['left'] . '{TEXT}' . $delimiter['right'],
                 '<span>
-                    <xsl:attribute name="class">'.$classes[$className].'</xsl:attribute>
-                    <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render(this.innerText, this, '.$options.')</xsl:attribute>
+                    <xsl:attribute name="class">' . $classes[$className] . '</xsl:attribute>
+                    <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render(this.innerText, this, ' . $options . ')</xsl:attribute>
                     <xsl:apply-templates/>
                     <script defer="" crossorigin="anonymous">
                         <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof katex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
-                        <xsl:attribute name="integrity">sha384-YNHdsYkH6gMx9y3mRkmcJ2mFUjTd0qNQQvY9VYZgQd7DcN7env35GzlmFaZ23JGp</xsl:attribute>
-                        <xsl:attribute name="onload">katex.render(this.parentNode.innerText, this.parentNode, '.$options.')</xsl:attribute>
-                        <xsl:attribute name="src">https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js</xsl:attribute>
+                        <xsl:attribute name="integrity">sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja</xsl:attribute>
+                        <xsl:attribute name="onload">katex.render(this.parentNode.innerText, this.parentNode, ' . $options . ')</xsl:attribute>
+                        <xsl:attribute name="src">https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js</xsl:attribute>
                     </script>
                 </span>'
             );
