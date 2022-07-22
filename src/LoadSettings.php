@@ -6,6 +6,7 @@
  * For detailed copyright and license information, please view the
  * LICENSE file that was distributed with this source code.
  */
+
 namespace TheTurk\MathRen;
 
 use Illuminate\Support\Arr;
@@ -45,21 +46,21 @@ class LoadSettings
 
         foreach ($bbCodeDelimiters as $delimiter) {
             $explicitBBCodeDelimiters[] = [
-                'left' => Str::before($delimiter['left'], ']') . ':0' . ']',
-                'right' => Str::before($delimiter['right'], ']') . ':0' . ']',
-                'display' => $delimiter['display']
+                'left'    => Str::before($delimiter['left'], ']').':0'.']',
+                'right'   => Str::before($delimiter['right'], ']').':0'.']',
+                'display' => $delimiter['display'],
             ];
         }
 
         return [
-            'mathren.katex_options' => $this->util->getKatexOptions(),
+            'mathren.katex_options'         => $this->util->getKatexOptions(),
             'mathren.enable_editor_buttons' => \boolval($this->util->get('enable_editor_buttons')),
-            'mathren.aliases_as_primary' => \boolval($this->util->get('aliases_as_primary')),
-            'mathren.enable_copy_tex' => \boolval($this->util->get('enable_copy_tex')),
+            'mathren.aliases_as_primary'    => \boolval($this->util->get('aliases_as_primary')),
+            'mathren.enable_copy_tex'       => \boolval($this->util->get('enable_copy_tex')),
 
             // Get type-specific delimiters.
-            'mathren.bbcode_delimiters' => $bbCodeDelimiters,
-            'mathren.alias_delimiters' => $aliasDelimiters,
+            'mathren.bbcode_delimiters'          => $bbCodeDelimiters,
+            'mathren.alias_delimiters'           => $aliasDelimiters,
             'mathren.explicit_bbcode_delimiters' => $explicitBBCodeDelimiters,
 
             // Set primary delimiters.
