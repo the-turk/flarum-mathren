@@ -1,3 +1,7 @@
+### 1.0.5
+
+- **Fix** code highlighting breaks when you interact with the page.
+
 ### 1.0.4
 
 Requires Flarum v1.2.0+

@@ -57,7 +57,12 @@ app.initializers.add(
 
       // using `c.innerText` destroys line breaks
       // using `c.innerHTML` introduces security concerns
-      codeNodeList.forEach((c) => (c.textContent = replaceDelimiters(c.textContent, true)));
+      codeNodeList.forEach((c) => {
+        // don't break code highlighting
+        if (c.classList.contains('hljs')) return;
+
+        c.textContent = replaceDelimiters(c.textContent, true);
+      });
     };
 
     /**
