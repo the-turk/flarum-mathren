@@ -31,6 +31,11 @@ the-turk-mathren:
       color_is_text_color_label: <code>\color</code> komutunun iki ifade içermesine izin ver (colorIsTextColor)
       throw_on_error_label: Desteklenmeyen komut girildiğinde konsola hata mesajı gönder
       bbcode_delimiters_rule_text: BBCode sınırlayıcılarını yazarken sadece büyük/küçük harf ve tire kullanabilirsiniz.
+      cdn_options_heading: CDN Seçenekleri
+      cdn_katex_text: <strong>KaTeX</strong> için CDN adresi
+      sri_katex_text: <strong>KaTeX</strong> için SRI özeti (hash)
+      cdn_asciimath2tex_text: <strong>asciimath2tex</strong> için CDN adresi
+      sri_asciimath2tex_text: <strong>asciimath2tex</strong> için SRI özeti (hash)
       other_options_heading: Diğer Seçenekler
       enable_editor_buttons_label: Metin editöründe butonları göster
       aliases_as_primary_label: Mümkünse özel sınırlayıcıları birincil sınırlayıcılar olarak kullan

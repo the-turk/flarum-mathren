@@ -160,6 +160,34 @@ app.initializers.add('the-turk-mathren', (app) => {
             </div>
           </div>
         </div>
+        <div className="MathRen-CDNOptions">
+          <h3>{app.translator.trans('the-turk-mathren.admin.settings.cdn_options_heading')}</h3>
+          <hr />
+          <div className="MathRen--flex">
+            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.cdn_katex_text')}</div>
+            <div className="Form-group">
+              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.cdn_katex')} />
+            </div>
+          </div>
+          <div className="MathRen--flex">
+            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.sri_katex_text')}</div>
+            <div className="Form-group">
+              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.sri_katex')} />
+            </div>
+          </div>
+          <div className="MathRen--flex">
+            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.cdn_asciimath2tex_text')}</div>
+            <div className="Form-group">
+              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.cdn_asciimath2tex')} />
+            </div>
+          </div>
+          <div className="MathRen--flex">
+            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.sri_asciimath2tex_text')}</div>
+            <div className="Form-group">
+              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.sri_asciimath2tex')} />
+            </div>
+          </div>
+        </div>
         <div className="MathRen-OtherOptions">
           <h3>{app.translator.trans('the-turk-mathren.admin.settings.other_options_heading')}</h3>
           <hr />

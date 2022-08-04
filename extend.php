@@ -47,6 +47,10 @@ return [
         ->default('the-turk-mathren.output_mode', 'htmlAndMathml')
         ->default('the-turk-mathren.aliases_as_primary', '1')
         ->default('the-turk-mathren.allow_asciimath', '0')
+        ->default('the-turk-mathren.cdn_katex', 'https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js')
+        ->default('the-turk-mathren.sri_katex', 'sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja')
+        ->default('the-turk-mathren.cdn_asciimath2tex', 'https://unpkg.com/asciimath2tex@1.4.0/dist/asciimath2tex.umd.js')
+        ->default('the-turk-mathren.sri_asciimath2tex', 'sha384-cdvLGvItf6Jz+kIS7cNq6cThfMF6hSoUveHAZJBnJqmEosxD2lUHn2/pUmGKGybo')
         ->registerLessConfigVar(
             'config-copy-tex',
             'the-turk-mathren.enable_copy_tex',

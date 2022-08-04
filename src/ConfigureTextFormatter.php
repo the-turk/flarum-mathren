@@ -78,16 +78,16 @@ class ConfigureTextFormatter
                     (\boolval($this->util->get('allow_asciimath')) ? '
                         <script defer="" crossorigin="anonymous">
                             <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof ascii2tex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
+                            <xsl:attribute name="integrity">' . $this->util->get('sri_asciimath2tex') . '</xsl:attribute>
                             <xsl:attribute name="onload">window.ascii2tex=new AsciiMathParser()</xsl:attribute>
-                            <xsl:attribute name="integrity">sha384-cdvLGvItf6Jz+kIS7cNq6cThfMF6hSoUveHAZJBnJqmEosxD2lUHn2/pUmGKGybo</xsl:attribute>
-                            <xsl:attribute name="src">https://unpkg.com/asciimath2tex@1.4.0/dist/asciimath2tex.umd.js</xsl:attribute>
+                            <xsl:attribute name="src">' . $this->util->get('cdn_asciimath2tex') . '</xsl:attribute>
                         </script>
                     ' : '') .
                     '<script defer="" crossorigin="anonymous">
                         <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof katex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
-                        <xsl:attribute name="integrity">sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja</xsl:attribute>
+                        <xsl:attribute name="integrity">' . $this->util->get('sri_katex') . '</xsl:attribute>
                         <xsl:attribute name="onload">katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.parentNode.innerText) : this.parentNode.innerText, this.parentNode, ' . $options . ')</xsl:attribute>
-                        <xsl:attribute name="src">https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js</xsl:attribute>
+                        <xsl:attribute name="src">' . $this->util->get('cdn_katex') . '</xsl:attribute>
                     </script>
                 </span>'
             );
