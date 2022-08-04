@@ -34,6 +34,7 @@ the-turk-mathren:
       other_options_heading: Diğer Seçenekler
       enable_editor_buttons_label: Metin editöründe butonları göster
       aliases_as_primary_label: Mümkünse özel sınırlayıcıları birincil sınırlayıcılar olarak kullan
+      allow_asciimath_label: AsciiMath söz dizimine izin ver
       enable_copy_tex_label: KaTeX tarafından işlenmiş ifadelerin kaynaklarının kopyalanmasına izin ver
       quote_button_text: Alıntı butonunu kullanabilmek için <code>flarum/mentions</code> eklentisini etkinleştirmelisiniz.
 

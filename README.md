@@ -13,6 +13,7 @@ An extension that handles TeX math rendering for your [Flarum](https://github.co
 ## Features
 
 - Based on [KaTeX](https://github.com/KaTeX/KaTeX) (the fastest math typesetting library on the web).
+- Supports [AsciiMath](http://asciimath.org/) syntax.
 - Display expressions as an inline or a block element.
 - Compatible with Markdown and BBCode.
 - Copy any expression's source code to the clipboard.

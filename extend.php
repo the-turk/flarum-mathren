@@ -46,6 +46,7 @@ return [
         ->default('the-turk-mathren.min_rule_thickness', '0.05')
         ->default('the-turk-mathren.output_mode', 'htmlAndMathml')
         ->default('the-turk-mathren.aliases_as_primary', '1')
+        ->default('the-turk-mathren.allow_asciimath', '0')
         ->registerLessConfigVar(
             'config-copy-tex',
             'the-turk-mathren.enable_copy_tex',

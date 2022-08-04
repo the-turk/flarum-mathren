@@ -34,6 +34,7 @@ the-turk-mathren:
       other_options_heading: Other Options
       enable_editor_buttons_label: Show buttons on text editor
       aliases_as_primary_label: Use alias delimiters as primary delimiters if possible
+      allow_asciimath_label: Allow AsciiMath syntax
       enable_copy_tex_label: Allow copying the source of KaTeX-rendered elements
       quote_button_text: You must enable the <code>flarum/mentions</code> extension to activate the quote button.
 

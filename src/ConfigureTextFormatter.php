@@ -70,15 +70,23 @@ class ConfigureTextFormatter
 
             // add custom BBCode
             $config->BBCodes->addCustom(
-                $delimiter['left'].'{TEXT}'.$delimiter['right'],
+                $delimiter['left'] . '{TEXT}' . $delimiter['right'],
                 '<span>
-                    <xsl:attribute name="class">'.$classes[$className].'</xsl:attribute>
-                    <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render(this.innerText, this, '.$options.')</xsl:attribute>
-                    <xsl:apply-templates/>
-                    <script defer="" crossorigin="anonymous">
+                    <xsl:attribute name="class">' . $classes[$className] . '</xsl:attribute>
+                    <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.innerText) : this.innerText, this, ' . $options . ')</xsl:attribute>
+                    <xsl:apply-templates/>' .
+                    (\boolval($this->util->get('allow_asciimath')) ? '
+                        <script defer="" crossorigin="anonymous">
+                            <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof ascii2tex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
+                            <xsl:attribute name="onload">window.ascii2tex=new AsciiMathParser()</xsl:attribute>
+                            <xsl:attribute name="integrity">sha384-cdvLGvItf6Jz+kIS7cNq6cThfMF6hSoUveHAZJBnJqmEosxD2lUHn2/pUmGKGybo</xsl:attribute>
+                            <xsl:attribute name="src">https://unpkg.com/asciimath2tex@1.4.0/dist/asciimath2tex.umd.js</xsl:attribute>
+                        </script>
+                    ' : '') .
+                    '<script defer="" crossorigin="anonymous">
                         <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof katex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
                         <xsl:attribute name="integrity">sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja</xsl:attribute>
-                        <xsl:attribute name="onload">katex.render(this.parentNode.innerText, this.parentNode, '.$options.')</xsl:attribute>
+                        <xsl:attribute name="onload">katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.parentNode.innerText) : this.parentNode.innerText, this.parentNode, ' . $options . ')</xsl:attribute>
                         <xsl:attribute name="src">https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js</xsl:attribute>
                     </script>
                 </span>'

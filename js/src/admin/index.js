@@ -183,6 +183,14 @@ app.initializers.add('the-turk-mathren', (app) => {
           </div>
           <div className="Form-group">
             <Switch
+              state={!!this.setting(['the-turk-mathren.allow_asciimath'])() && this.setting(['the-turk-mathren.allow_asciimath'])() !== '0'}
+              onchange={this.settings['the-turk-mathren.allow_asciimath']}
+            >
+              {app.translator.trans('the-turk-mathren.admin.settings.allow_asciimath_label')}
+            </Switch>
+          </div>
+          <div className="Form-group">
+            <Switch
               state={!!this.setting(['the-turk-mathren.enable_copy_tex'])() && this.setting(['the-turk-mathren.enable_copy_tex'])() !== '0'}
               onchange={this.settings['the-turk-mathren.enable_copy_tex']}
             >
