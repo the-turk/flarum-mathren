@@ -1,3 +1,8 @@
+### 1.0.6
+
+- **Add** support for [AsciiMath](http://asciimath.org/) syntax. https://github.com/the-turk/flarum-mathren/issues/35
+- **Add** some CDN options which allows you to change them easily.
+
 ### 1.0.5
 
 - **Fix** code highlighting breaks when you interact with the page.
