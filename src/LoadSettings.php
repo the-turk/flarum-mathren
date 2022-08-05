@@ -6,6 +6,7 @@
  * For detailed copyright and license information, please view the
  * LICENSE file that was distributed with this source code.
  */
+
 namespace TheTurk\MathRen;
 
 use Illuminate\Support\Arr;
@@ -69,25 +70,25 @@ class LoadSettings
             }
 
             $$explicitArray[] = [
-                'left' => Str::before($delimiter['left'], ']') . ':0' . ']',
-                'right' => Str::before($delimiter['right'], ']') . ':0' . ']',
+                'left'    => Str::before($delimiter['left'], ']').':0'.']',
+                'right'   => Str::before($delimiter['right'], ']').':0'.']',
                 'display' => $delimiter['display'],
-                'ascii' => $delimiter['ascii']
+                'ascii'   => $delimiter['ascii'],
             ];
         }
 
         $explicitDelimiters = $allowAsciiMath ? \array_merge($explicitAsciiDelimiters, $explicitLatexDelimiters) : $explicitLatexDelimiters;
 
         $settings = [
-            'mathren.allow_asciimath' => $allowAsciiMath,
-            'mathren.katex_options' => $this->util->getKatexOptions(),
+            'mathren.allow_asciimath'       => $allowAsciiMath,
+            'mathren.katex_options'         => $this->util->getKatexOptions(),
             'mathren.enable_editor_buttons' => \boolval($this->util->get('enable_editor_buttons')),
-            'mathren.aliases_as_primary' => \boolval($this->util->get('aliases_as_primary')),
-            'mathren.enable_copy_tex' => \boolval($this->util->get('enable_copy_tex')),
+            'mathren.aliases_as_primary'    => \boolval($this->util->get('aliases_as_primary')),
+            'mathren.enable_copy_tex'       => \boolval($this->util->get('enable_copy_tex')),
 
             // Get type-specific delimiters.
-            'mathren.bbcode_delimiters' => $bbCodeDelimiters,
-            'mathren.alias_delimiters' => $aliasDelimiters,
+            'mathren.bbcode_delimiters'          => $bbCodeDelimiters,
+            'mathren.alias_delimiters'           => $aliasDelimiters,
             'mathren.explicit_bbcode_delimiters' => $explicitDelimiters,
 
             // Set primary delimiters.
@@ -115,7 +116,7 @@ class LoadSettings
                 function ($val) {
                     return $val['display'] === false;
                 }
-            )
+            ),
         ];
 
         if ($allowAsciiMath) {
@@ -143,7 +144,7 @@ class LoadSettings
                     function ($val) {
                         return $val['display'] === false;
                     }
-                )
+                ),
             ]);
         }
 
