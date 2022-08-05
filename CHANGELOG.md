@@ -1,3 +1,7 @@
+### 1.0.7
+
+- **Add** new delimiter options for [AsciiMath](http://asciimath.org/) syntax.
+
 ### 1.0.6
 
 - **Add** support for [AsciiMath](http://asciimath.org/) syntax. https://github.com/the-turk/flarum-mathren/issues/35
