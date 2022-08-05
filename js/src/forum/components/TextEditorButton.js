@@ -10,6 +10,7 @@ import app from 'flarum/common/app';
 import Button from 'flarum/common/components/Button';
 import Component from 'flarum/common/Component';
 import Dropdown from 'flarum/common/components/Dropdown';
+import Separator from 'flarum/common/components/Separator';
 import ItemList from 'flarum/common/utils/ItemList';
 import icon from 'flarum/common/helpers/icon';
 
@@ -17,6 +18,22 @@ import getPrimaryDelimiters from '../utils/katex/getPrimaryDelimiters';
 import getFlarumComposers from '../utils/getFlarumComposers';
 
 export default class TextEditorButton extends Component {
+  oninit(vnode) {
+    this.isAsciiMath = false;
+
+    super.oninit(vnode);
+  }
+
+  oncreate(vnode) {
+    $(vnode.dom)
+      .find('label.checkbox')
+      .on('click', function (e) {
+        e.stopPropagation();
+      });
+
+    super.oncreate(vnode);
+  }
+
   view() {
     return Dropdown.component(
       {
@@ -43,7 +60,7 @@ export default class TextEditorButton extends Component {
           icon: 'fas fa-vector-square',
           onclick: () => this.wrapSelection(true),
         },
-        app.translator.trans('the-turk-mathren.forum.composer.block_expression')
+        app.translator.trans('the-turk-mathren.forum.composer.block_expression' + (this.isAsciiMath ? '_asciimath' : ''))
       ),
       50
     );
@@ -55,10 +72,30 @@ export default class TextEditorButton extends Component {
           icon: 'fas fa-grip-lines',
           onclick: () => this.wrapSelection(),
         },
-        app.translator.trans('the-turk-mathren.forum.composer.inline_expression')
+        app.translator.trans('the-turk-mathren.forum.composer.inline_expression' + (this.isAsciiMath ? '_asciimath' : ''))
       ),
       0
     );
+
+    if (app.forum.attribute('mathren.allow_asciimath')) {
+      items.add('mathren-separator', Separator.component());
+
+      items.add(
+        'mathren-asciiMath',
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            onchange={(e) => {
+              const target = e.target;
+              this.isAsciiMath = target.checked;
+              m.redraw.sync();
+              e.redraw = false;
+            }}
+          />
+          {app.translator.trans('the-turk-mathren.forum.composer.asciimath_only')}
+        </label>
+      );
+    }
 
     return items;
   }
@@ -79,10 +116,22 @@ export default class TextEditorButton extends Component {
     this.delimiters = getPrimaryDelimiters.bind(this, app.forum, getFlarumComposers().indexOf(composerClass) === -1)();
 
     // opening tag (left delimiter)
-    const leftDelim = displayMode ? this.delimiters.block['left'] : this.delimiters.inline['left'];
+    const leftDelim = displayMode
+      ? this.isAsciiMath
+        ? this.delimiters.block_asciimath['left']
+        : this.delimiters.block['left']
+      : this.isAsciiMath
+      ? this.delimiters.inline_asciimath['left']
+      : this.delimiters.inline['left'];
 
     // closing tag (right delimiter)
-    const rightDelim = displayMode ? this.delimiters.block['right'] : this.delimiters.inline['right'];
+    const rightDelim = displayMode
+      ? this.isAsciiMath
+        ? this.delimiters.block_asciimath['right']
+        : this.delimiters.block['right']
+      : this.isAsciiMath
+      ? this.delimiters.inline_asciimath['right']
+      : this.delimiters.inline['right'];
 
     const selectionRange = this.attrs.textEditor.getSelectionRange();
 

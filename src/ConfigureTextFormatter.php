@@ -6,7 +6,6 @@
  * For detailed copyright and license information, please view the
  * LICENSE file that was distributed with this source code.
  */
-
 namespace TheTurk\MathRen;
 
 use Illuminate\Support\Arr;
@@ -48,6 +47,15 @@ class ConfigureTextFormatter
         $katexOptions = $this->util->getKatexOptions();
         $bbDelimiters = $this->util->getDelimitersWithOptions('bbcode');
 
+        $allowAsciiMath = \boolval($this->util->get('allow_asciimath'));
+
+        if ($allowAsciiMath) {
+            $bbDelimiters = array_merge(
+                $bbDelimiters,
+                $this->util->getDelimitersWithOptions('bbcode', true)
+            );
+        }
+
         // This will be used for wrapping expressions
         // with corresponding class attributes.
         $classes = $this->util->getClasses();
@@ -68,29 +76,43 @@ class ConfigureTextFormatter
             $options
                 = \json_encode(Arr::add($katexOptions, 'displayMode', $displayMode));
 
-            // add custom BBCode
-            $config->BBCodes->addCustom(
-                $delimiter['left'].'{TEXT}'.$delimiter['right'],
-                '<span>
-                    <xsl:attribute name="class">'.$classes[$className].'</xsl:attribute>
-                    <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.innerText) : this.innerText, this, '.$options.')</xsl:attribute>
-                    <xsl:apply-templates/>'.
-                    (\boolval($this->util->get('allow_asciimath')) ? '
+            if ($allowAsciiMath && ($delimiter['ascii'] === true)) {
+                $config->BBCodes->addCustom(
+                    $delimiter['left'] . '{TEXT}' . $delimiter['right'],
+                    '<span>
+                        <xsl:attribute name="class">' . $classes[$className] . '</xsl:attribute>
+                        <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.innerText) : this.innerText, this, ' . $options . ')</xsl:attribute>
+                        <xsl:apply-templates/>
                         <script defer="" crossorigin="anonymous">
                             <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof ascii2tex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
-                            <xsl:attribute name="integrity">'.$this->util->get('sri_asciimath2tex').'</xsl:attribute>
+                            <xsl:attribute name="integrity">' . $this->util->get('sri_asciimath2tex') . '</xsl:attribute>
                             <xsl:attribute name="onload">window.ascii2tex=new AsciiMathParser()</xsl:attribute>
-                            <xsl:attribute name="src">'.$this->util->get('cdn_asciimath2tex').'</xsl:attribute>
+                            <xsl:attribute name="src">' . $this->util->get('cdn_asciimath2tex') . '</xsl:attribute>
                         </script>
-                    ' : '').
-                    '<script defer="" crossorigin="anonymous">
-                        <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof katex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
-                        <xsl:attribute name="integrity">'.$this->util->get('sri_katex').'</xsl:attribute>
-                        <xsl:attribute name="onload">katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.parentNode.innerText) : this.parentNode.innerText, this.parentNode, '.$options.')</xsl:attribute>
-                        <xsl:attribute name="src">'.$this->util->get('cdn_katex').'</xsl:attribute>
-                    </script>
-                </span>'
-            );
+                        <script defer="" crossorigin="anonymous">
+                            <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof katex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
+                            <xsl:attribute name="integrity">' . $this->util->get('sri_katex') . '</xsl:attribute>
+                            <xsl:attribute name="onload">katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.parentNode.innerText) : this.parentNode.innerText, this.parentNode, ' . $options . ')</xsl:attribute>
+                            <xsl:attribute name="src">' . $this->util->get('cdn_katex') . '</xsl:attribute>
+                        </script>
+                    </span>'
+                );
+            } else {
+                $config->BBCodes->addCustom(
+                    $delimiter['left'] . '{TEXT}' . $delimiter['right'],
+                    '<span>
+                        <xsl:attribute name="class">' . $classes[$className] . '</xsl:attribute>
+                        <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render(this.innerText, this, ' . $options . ')</xsl:attribute>
+                        <xsl:apply-templates/>
+                        <script defer="" crossorigin="anonymous">
+                            <xsl:attribute name="data-s9e-livepreview-onrender">if(typeof katex!==\'undefined\')this.parentNode.removeChild(this)</xsl:attribute>
+                            <xsl:attribute name="integrity">' . $this->util->get('sri_katex') . '</xsl:attribute>
+                            <xsl:attribute name="onload">katex.render(this.parentNode.innerText, this.parentNode, ' . $options . ')</xsl:attribute>
+                            <xsl:attribute name="src">' . $this->util->get('cdn_katex') . '</xsl:attribute>
+                        </script>
+                    </span>'
+                );
+            }
 
             // current BBCode tag
             $tag = $config->tags[$delimiterText];

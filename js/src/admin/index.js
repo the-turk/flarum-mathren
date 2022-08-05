@@ -31,33 +31,90 @@ app.initializers.add('the-turk-mathren', (app) => {
             <i className="fa-icon fas fa-exclamation-circle" />
             {app.translator.trans('the-turk-mathren.admin.settings.bbcode_delimiters_rule_text')}
           </div>
-          <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.block_delimiters_text')}</div>
-            <div className="Form-group">
-              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.block_delimiters')} placeholder="[math]%e%[/math]" />
+          <div className="MathRen--flex Mathren--binary">
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.block_delimiters_text')}</div>
+              <div className="Form-group">
+                <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.block_delimiters')} placeholder="[math]%e%[/math]" />
+              </div>
+            </div>
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.block_asciimath_delimiters_text')}</div>
+              <div className="Form-group">
+                <input
+                  className="FormControl"
+                  type="text"
+                  bidi={this.setting('the-turk-mathren.block_asciimath_delimiters')}
+                  placeholder="[asmath]%e%[asmath]"
+                />
+              </div>
             </div>
           </div>
           <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.inline_delimiters_text')}</div>
-            <div className="Form-group">
-              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.inline_delimiters')} placeholder="[imath]%e%[/imath]" />
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.inline_delimiters_text')}</div>
+              <div className="Form-group">
+                <input
+                  className="FormControl"
+                  type="text"
+                  bidi={this.setting('the-turk-mathren.inline_delimiters')}
+                  placeholder="[imath]%e%[/imath]"
+                />
+              </div>
+            </div>
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.inline_asciimath_delimiters_text')}</div>
+              <div className="Form-group">
+                <input
+                  className="FormControl"
+                  type="text"
+                  bidi={this.setting('the-turk-mathren.inline_asciimath_delimiters')}
+                  placeholder="[iasmath]%e%[iasmath]"
+                />
+              </div>
             </div>
           </div>
           <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.alias_block_delimiters_text')}</div>
-            <div className="Form-group">
-              <input
-                className="FormControl"
-                type="text"
-                bidi={this.setting('the-turk-mathren.alias_block_delimiters')}
-                placeholder="$$%e%$$,₺₺%e%₺₺"
-              />
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.alias_block_delimiters_text')}</div>
+              <div className="Form-group">
+                <input
+                  className="FormControl"
+                  type="text"
+                  bidi={this.setting('the-turk-mathren.alias_block_delimiters')}
+                  placeholder="$$%e%$$,₺₺%e%₺₺"
+                />
+              </div>
+            </div>
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.alias_block_asciimath_delimiters_text')}</div>
+              <div className="Form-group">
+                <input
+                  className="FormControl"
+                  type="text"
+                  bidi={this.setting('the-turk-mathren.alias_block_asciimath_delimiters')}
+                  placeholder="\$%e%\$"
+                />
+              </div>
             </div>
           </div>
           <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.alias_inline_delimiters_text')}</div>
-            <div className="Form-group">
-              <input type="text" className="FormControl" bidi={this.setting('the-turk-mathren.alias_inline_delimiters')} placeholder="\(%e%\)" />
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.alias_inline_delimiters_text')}</div>
+              <div className="Form-group">
+                <input type="text" className="FormControl" bidi={this.setting('the-turk-mathren.alias_inline_delimiters')} placeholder="\(%e%\)" />
+              </div>
+            </div>
+            <div className="MathRen--delimiterGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.alias_inline_asciimath_delimiters_text')}</div>
+              <div className="Form-group">
+                <input
+                  type="text"
+                  className="FormControl"
+                  bidi={this.setting('the-turk-mathren.alias_inline_asciimath_delimiters')}
+                  placeholder="\{%e%\}"
+                />
+              </div>
             </div>
           </div>
           <div className="helpText">
@@ -163,28 +220,32 @@ app.initializers.add('the-turk-mathren', (app) => {
         <div className="MathRen-CDNOptions">
           <h3>{app.translator.trans('the-turk-mathren.admin.settings.cdn_options_heading')}</h3>
           <hr />
-          <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.cdn_katex_text')}</div>
-            <div className="Form-group">
-              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.cdn_katex')} />
+          <div className="MathRen--flex Mathren--binary">
+            <div className="MathRen--cdnGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.cdn_katex_text')}</div>
+              <div className="Form-group">
+                <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.cdn_katex')} />
+              </div>
+            </div>
+            <div className="MathRen--cdnGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.sri_katex_text')}</div>
+              <div className="Form-group">
+                <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.sri_katex')} />
+              </div>
             </div>
           </div>
-          <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.sri_katex_text')}</div>
-            <div className="Form-group">
-              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.sri_katex')} />
+          <div className="MathRen--flex Mathren--binary">
+            <div className="MathRen--cdnGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.cdn_asciimath2tex_text')}</div>
+              <div className="Form-group">
+                <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.cdn_asciimath2tex')} />
+              </div>
             </div>
-          </div>
-          <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.cdn_asciimath2tex_text')}</div>
-            <div className="Form-group">
-              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.cdn_asciimath2tex')} />
-            </div>
-          </div>
-          <div className="MathRen--flex">
-            <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.sri_asciimath2tex_text')}</div>
-            <div className="Form-group">
-              <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.sri_asciimath2tex')} />
+            <div className="MathRen--cdnGroup">
+              <div className="helpText">{app.translator.trans('the-turk-mathren.admin.settings.sri_asciimath2tex_text')}</div>
+              <div className="Form-group">
+                <input className="FormControl" type="text" bidi={this.setting('the-turk-mathren.sri_asciimath2tex')} />
+              </div>
             </div>
           </div>
         </div>

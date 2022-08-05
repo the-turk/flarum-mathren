@@ -80,11 +80,18 @@ app.initializers.add(
       const aliasDelimiters = app.forum.attribute('mathren.alias_delimiters');
       const splitAtDelimiters = reverse ? bbDelimiters.concat(explicitBBDelimiters) : aliasDelimiters;
 
-      return {
+      let options = {
         primaryBlockDelimiter: primaryDelimiters.block,
         primaryInlineDelimiter: primaryDelimiters.inline,
         splitAtDelimiters,
       };
+
+      if (app.forum.attribute('mathren.allow_asciimath')) {
+        options['primaryBlockAsciiMathDelimiter'] = primaryDelimiters.block_asciimath;
+        options['primaryInlineAsciiMathDelimiter'] = primaryDelimiters.inline_asciimath;
+      }
+
+      return options;
     };
 
     /**

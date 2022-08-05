@@ -15,15 +15,31 @@
  * @return { Object }
  */
 export default function getPrimaryDelimiters(forum, reverse = false) {
+  let delimiters = {};
+
   if (forum.attribute('mathren.aliases_as_primary') && reverse === false) {
-    return {
+    delimiters = {
       inline: forum.attribute('mathren.primary_inline_delimiter_alias'),
       block: forum.attribute('mathren.primary_block_delimiter_alias'),
     };
+
+    if (forum.attribute('mathren.allow_asciimath')) {
+      delimiters['inline_asciimath'] = forum.attribute('mathren.primary_inline_asciimath_delimiter_alias');
+      delimiters['block_asciimath'] = forum.attribute('mathren.primary_block_asciimath_delimiter_alias');
+    }
+
+    return delimiters;
   }
 
-  return {
+  delimiters = {
     inline: forum.attribute('mathren.primary_inline_delimiter'),
     block: forum.attribute('mathren.primary_block_delimiter'),
   };
+
+  if (forum.attribute('mathren.allow_asciimath')) {
+    delimiters['inline_asciimath'] = forum.attribute('mathren.primary_inline_asciimath_delimiter');
+    delimiters['block_asciimath'] = forum.attribute('mathren.primary_block_asciimath_delimiter');
+  }
+
+  return delimiters;
 }

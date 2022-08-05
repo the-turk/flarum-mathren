@@ -26,7 +26,14 @@ const replaceDelimitersInText = function (text, options) {
       const span = document.createElement('span');
       const math = data[i].data;
       const displayMode = data[i].display === true;
-      const delimiter = displayMode ? options.primaryBlockDelimiter : options.primaryInlineDelimiter;
+      const asciiMath = data[i].ascii === true;
+      const delimiter = displayMode
+        ? asciiMath
+          ? options.primaryBlockAsciiMathDelimiter
+          : options.primaryBlockDelimiter
+        : asciiMath
+        ? options.primaryInlineAsciiMathDelimiter
+        : options.primaryInlineDelimiter;
 
       span.textContent = delimiter['left'] + math + delimiter['right'];
 

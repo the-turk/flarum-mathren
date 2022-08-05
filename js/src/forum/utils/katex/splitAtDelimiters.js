@@ -69,6 +69,7 @@ const splitAtDelimiters = function (text, delimiters) {
       data: math,
       rawData,
       display: delimiters[i].display,
+      ascii: delimiters[i].ascii,
     });
     text = text.slice(index + delimiters[i].right.length);
   }
