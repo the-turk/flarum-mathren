@@ -80,7 +80,7 @@ class ConfigureTextFormatter
             if ($allowAsciiMath && ($delimiter['ascii'] === true)) {
                 $config->BBCodes->addCustom(
                     $delimiter['left'].'{TEXT}'.$delimiter['right'],
-                    '<span>
+                    '<span data-s9e-livepreview-hash="">
                         <xsl:attribute name="class">'.$classes[$className].'</xsl:attribute>
                         <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render((typeof ascii2tex!==\'undefined\') ? ascii2tex.parse(this.innerText) : this.innerText, this, '.$options.')</xsl:attribute>
                         <xsl:apply-templates/>
@@ -101,7 +101,7 @@ class ConfigureTextFormatter
             } else {
                 $config->BBCodes->addCustom(
                     $delimiter['left'].'{TEXT}'.$delimiter['right'],
-                    '<span>
+                    '<span data-s9e-livepreview-hash="">
                         <xsl:attribute name="class">'.$classes[$className].'</xsl:attribute>
                         <xsl:attribute name="data-s9e-livepreview-onupdate">if(typeof katex!==\'undefined\')katex.render(this.innerText, this, '.$options.')</xsl:attribute>
                         <xsl:apply-templates/>
